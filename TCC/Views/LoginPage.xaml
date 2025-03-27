@@ -2,149 +2,81 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="TCC.Views.LoginPage"
-             Title="LoginPage">
-
-    <ContentPage.Resources>
-        <Style TargetType="Label">
-            <Setter Property="Margin" Value="8" />
-        </Style>
-    </ContentPage.Resources>
+             Title="LoginPage"
+             BackgroundColor="White">
 
     <VerticalStackLayout>
-        <Grid BackgroundColor="Red" 
-          RowDefinitions="* , * , * , * , *"
-          ColumnDefinitions="*"
-          Padding="10">
-            <Label
-            Text="🎉 Seja Bem-Vindo! 🎉"
-            TextColor="White"
-            FontSize="18"
-            HorizontalTextAlignment="Center"
-            SemanticProperties.HeadingLevel="Level1" 
-            Grid.Row="0"
-            Grid.Column="0"/>
+        <!-- Header occupying the entire top part -->
+        <Border BackgroundColor="Red" Padding="20" StrokeThickness="0" HeightRequest="300" HorizontalOptions="FillAndExpand">
+            <VerticalStackLayout HorizontalOptions="Center" Spacing="8">
+                <Label Text="🎉 Seja Bem-Vindo! 🎉" 
+                   FontSize="26" 
+                   HorizontalOptions="Center" 
+                   FontAttributes="Bold"
+                   TextColor="White" />
+                <Label Text="Conecte-se ao serviço de transporte Barbieri!" 
+                   FontSize="16" 
+                   HorizontalOptions="Center" 
+                   TextColor="White" />
+                <Label Text="Prepare-se para embarcar rumo aos seus sonhos 🚋" 
+                   FontSize="16" 
+                   HorizontalOptions="Center" 
+                   FontAttributes="Bold"
+                   TextColor="White" />
 
-            <Label
-            Text="Conecte-se ao serviço de transporte Barbieri!"
-            TextColor="White"
-            FontSize="18"
-            HorizontalTextAlignment="Center"
-            SemanticProperties.HeadingLevel="Level1" 
-            Grid.Row="1"
-            Grid.Column="0"/>
+                <!-- Logo Container -->
+                <Frame BackgroundColor="White" CornerRadius="60" Padding="10" HorizontalOptions="Center" HeightRequest="120" WidthRequest="120" HasShadow="False">
+                    <Image Source="logo.png" HeightRequest="100" WidthRequest="100" HorizontalOptions="Center" VerticalOptions="Center" />
+                </Frame>
+            </VerticalStackLayout>
+        </Border>
 
-            <Label
-            Text="Prepare-se para embarcar rumo ao seus sonhos 🚍"
-            TextColor="White"
-            FontSize="18"
-            HorizontalTextAlignment="Center"
-            FontAttributes="Bold"
-            SemanticProperties.HeadingLevel="Level1" 
-            Grid.Row="2"
-            Grid.Column="0"/>
+        <ScrollView>
+            <VerticalStackLayout Padding="20" Spacing="20">
+                <!-- Input Fields -->
+                <Entry Placeholder="Nome do passageiro/motorista" 
+                   FontSize="16" 
+                   BackgroundColor="White" 
+                   TextColor="Black" 
+                   Margin="10,5" 
+                   HeightRequest="50" />
 
-            <Image
-            Source="logo.png"
-            HeightRequest="185"
-            Aspect="AspectFit"
-            SemanticProperties.Description="dot net bot in a hovercraft number nine" 
-            Grid.Row="3"
-            Grid.Column="0"/>
+                <Entry Placeholder="Senha" 
+                   FontSize="16" 
+                   IsPassword="True" 
+                   BackgroundColor="White" 
+                   TextColor="Black" 
+                   Margin="10,5" 
+                   HeightRequest="50" />
 
-        </Grid>
-        <Grid BackgroundColor="White" 
-          RowDefinitions="* , * , * , * , * , * , * , * , * , * , *"
-          ColumnDefinitions="* , * , * , *, * , * , * , * , *, *">
+                <!-- Options -->
+                <HorizontalStackLayout>
+                    <CheckBox />
+                    <Label Text="Manter-me logado" VerticalOptions="Center" FontSize="14" />
+                    <Label HorizontalOptions="FillAndExpand"/>
+                    <Button Text="Esqueci minha senha" 
+                        TextColor="Red" 
+                        FontSize="14" 
+                        BackgroundColor="Transparent" 
+                        HorizontalOptions="End" />
+                </HorizontalStackLayout>
 
-            <Label
-            Text=" "
-            FontSize="1"
-            Grid.Row="0"/>
+                <!-- Login Button -->
+                <Button Text="EMBARCAR" 
+                    BackgroundColor="Red" 
+                    TextColor="White" 
+                    FontSize="18" 
+                    CornerRadius="10" 
+                    HeightRequest="50" />
 
-            <Label
-            Text="Nome do passageiro/motorista"
-            TextColor="Black"
-            FontSize="18"
-            HorizontalTextAlignment="Center"
-            FontAttributes="Bold"
-            Grid.Row="1"
-            Grid.Column="2"
-            Grid.ColumnSpan="6"/>
-
-            <Entry x:Name="nome" Grid.Row="2" Grid.Column="2" Grid.ColumnSpan="6">
-            </Entry>
-
-            <Label
-            Text="Senha"
-            TextColor="Black"
-            FontSize="18"
-            HorizontalTextAlignment="Center"
-            FontAttributes="Bold"
-            Grid.Row="3"
-            Grid.Column="4"
-            Grid.ColumnSpan="2"/>
-
-            <Entry x:Name="senha" Grid.Row="4" Grid.Column="2" Grid.ColumnSpan="6">
-
-            </Entry>
-
-            <Label
-            Text=" "
-            Grid.Row="5"
-            FontSize="1"/>
-
-            <CheckBox Grid.Row="6" Grid.Column="2"/>
-
-            <Label
-            Text="Manter-me logado"
-            Grid.Row="6" 
-            Grid.Column="3"
-            Grid.ColumnSpan="2"/>
-
-            <Button
-            Text="Esqueci Minha Senha"
-            TextColor="Red"
-            BackgroundColor="Transparent"
-            Grid.Row="6"
-            Grid.Column="6"
-            Grid.ColumnSpan="2"
-            BorderWidth="0"
-            FontAttributes="Bold"
-            HorizontalOptions="FillAndExpand"
-            VerticalOptions="Center"
-            MinimumWidthRequest="150" />
-
-
-            <Label
-            Text=" "
-            Grid.Row="7"
-            FontSize="1"/>
-
-            <Button
-            x:Name="Embarcar"
-            Text="EMBARCAR" 
-            TextColor="White"
-            HorizontalOptions="Fill"
-            Grid.Row="8"
-            Grid.Column="2"
-            Grid.ColumnSpan="6"/>
-
-            <Label
-            Text=" "
-            FontSize="1"
-            Grid.Row="9"/>
-
-            <Label
-            Text="Criar conta"
-            TextColor="Black"
-            FontSize="14"
-            HorizontalTextAlignment="Center"
-            Grid.Row="10"
-            Grid.Column="4"
-            Grid.ColumnSpan="2">
-            </Label>
-
-        </Grid>
+                <!-- Register -->
+                <Button Text="Criar conta" 
+                    FontSize="14" 
+                    TextColor="Gray" 
+                    BackgroundColor="Transparent" 
+                    HorizontalOptions="Center" />
+            </VerticalStackLayout>
+        </ScrollView>
     </VerticalStackLayout>
-    
+
 </ContentPage>
