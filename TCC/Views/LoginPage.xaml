@@ -124,7 +124,6 @@
             x:Name="Embarcar"
             Text="EMBARCAR" 
             TextColor="White"
-            Clicked="OnEmbarcarClicked"
             HorizontalOptions="Fill"
             Grid.Row="8"
             Grid.Column="2"
