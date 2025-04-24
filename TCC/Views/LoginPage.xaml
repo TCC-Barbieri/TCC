@@ -34,7 +34,7 @@
         <ScrollView>
             <VerticalStackLayout Padding="20" Spacing="20">
                 <!-- Input Fields -->
-                <Entry Placeholder="Nome do passageiro/motorista" 
+                <Entry Placeholder="Nome do usuário" 
                    FontSize="16" 
                    BackgroundColor="White" 
                    TextColor="Black" 
