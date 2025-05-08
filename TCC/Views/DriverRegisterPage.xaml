@@ -111,7 +111,7 @@
             </VerticalStackLayout>
 
             <!-- Linha 5: Contato de Emergência e endereço  -->
-            <VerticalStackLayout Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" Spacing="2">
+            <VerticalStackLayout Grid.Row="4" Grid.Column="0" Spacing="2">
                 <Label Text="Contato de Emergência" FontSize="12" Margin="5,0,0,0" />
                 <Entry Placeholder="Contato de Emergência" 
                    FontSize="14" 
@@ -120,7 +120,7 @@
                    HeightRequest="40" />
             </VerticalStackLayout>
 
-            <VerticalStackLayout Grid.Row="3" Grid.Column="1" Spacing="2">
+            <VerticalStackLayout Grid.Row="4" Grid.Column="1" Spacing="2">
                 <Label Text="Endereço" FontSize="12" Margin="5,0,0,0" />
                 <Entry Placeholder="Endereço" 
                    FontSize="14" 
