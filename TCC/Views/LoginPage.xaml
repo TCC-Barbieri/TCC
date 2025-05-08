@@ -7,7 +7,7 @@
 
     <VerticalStackLayout>
         <!-- Header occupying the entire top part -->
-        <Border BackgroundColor="Red" Padding="20" StrokeThickness="0" HeightRequest="300" HorizontalOptions="FillAndExpand">
+        <Border BackgroundColor="#FF3333" Padding="20" StrokeThickness="0" HeightRequest="300" HorizontalOptions="FillAndExpand">
             <VerticalStackLayout HorizontalOptions="Center" Spacing="8">
                 <Label Text="🎉 Seja Bem-Vindo! 🎉" 
                    FontSize="26" 
@@ -55,7 +55,7 @@
                     <Label Text="Manter-me logado" VerticalOptions="Center" FontSize="14" />
                     <Label HorizontalOptions="FillAndExpand"/>
                     <Button Text="Esqueci minha senha" 
-                        TextColor="Red" 
+                        TextColor="#FF3333" 
                         FontSize="14" 
                         BackgroundColor="Transparent" 
                         HorizontalOptions="End" />
@@ -63,7 +63,7 @@
 
                 <!-- Login Button -->
                 <Button Text="EMBARCAR" 
-                    BackgroundColor="Red" 
+                    BackgroundColor="#FF3333" 
                     TextColor="White" 
                     FontSize="18" 
                     CornerRadius="10" 
