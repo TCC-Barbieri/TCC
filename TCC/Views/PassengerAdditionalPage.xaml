@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="TCC.Views.PassengerAdditionalPage"
+             Title="Adicionais"
+             BackgroundColor="White">
+
+    <Grid RowDefinitions="Auto,*,Auto,Auto">
+        <!-- Cabeçalho vermelho com formato ondulado -->
+        <Grid Grid.Row="0" HeightRequest="200" BackgroundColor="#FF0000">
+            <Path Fill="#FF3333" 
+                  Data="M0,160 C150,220 250,100 400,160 L400,0 L0,0 Z" />
+
+            <VerticalStackLayout HorizontalOptions="Center" VerticalOptions="Center" Spacing="8">
+                <Label Text="Adicionais" 
+                       FontSize="32" 
+                       HorizontalOptions="Center" 
+                       FontAttributes="Bold"
+                       TextColor="White" />
+                <Label Text="Passageiro" 
+                       FontSize="26" 
+                       HorizontalOptions="Center" 
+                       TextColor="White" />
+            </VerticalStackLayout>
+        </Grid>
+
+        <!-- Conteúdo principal - formulário -->
+        <ScrollView Grid.Row="1">
+            <Grid Padding="20" RowSpacing="15" ColumnSpacing="15"
+                  RowDefinitions="Auto,Auto,Auto,Auto,*"
+                  ColumnDefinitions="*,*">
+
+                <!-- Data de Nascimento -->
+                <VerticalStackLayout Grid.Row="0" Grid.Column="0" Spacing="5">
+                    <Label Text="Data de Nascimento" FontSize="14" TextColor="Black" />
+                    <Border Stroke="#DDDDDD"
+                            StrokeThickness="1"
+                            StrokeShape="RoundRectangle 5,5,5,5">
+                        <DatePicker FontSize="14" 
+                                   TextColor="Black"
+                                   Format="dd/MM/yyyy"
+                                   HeightRequest="40"
+                                   x:Name="DataNascimentoPicker" />
+                    </Border>
+                </VerticalStackLayout>
+
+                <!-- Foto do Passageiro -->
+                <VerticalStackLayout Grid.Row="0" Grid.Column="1" Grid.RowSpan="3" Spacing="5" 
+                                     HorizontalOptions="Center" VerticalOptions="Start">
+                    <Label Text="Foto do passageiro" FontSize="14" TextColor="Black" />
+                    <Border Stroke="#000000"
+                            StrokeThickness="1"
+                            StrokeShape="Rectangle"
+                            WidthRequest="120"
+                            HeightRequest="150">
+                        <Grid>
+                            <Image x:Name="ProfileImage" 
+                                   Aspect="AspectFill" 
+                                   HorizontalOptions="Fill" 
+                                   VerticalOptions="Fill" />
+                            <Button x:Name="AddPhotoButton"
+                                    Text="+"
+                                    FontSize="24"
+                                    BackgroundColor="#DDDDDD"
+                                    TextColor="Black"
+                                    Opacity="0.7"
+                                    HeightRequest="40"
+                                    WidthRequest="40"
+                                    CornerRadius="20"
+                                    HorizontalOptions="Center"
+                                    VerticalOptions="Center"
+                                    Clicked="OnAddPhotoClicked" />
+                        </Grid>
+                    </Border>
+                </VerticalStackLayout>
+
+                <!-- Contato de emergência -->
+                <VerticalStackLayout Grid.Row="1" Grid.Column="0" Spacing="5">
+                    <Label Text="Contato de emergência" FontSize="14" TextColor="Black" />
+                    <Border Stroke="#DDDDDD"
+                            StrokeThickness="1"
+                            StrokeShape="RoundRectangle 5,5,5,5">
+                        <Entry Placeholder="Telefone de emergência" 
+                               FontSize="14" 
+                               TextColor="Black"
+                               Keyboard="Telephone"
+                               HeightRequest="40"
+                               x:Name="ContatoEmergenciaEntry" />
+                    </Border>
+                </VerticalStackLayout>
+
+                <!-- Atendimento especial -->
+                <VerticalStackLayout Grid.Row="2" Grid.Column="0" Spacing="5">
+                    <Label Text="Atendimento especial?" FontSize="14" TextColor="Black" />
+                    <HorizontalStackLayout Spacing="15">
+                        <HorizontalStackLayout>
+                            <Ellipse Fill="White" Stroke="Black" StrokeThickness="1" WidthRequest="20" HeightRequest="20">
+                                <Ellipse.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="OnSimTapped"/>
+                                </Ellipse.GestureRecognizers>
+                            </Ellipse>
+                            <Ellipse x:Name="SimPreenchido" Fill="Black" IsVisible="{Binding Source={x:Reference AtendimentoSimRadio}, Path=IsChecked}"
+                                    WidthRequest="12" HeightRequest="12" HorizontalOptions="Center" VerticalOptions="Center"
+                                    Margin="-16,0,0,0"/>
+                            <Label Text="Sim" Margin="5,0,15,0" VerticalOptions="Center"/>
+                        </HorizontalStackLayout>
+
+                        <HorizontalStackLayout>
+                            <Ellipse Fill="White" Stroke="Black" StrokeThickness="1" WidthRequest="20" HeightRequest="20">
+                                <Ellipse.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="OnNaoTapped"/>
+                                </Ellipse.GestureRecognizers>
+                            </Ellipse>
+                            <Ellipse x:Name="NaoPreenchido" Fill="Black" IsVisible="{Binding Source={x:Reference AtendimentoNaoRadio}, Path=IsChecked}"
+                                    WidthRequest="12" HeightRequest="12" HorizontalOptions="Center" VerticalOptions="Center"
+                                    Margin="-16,0,0,0"/>
+                            <Label Text="Não" Margin="5,0,0,0" VerticalOptions="Center"/>
+                        </HorizontalStackLayout>
+
+                        <RadioButton x:Name="AtendimentoSimRadio" 
+                                     GroupName="AtendimentoEspecial"
+                                     IsChecked="False"
+                                     CheckedChanged="OnAtendimentoEspecialChanged"
+                                     IsVisible="False" />
+                        <RadioButton x:Name="AtendimentoNaoRadio" 
+                                     GroupName="AtendimentoEspecial"
+                                     IsChecked="True"
+                                     IsVisible="False" />
+                    </HorizontalStackLayout>
+                </VerticalStackLayout>
+
+                <!-- Nome do responsável -->
+                <VerticalStackLayout Grid.Row="3" Grid.Column="0" Spacing="5">
+                    <Label Text="Nome do responsável" FontSize="14" TextColor="Black" />
+                    <Border Stroke="#DDDDDD"
+                            StrokeThickness="1"
+                            StrokeShape="RoundRectangle 5,5,5,5">
+                        <Entry Placeholder="Nome completo" 
+                               FontSize="14" 
+                               TextColor="Black"
+                               HeightRequest="40"
+                               x:Name="ResponsavelEntry" />
+                    </Border>
+                </VerticalStackLayout>
+
+                <!-- Endereço reserva -->
+                <VerticalStackLayout Grid.Row="3" Grid.Column="1" Spacing="5">
+                    <Label Text="Endereço reserva" FontSize="14" TextColor="Black" />
+                    <Border Stroke="#DDDDDD"
+                            StrokeThickness="1"
+                            StrokeShape="RoundRectangle 5,5,5,5">
+                        <Entry Placeholder="Endereço alternativo" 
+                               FontSize="14" 
+                               TextColor="Black"
+                               HeightRequest="40"
+                               x:Name="EnderecoReservaEntry" />
+                    </Border>
+                </VerticalStackLayout>
+
+                <!-- Área para informações de atendimento especial -->
+                <VerticalStackLayout Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" Spacing="5"
+                                     x:Name="AtendimentoEspecialDetalhesLayout"
+                                     IsVisible="False">
+                    <Label Text="Detalhes do atendimento especial" FontSize="14" TextColor="Black" />
+                    <Border Stroke="#DDDDDD"
+                            StrokeThickness="1"
+                            StrokeShape="RoundRectangle 5,5,5,5">
+                        <Editor Placeholder="Descreva o tipo de atendimento especial necessário" 
+                                FontSize="14" 
+                                TextColor="Black"
+                                HeightRequest="100"
+                                AutoSize="TextChanges"
+                                x:Name="AtendimentoEspecialEditor" />
+                    </Border>
+                </VerticalStackLayout>
+            </Grid>
+        </ScrollView>
+
+        <!-- Botão Registrar -->
+        <Button Grid.Row="2" 
+                Text="REGISTRAR" 
+                BackgroundColor="#FF3333" 
+                TextColor="White" 
+                CornerRadius="25" 
+                HeightRequest="45" 
+                FontAttributes="Bold"
+                Margin="40,10"
+                HorizontalOptions="Fill"
+                Clicked="OnRegistrarClicked" />
+
+        <!-- Botão Já tenho uma conta -->
+        <Button Grid.Row="3" 
+                Text="Já tenho uma conta" 
+                BackgroundColor="Transparent" 
+                TextColor="#FF3333" 
+                FontSize="14" 
+                BorderWidth="0"
+                HeightRequest="35"
+                HorizontalOptions="Center"
+                Clicked="OnLoginClicked" />
+    </Grid>
+</ContentPage>

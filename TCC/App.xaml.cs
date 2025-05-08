@@ -8,7 +8,7 @@ namespace TCC
         {
             InitializeComponent();
 
-            MainPage = new DriverRegisterPage(); // Mudar página inicial 
+            MainPage = new PassengerAdditionalPage(); // Mudar página inicial 
         }
 
         protected override Window CreateWindow(IActivationState? activationState)
