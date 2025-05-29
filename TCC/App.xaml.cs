@@ -8,17 +8,17 @@ namespace TCC
         {
             InitializeComponent();
 
-            MainPage = new PassengerAdditionalPage(); // Mudar página inicial 
+            MainPage = new DriverRegisterPage(); // Mudar página inicial 
         }
 
         protected override Window CreateWindow(IActivationState? activationState)
         {
-            Window window = base.CreateWindow(activationState);
+            Window window = base.CreateWindow(activationState); // Cria a janela principal
 
-            window.Width = 800;
-            window.Height = 600;
+            window.Width = 800; // Define largura
+            window.Height = 600; // Define altura
 
-            return window;
+            return window; // Retorna a janela configurada
         }
     }
 }

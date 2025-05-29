@@ -2,154 +2,158 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="TCC.Views.DriverRegisterPage"
-             Title="DriverRegisterPage">
-    <Grid RowDefinitions="Auto,*,Auto,Auto">
-        <!-- Cabeçalho vermelho -->
-        <Border Grid.Row="0" BackgroundColor="#FF0000" Padding="20,15" StrokeThickness="0" HorizontalOptions="Fill">
-            <VerticalStackLayout HorizontalOptions="Center" Spacing="5">
-                <Label Text="Criar Conta" 
-                   FontSize="30" 
-                   HorizontalOptions="Center" 
-                   FontAttributes="Bold"
-                   TextColor="White" />
-                <Label Text="Passageiro" 
-                   FontSize="24" 
-                   HorizontalOptions="Center" 
-                   TextColor="White" />
-                <Label Text="Cadastre-se para utilizar o transporte Barbieri!" 
-                   FontSize="14" 
-                   HorizontalOptions="Center" 
-                   TextColor="White"
-                   Margin="0,5,0,0" />
-            </VerticalStackLayout>
-        </Border>
+             Title="Criar Conta"
+             BackgroundColor="#F5F5F5">
 
-        <!-- Conteúdo principal -->
-        <Grid Grid.Row="1" RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto" ColumnDefinitions="*,*" 
-          Padding="15,10" RowSpacing="2" ColumnSpacing="15">
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="15">
 
-            <!-- Linha 1: Nome e Senha -->
-            <VerticalStackLayout Grid.Row="0" Grid.Column="0" Spacing="2">
-                <Label Text="Nome" FontSize="12" Margin="5,0,0,0" />
-                <Entry Placeholder="Nome do usuário" 
-                   FontSize="14" 
-                   BackgroundColor="White" 
-                   TextColor="Black" 
-                   HeightRequest="40" />
-            </VerticalStackLayout>
+            <!-- Cabeçalho -->
+            <Border BackgroundColor="#FF0000" 
+                    Padding="20,30" 
+                    StrokeThickness="0"
+                    StrokeShape="RoundRectangle,8">
+                <VerticalStackLayout HorizontalOptions="Center" Spacing="5">
+                    <Label Text="Criar Conta" 
+                           FontSize="24" 
+                           HorizontalOptions="Center" 
+                           FontAttributes="Bold"
+                           TextColor="White" />
+                    <Label Text="Passageiro" 
+                           FontSize="16" 
+                           HorizontalOptions="Center" 
+                           TextColor="White" />
+                    <Label Text="Cadastre-se para utilizar o transporte Barbieri!" 
+                           FontSize="12" 
+                           HorizontalOptions="Center" 
+                           TextColor="White" />
+                </VerticalStackLayout>
+            </Border>
 
-            <VerticalStackLayout Grid.Row="0" Grid.Column="1" Spacing="2">
-                <Label Text="Senha" FontSize="12" Margin="5,0,0,0" />
-                <Entry Placeholder="Senha" 
-                   FontSize="14" 
-                   IsPassword="True" 
-                   BackgroundColor="White" 
-                   TextColor="Black" 
-                   HeightRequest="40" />
+            <!-- Nome -->
+            <VerticalStackLayout Spacing="5">
+                <Label Text="Nome Completo" FontSize="14" TextColor="#333" />
+                <Entry Placeholder="Digite seu nome completo" 
+                       FontSize="16" 
+                       BackgroundColor="White" 
+                       TextColor="#333" 
+                       HeightRequest="45" />
             </VerticalStackLayout>
 
-            <!-- Linha 2: RG e Confirmar Senha -->
-            <VerticalStackLayout Grid.Row="1" Grid.Column="0" Spacing="2">
-                <Label Text="RG" FontSize="12" Margin="5,0,0,0" />
-                <Entry Placeholder="RG" 
-                   FontSize="14" 
-                   BackgroundColor="White" 
-                   TextColor="Black" 
-                   Keyboard="Numeric" 
-                   HeightRequest="40" />
+            <!-- RG -->
+            <VerticalStackLayout Spacing="5">
+                <Label Text="RG" FontSize="14" TextColor="#333" />
+                <Entry Placeholder="00.000.000-0" 
+                       FontSize="16" 
+                       BackgroundColor="White" 
+                       TextColor="#333" 
+                       Keyboard="Numeric"
+                       HeightRequest="45" />
             </VerticalStackLayout>
 
-            <VerticalStackLayout Grid.Row="1" Grid.Column="1" Spacing="2">
-                <Label Text="Confirmar Senha" FontSize="12" Margin="5,0,0,0" />
-                <Entry Placeholder="Confirmar Senha" 
-                   FontSize="14" 
-                   IsPassword="True" 
-                   BackgroundColor="White" 
-                   TextColor="Black" 
-                   HeightRequest="40" />
+            <!-- CPF -->
+            <VerticalStackLayout Spacing="5">
+                <Label Text="CPF" FontSize="14" TextColor="#333" />
+                <Entry Placeholder="000.000.000-00" 
+                       FontSize="16" 
+                       BackgroundColor="White" 
+                       TextColor="#333" 
+                       Keyboard="Numeric"
+                       HeightRequest="45" />
             </VerticalStackLayout>
 
-            <!-- Linha 3: CPF e Email -->
-            <VerticalStackLayout Grid.Row="2" Grid.Column="0" Spacing="2">
-                <Label Text="CPF" FontSize="12" Margin="5,0,0,0" />
-                <Entry Placeholder="CPF" 
-                   FontSize="14" 
-                   BackgroundColor="White" 
-                   TextColor="Black" 
-                   Keyboard="Numeric" 
-                   HeightRequest="40" />
+            <!-- Email -->
+            <VerticalStackLayout Spacing="5">
+                <Label Text="Email" FontSize="14" TextColor="#333" />
+                <Entry Placeholder="seu@email.com" 
+                       FontSize="16" 
+                       BackgroundColor="White" 
+                       TextColor="#333" 
+                       Keyboard="Email"
+                       HeightRequest="45" />
             </VerticalStackLayout>
 
-            <VerticalStackLayout Grid.Row="2" Grid.Column="1" Spacing="2">
-                <Label Text="Email" FontSize="12" Margin="5,0,0,0" />
-                <Entry Placeholder="Email" 
-                   FontSize="14" 
-                   BackgroundColor="White" 
-                   TextColor="Black" 
-                   Keyboard="Email" 
-                   HeightRequest="40" />
+            <!-- Data de Nascimento -->
+            <VerticalStackLayout Spacing="5">
+                <Label Text="Data de Nascimento" FontSize="14" TextColor="#333" />
+                <DatePicker BackgroundColor="White" 
+                            TextColor="#333" 
+                            FontSize="16"
+                            HeightRequest="45" />
             </VerticalStackLayout>
 
-            <!-- Linha 4: Data de Nascimento e Telefone -->
-            <VerticalStackLayout Grid.Row="3" Grid.Column="0" Spacing="2">
-                <Label Text="Data de Nascimento" FontSize="12" Margin="5,0,0,0" />
-                <Entry Placeholder="Data de Nascimento" 
-                   FontSize="14" 
-                   BackgroundColor="White" 
-                   TextColor="Black" 
-                   HeightRequest="40" />
+            <!-- Telefone -->
+            <VerticalStackLayout Spacing="5">
+                <Label Text="Telefone" FontSize="14" TextColor="#333" />
+                <Entry Placeholder="(11) 99999-9999" 
+                       FontSize="16" 
+                       BackgroundColor="White" 
+                       TextColor="#333" 
+                       Keyboard="Telephone"
+                       HeightRequest="45" />
             </VerticalStackLayout>
 
-            <VerticalStackLayout Grid.Row="3" Grid.Column="1" Spacing="2">
-                <Label Text="Telefone" FontSize="12" Margin="5,0,0,0" />
-                <Entry Placeholder="Telefone" 
-                   FontSize="14" 
-                   BackgroundColor="White" 
-                   TextColor="Black" 
-                   Keyboard="Telephone" 
-                   HeightRequest="40" />
+            <!-- Contato de Emergência -->
+            <VerticalStackLayout Spacing="5">
+                <Label Text="Contato de Emergência" FontSize="14" TextColor="#333" />
+                <Entry Placeholder="(11) 99999-9999" 
+                       FontSize="16" 
+                       BackgroundColor="White" 
+                       TextColor="#333" 
+                       Keyboard="Telephone"
+                       HeightRequest="45" />
             </VerticalStackLayout>
 
-            <!-- Linha 5: Contato de Emergência e endereço  -->
-            <VerticalStackLayout Grid.Row="4" Grid.Column="0" Spacing="2">
-                <Label Text="Contato de Emergência" FontSize="12" Margin="5,0,0,0" />
-                <Entry Placeholder="Contato de Emergência" 
-                   FontSize="14" 
-                   BackgroundColor="White" 
-                   TextColor="Black" 
-                   HeightRequest="40" />
+            <!-- Endereço -->
+            <VerticalStackLayout Spacing="5">
+                <Label Text="Endereço" FontSize="14" TextColor="#333" />
+                <Entry Placeholder="Rua, número, bairro, cidade" 
+                       FontSize="16" 
+                       BackgroundColor="White" 
+                       TextColor="#333" 
+                       HeightRequest="45" />
             </VerticalStackLayout>
 
-            <VerticalStackLayout Grid.Row="4" Grid.Column="1" Spacing="2">
-                <Label Text="Endereço" FontSize="12" Margin="5,0,0,0" />
-                <Entry Placeholder="Endereço" 
-                   FontSize="14" 
-                   BackgroundColor="White" 
-                   TextColor="Black" 
-                   Keyboard="Telephone" 
-                   HeightRequest="40" />
+            <!-- Senha -->
+            <VerticalStackLayout Spacing="5">
+                <Label Text="Senha" FontSize="14" TextColor="#333" />
+                <Entry Placeholder="Mínimo 8 caracteres" 
+                       FontSize="16" 
+                       BackgroundColor="White" 
+                       TextColor="#333" 
+                       IsPassword="True"
+                       HeightRequest="45" />
             </VerticalStackLayout>
-        </Grid>
 
-        <!-- Botão Próximo -->
-        <Button Grid.Row="2" 
-            Text="PRÓXIMO" 
-            BackgroundColor="#FF3333" 
-            TextColor="White" 
-            CornerRadius="25" 
-            HeightRequest="45" 
-            FontAttributes="Bold"
-            Margin="40,10"
-            HorizontalOptions="Fill" />
+            <!-- Confirmar Senha -->
+            <VerticalStackLayout Spacing="5">
+                <Label Text="Confirmar Senha" FontSize="14" TextColor="#333" />
+                <Entry Placeholder="Digite a senha novamente" 
+                       FontSize="16" 
+                       BackgroundColor="White" 
+                       TextColor="#333" 
+                       IsPassword="True"
+                       HeightRequest="45" />
+            </VerticalStackLayout>
 
-        <!-- Botão Já tenho uma conta -->
-        <Button Grid.Row="3" 
-            Text="Já tenho uma conta" 
-            BackgroundColor="Transparent" 
-            TextColor="#FF3333" 
-            FontSize="14" 
-            BorderWidth="0"
-            HeightRequest="35"
-            HorizontalOptions="Center" />
-    </Grid>
+            <!-- Botão Criar Conta -->
+            <Button Text="CRIAR CONTA" 
+                    BackgroundColor="#FF0000" 
+                    TextColor="White" 
+                    CornerRadius="8" 
+                    HeightRequest="50" 
+                    FontSize="16"
+                    FontAttributes="Bold"
+                    Margin="0,20,0,10" />
+
+            <!-- Botão Já tenho conta -->
+            <Button Text="Já tenho uma conta" 
+                    BackgroundColor="Transparent" 
+                    TextColor="#FF0000" 
+                    FontSize="14" 
+                    BorderWidth="0"
+                    HeightRequest="40" />
+
+        </VerticalStackLayout>
+    </ScrollView>
 </ContentPage>
