@@ -6,128 +6,73 @@
              BackgroundColor="White">
 
     <ScrollView>
-        <VerticalStackLayout Padding="20" Spacing="15">
+        <VerticalStackLayout Padding="20" Spacing="20">
 
-            <!-- Cabeçalho -->
-            <Border BackgroundColor="#FF0000" 
-                    Padding="20,30" 
-                    StrokeThickness="0"
-                    StrokeShape="RoundRectangle,8">
-                <VerticalStackLayout HorizontalOptions="Center" Spacing="5">
-                    <Label Text="Criar Conta" 
-                           FontSize="24" 
-                           HorizontalOptions="Center" 
-                           FontAttributes="Bold"
-                           TextColor="White" />
-                    <Label Text="Passageiro" 
-                           FontSize="16" 
-                           HorizontalOptions="Center" 
-                           TextColor="White" />
-                    <Label Text="Cadastre-se para utilizar o transporte Barbieri!" 
-                           FontSize="12" 
-                           HorizontalOptions="Center" 
-                           TextColor="White" />
+            <!-- Cabeçalho vermelho com curva -->
+            <Grid HeightRequest="200" BackgroundColor="#FF0000">
+                <Path Fill="#FF3333" 
+                      Data="M0,160 C150,220 250,100 400,160 L400,0 L0,0 Z" />
+                <VerticalStackLayout HorizontalOptions="Center" VerticalOptions="Center" Spacing="5">
+                    <Label Text="Criar Conta" FontSize="32" FontAttributes="Bold" TextColor="White" />
+                    <Label Text="Passageiro" FontSize="20" TextColor="White" />
+                    <Label Text="Cadastre-se para utilizar o transporte Barbieri!" FontSize="12" TextColor="White" />
                 </VerticalStackLayout>
-            </Border>
+            </Grid>
 
+            <!-- 📋 Campos de Cadastro -->
             <!-- Nome -->
             <VerticalStackLayout Spacing="5">
                 <Label Text="Nome" FontSize="14" />
-                <Entry Placeholder="Nome do usuário"
-                       FontSize="16"
-                       BackgroundColor="White"
-                       TextColor="Black"
-                       HeightRequest="45" />
+                <Entry Placeholder="Nome do usuário" FontSize="16" TextColor="Black" HeightRequest="45" />
             </VerticalStackLayout>
 
             <!-- Senha -->
             <VerticalStackLayout Spacing="5">
                 <Label Text="Senha" FontSize="14" />
-                <Entry Placeholder="Senha"
-                       IsPassword="True"
-                       FontSize="16"
-                       BackgroundColor="White"
-                       TextColor="Black"
-                       HeightRequest="45" />
+                <Entry Placeholder="Senha" IsPassword="True" FontSize="16" TextColor="Black" HeightRequest="45" />
             </VerticalStackLayout>
 
             <!-- Confirmar Senha -->
             <VerticalStackLayout Spacing="5">
                 <Label Text="Confirmar Senha" FontSize="14" />
-                <Entry Placeholder="Confirmar Senha"
-                       IsPassword="True"
-                       FontSize="16"
-                       BackgroundColor="White"
-                       TextColor="Black"
-                       HeightRequest="45" />
+                <Entry Placeholder="Confirmar Senha" IsPassword="True" FontSize="16" TextColor="Black" HeightRequest="45" />
             </VerticalStackLayout>
 
             <!-- RG -->
             <VerticalStackLayout Spacing="5">
                 <Label Text="RG" FontSize="14" />
-                <Entry Placeholder="RG"
-                       FontSize="16"
-                       Keyboard="Numeric"
-                       BackgroundColor="White"
-                       TextColor="Black"
-                       HeightRequest="45" />
+                <Entry Placeholder="RG" FontSize="16" Keyboard="Numeric" TextColor="Black" HeightRequest="45" />
             </VerticalStackLayout>
 
             <!-- CPF -->
             <VerticalStackLayout Spacing="5">
                 <Label Text="CPF" FontSize="14" />
-                <Entry Placeholder="CPF"
-                       FontSize="16"
-                       Keyboard="Numeric"
-                       BackgroundColor="White"
-                       TextColor="Black"
-                       HeightRequest="45" />
+                <Entry Placeholder="CPF" FontSize="16" Keyboard="Numeric" TextColor="Black" HeightRequest="45" />
             </VerticalStackLayout>
 
             <!-- Email -->
             <VerticalStackLayout Spacing="5">
                 <Label Text="Email" FontSize="14" />
-                <Entry Placeholder="Email"
-                       FontSize="16"
-                       Keyboard="Email"
-                       BackgroundColor="White"
-                       TextColor="Black"
-                       HeightRequest="45" />
+                <Entry Placeholder="Email" FontSize="16" Keyboard="Email" TextColor="Black" HeightRequest="45" />
             </VerticalStackLayout>
 
             <!-- Endereço -->
             <VerticalStackLayout Spacing="5">
                 <Label Text="Endereço" FontSize="14" />
-                <Entry Placeholder="Endereço"
-                       FontSize="16"
-                       BackgroundColor="White"
-                       TextColor="Black"
-                       HeightRequest="45" />
+                <Entry Placeholder="Endereço" FontSize="16" TextColor="Black" HeightRequest="45" />
             </VerticalStackLayout>
 
             <!-- Telefone -->
             <VerticalStackLayout Spacing="5">
                 <Label Text="Telefone" FontSize="14" />
-                <Entry Placeholder="Telefone"
-                       FontSize="16"
-                       Keyboard="Telephone"
-                       BackgroundColor="White"
-                       TextColor="Black"
-                       HeightRequest="45" />
+                <Entry Placeholder="Telefone" FontSize="16" Keyboard="Telephone" TextColor="Black" HeightRequest="45" />
             </VerticalStackLayout>
 
             <!-- Unidade Escolar -->
             <VerticalStackLayout Spacing="5">
                 <Label Text="Unidade Escolar" FontSize="14" />
-                <Border Stroke="#DDDDDD"
-                        StrokeThickness="1"
-                        StrokeShape="RoundRectangle 5,5,5,5"
-                        HeightRequest="45">
-                    <Picker
-                            FontSize="12"
-                            BackgroundColor="White"
-                            TextColor="Black"
-                            x:Name="UnidadeEscolarPicker">
+                <Border Stroke="#DDDDDD" StrokeThickness="1" StrokeShape="RoundRectangle 5,5,5,5" HeightRequest="45">
+                    <Picker FontSize="12" TextColor="Black" x:Name="UnidadeEscolarPicker">
                         <Picker.Items>
                             <x:String>ETEC</x:String>
                             <x:String>FATEC</x:String>
@@ -137,23 +82,93 @@
                 </Border>
             </VerticalStackLayout>
 
-            <!-- Botão Próximo -->
-            <Button Text="PRÓXIMO"
-                    BackgroundColor="#FF3333"
-                    TextColor="White"
-                    CornerRadius="8"
-                    HeightRequest="50"
-                    FontAttributes="Bold"
-                    FontSize="16"
-                    Margin="0,20,0,10" />
+            <!-- 📸 Foto + Info Adicionais -->
+            <VerticalStackLayout Spacing="20">
+                
+                <!-- Data de Nascimento -->
+                <VerticalStackLayout Spacing="5">
+                    <Label Text="Data de Nascimento" FontSize="14" />
+                    <Border Stroke="#DDDDDD" StrokeThickness="1" StrokeShape="RoundRectangle 5,5,5,5">
+                        <DatePicker FontSize="14" Format="dd/MM/yyyy" TextColor="Black" x:Name="DataNascimentoPicker" />
+                    </Border>
+                </VerticalStackLayout>
 
-            <!-- Botão Já tenho uma conta -->
-            <Button Text="Já tenho uma conta"
-                    BackgroundColor="Transparent"
-                    TextColor="#FF3333"
-                    FontSize="14"
-                    BorderWidth="0"
-                    HeightRequest="40" />
+                <!-- Contato de emergência -->
+                <VerticalStackLayout Spacing="5">
+                    <Label Text="Contato de emergência" FontSize="14" />
+                    <Border Stroke="#DDDDDD" StrokeThickness="1" StrokeShape="RoundRectangle 5,5,5,5">
+                        <Entry Placeholder="Telefone de emergência" FontSize="14" Keyboard="Telephone" x:Name="ContatoEmergenciaEntry" />
+                    </Border>
+                </VerticalStackLayout>
+
+                <!-- Atendimento Especial -->
+                <VerticalStackLayout Spacing="5">
+                    <Label Text="Atendimento especial?" FontSize="14" />
+                    <HorizontalStackLayout Spacing="15">
+                        <HorizontalStackLayout>
+                            <Ellipse Fill="White" Stroke="Black" WidthRequest="20" HeightRequest="20">
+                                <Ellipse.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="OnSimTapped" />
+                                </Ellipse.GestureRecognizers>
+                            </Ellipse>
+                            <Ellipse x:Name="SimPreenchido" Fill="Black" IsVisible="{Binding Source={x:Reference AtendimentoSimRadio}, Path=IsChecked}"
+                                     WidthRequest="12" HeightRequest="12" Margin="-16,0,0,0" />
+                            <Label Text="Sim" Margin="5,0" />
+                        </HorizontalStackLayout>
+
+                        <HorizontalStackLayout>
+                            <Ellipse Fill="White" Stroke="Black" WidthRequest="20" HeightRequest="20">
+                                <Ellipse.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="OnNaoTapped" />
+                                </Ellipse.GestureRecognizers>
+                            </Ellipse>
+                            <Ellipse x:Name="NaoPreenchido" Fill="Black" IsVisible="{Binding Source={x:Reference AtendimentoNaoRadio}, Path=IsChecked}"
+                                     WidthRequest="12" HeightRequest="12" Margin="-16,0,0,0" />
+                            <Label Text="Não" Margin="5,0" />
+                        </HorizontalStackLayout>
+
+                        <RadioButton x:Name="AtendimentoSimRadio" GroupName="AtendimentoEspecial"
+                                     IsChecked="False" CheckedChanged="OnAtendimentoEspecialChanged" IsVisible="False" />
+                        <RadioButton x:Name="AtendimentoNaoRadio" GroupName="AtendimentoEspecial"
+                                     IsChecked="True" IsVisible="False" />
+                    </HorizontalStackLayout>
+                </VerticalStackLayout>
+
+                <!-- Detalhes do Atendimento Especial -->
+                <VerticalStackLayout x:Name="AtendimentoEspecialDetalhesLayout" IsVisible="False" Spacing="5">
+                    <Label Text="Detalhes do atendimento especial" FontSize="14" />
+                    <Border Stroke="#DDDDDD" StrokeThickness="1" StrokeShape="RoundRectangle 5,5,5,5">
+                        <Editor Placeholder="Descreva o atendimento especial necessário" FontSize="14"
+                                TextColor="Black" HeightRequest="100" AutoSize="TextChanges"
+                                x:Name="AtendimentoEspecialEditor" />
+                    </Border>
+                </VerticalStackLayout>
+
+                <!-- Nome do responsável -->
+                <VerticalStackLayout Spacing="5">
+                    <Label Text="Nome do responsável" FontSize="14" />
+                    <Border Stroke="#DDDDDD" StrokeThickness="1" StrokeShape="RoundRectangle 5,5,5,5">
+                        <Entry Placeholder="Nome completo do responsável" FontSize="14" TextColor="Black"
+                               x:Name="ResponsavelEntry" />
+                    </Border>
+                </VerticalStackLayout>
+
+                <!-- Endereço reserva -->
+                <VerticalStackLayout Spacing="5">
+                    <Label Text="Endereço reserva" FontSize="14" />
+                    <Border Stroke="#DDDDDD" StrokeThickness="1" StrokeShape="RoundRectangle 5,5,5,5">
+                        <Entry Placeholder="Endereço alternativo" FontSize="14" TextColor="Black"
+                               x:Name="EnderecoReservaEntry" />
+                    </Border>
+                </VerticalStackLayout>
+            </VerticalStackLayout>
+
+            <!-- Botões finais -->
+            <Button Text="REGISTRAR" BackgroundColor="#FF3333" TextColor="White" CornerRadius="25"
+                    HeightRequest="50" FontAttributes="Bold" Clicked="OnRegistrarClicked" />
+
+            <Button Text="Já tenho uma conta" BackgroundColor="Transparent" TextColor="#FF3333"
+                    FontSize="14" Clicked="OnLoginClicked" />
 
         </VerticalStackLayout>
     </ScrollView>

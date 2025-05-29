@@ -19,7 +19,7 @@
                            HorizontalOptions="Center" 
                            FontAttributes="Bold"
                            TextColor="White" />
-                    <Label Text="Passageiro" 
+                    <Label Text="Motorista" 
                            FontSize="16" 
                            HorizontalOptions="Center" 
                            TextColor="White" />
@@ -96,12 +96,62 @@
             <!-- Contato de Emergência -->
             <VerticalStackLayout Spacing="5">
                 <Label Text="Contato de Emergência" FontSize="14" TextColor="#333" />
-                <Entry Placeholder="(11) 99999-9999" 
+                <Entry x:Name="ContatoEmergenciaEntry"
+                       Placeholder="(11) 99999-9999" 
                        FontSize="16" 
                        BackgroundColor="White" 
                        TextColor="#333" 
                        Keyboard="Telephone"
                        HeightRequest="45" />
+            </VerticalStackLayout>
+
+            <!-- CNH -->
+            <VerticalStackLayout Spacing="5">
+                <Label Text="CNH" FontSize="14" TextColor="#333" />
+                <Entry x:Name="CNHEntry"
+                       Placeholder="Número da CNH" 
+                       FontSize="16" 
+                       BackgroundColor="White" 
+                       TextColor="#333" 
+                       Keyboard="Numeric"
+                       HeightRequest="45" />
+            </VerticalStackLayout>
+
+            <!-- Sexo -->
+            <VerticalStackLayout Spacing="5">
+                <Label Text="Sexo" FontSize="14" TextColor="#333" />
+                <HorizontalStackLayout Spacing="20">
+
+                    <!-- Masculino -->
+                    <HorizontalStackLayout VerticalOptions="Center">
+                        <Ellipse Fill="White" Stroke="Black" StrokeThickness="1" WidthRequest="20" HeightRequest="20">
+                            <Ellipse.GestureRecognizers>
+                                <TapGestureRecognizer />
+                            </Ellipse.GestureRecognizers>
+                        </Ellipse>
+                        <Ellipse x:Name="MasculinoPreenchido" Fill="Black" IsVisible="{Binding Source={x:Reference MasculinoRadio}, Path=IsChecked}"
+                                 WidthRequest="12" HeightRequest="12" HorizontalOptions="Center" VerticalOptions="Center"
+                                 Margin="-16,0,0,0"/>
+                        <Label Text="Masculino" Margin="5,0,0,0" VerticalOptions="Center"/>
+                    </HorizontalStackLayout>
+
+                    <!-- Feminino -->
+                    <HorizontalStackLayout VerticalOptions="Center">
+                        <Ellipse Fill="White" Stroke="Black" StrokeThickness="1" WidthRequest="20" HeightRequest="20">
+                            <Ellipse.GestureRecognizers>
+                                <TapGestureRecognizer />
+                            </Ellipse.GestureRecognizers>
+                        </Ellipse>
+                        <Ellipse x:Name="FemininoPreenchido" Fill="Black" IsVisible="{Binding Source={x:Reference FemininoRadio}, Path=IsChecked}"
+                                 WidthRequest="12" HeightRequest="12" HorizontalOptions="Center" VerticalOptions="Center"
+                                 Margin="-16,0,0,0"/>
+                        <Label Text="Feminino" Margin="5,0,0,0" VerticalOptions="Center"/>
+                    </HorizontalStackLayout>
+
+                    <!-- Botões Invisíveis -->
+                    <RadioButton x:Name="MasculinoRadio" GroupName="Sexo" IsChecked="True" IsVisible="False" />
+                    <RadioButton x:Name="FemininoRadio" GroupName="Sexo" IsChecked="False" IsVisible="False" />
+                </HorizontalStackLayout>
             </VerticalStackLayout>
 
             <!-- Endereço -->
