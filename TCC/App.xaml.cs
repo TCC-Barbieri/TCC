@@ -8,7 +8,7 @@ namespace TCC
         {
             InitializeComponent();
 
-            MainPage = new Home(); // Mudar página inicial 
+            Application.Current.MainPage = new NavigationPage(new Home());
         }
 
         protected override Window CreateWindow(IActivationState? activationState)
