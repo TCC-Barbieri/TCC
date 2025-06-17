@@ -173,7 +173,7 @@
                     CornerRadius="25"
                     HeightRequest="50"
                     FontAttributes="Bold"
-                    Clicked="OnRegistrarClicked" />
+                    Clicked="OnRegisterClicked" />
 
             <Button Text="I already have an account"
                     BackgroundColor="Transparent"

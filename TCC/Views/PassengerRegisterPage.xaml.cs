@@ -30,7 +30,7 @@ public partial class PassengerRegisterPage : ContentPage
     }
 
     // Evento do botão registrar
-    private async void OnRegistrarClicked(object sender, EventArgs e)
+    private async void OnRegisterClicked(object sender, EventArgs e)
     {
         try
         {
