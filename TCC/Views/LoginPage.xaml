@@ -5,70 +5,59 @@
              Title="LoginPage"
              BackgroundColor="White">
 
-    <VerticalStackLayout>
-        <!-- Header occupying the entire top part -->
-        <Border BackgroundColor="#FF3333" Padding="20" StrokeThickness="0" HeightRequest="300" HorizontalOptions="FillAndExpand">
-            <VerticalStackLayout HorizontalOptions="Center" Spacing="8">
-                <Label Text="🎉 Seja Bem-Vindo! 🎉" 
-                   FontSize="26" 
-                   HorizontalOptions="Center" 
-                   FontAttributes="Bold"
-                   TextColor="White" />
-                <Label Text="Conecte-se ao serviço de transporte Barbieri!" 
-                   FontSize="16" 
-                   HorizontalOptions="Center" 
-                   TextColor="White" />
-                <Label Text="Prepare-se para embarcar rumo aos seus sonhos 🚋" 
-                   FontSize="16" 
-                   HorizontalOptions="Center" 
-                   FontAttributes="Bold"
-                   TextColor="White" />
+    <ScrollView>
+        <VerticalStackLayout>
+            <!-- Header occupying the entire top part -->
+            <Border BackgroundColor="#FF3333" Padding="20" StrokeThickness="0" HeightRequest="300" HorizontalOptions="FillAndExpand">
+                <VerticalStackLayout HorizontalOptions="Center" Spacing="8">
+                    <Label Text="🎉 Seja Bem-Vindo! 🎉" 
+               FontSize="26" 
+               HorizontalOptions="Center" 
+               FontAttributes="Bold"
+               TextColor="White" />
+                    <Label Text="Conecte-se ao serviço de transporte Barbieri!" 
+               FontSize="16" 
+               HorizontalOptions="Center" 
+               TextColor="White" />
+                    <Label Text="Prepare-se para embarcar rumo aos seus sonhos 🚋" 
+               FontSize="16" 
+               HorizontalOptions="Center" 
+               FontAttributes="Bold"
+               TextColor="White" />
 
-                <!-- Logo Container -->
-                <Frame BackgroundColor="White" CornerRadius="60" Padding="10" HorizontalOptions="Center" HeightRequest="120" WidthRequest="120" HasShadow="False">
-                    <Image Source="logo.jpg" HeightRequest="100" WidthRequest="100" HorizontalOptions="Center" VerticalOptions="Center" />
-                </Frame>
-            </VerticalStackLayout>
-        </Border>
+                    <!-- Logo Container -->
+                    <Frame BackgroundColor="White" CornerRadius="60" Padding="10" HorizontalOptions="Center" HeightRequest="120" WidthRequest="120" HasShadow="False">
+                        <Image Source="logo.jpg" HeightRequest="100" WidthRequest="100" HorizontalOptions="Center" VerticalOptions="Center" />
+                    </Frame>
+                </VerticalStackLayout>
+            </Border>
 
-        <ScrollView>
-            <VerticalStackLayout Padding="20" Spacing="20">
-                <!-- Input Fields -->
-                <Entry Placeholder="Nome do usuário" 
-                   FontSize="16" 
-                   BackgroundColor="White" 
-                   TextColor="Black" 
-                   Margin="10,5" 
-                   HeightRequest="50" />
+            <ScrollView>
+                <VerticalStackLayout Padding="20" Spacing="15">
 
-                <Entry Placeholder="Senha" 
-                   FontSize="16" 
-                   IsPassword="True" 
-                   BackgroundColor="White" 
-                   TextColor="Black" 
-                   Margin="10,5" 
-                   HeightRequest="50" />
+                    <Label Text="Login" FontSize="32" HorizontalOptions="Center" />
 
-                <!-- Options -->
-                <HorizontalStackLayout>
-                    <CheckBox />
-                    <Label Text="Manter-me logado" VerticalOptions="Center" FontSize="14" />
-                    <Button Text="Esqueci minha senha" 
-                        TextColor="#FF3333" 
-                        FontSize="14" 
-                        BackgroundColor="Transparent" 
-                        HorizontalOptions="End" />
-                </HorizontalStackLayout>
+                    <Entry x:Name="EmailEntry" Placeholder="E-mail" Keyboard="Email" />
+                    <Entry x:Name="PasswordEntry" Placeholder="Senha" IsPassword="True" />
 
-                <!-- Login Button -->
-                <Button Text="EMBARCAR" 
-                    BackgroundColor="#FF3333" 
-                    TextColor="White" 
-                    FontSize="18" 
-                    CornerRadius="10" 
-                    HeightRequest="50" />
-            </VerticalStackLayout>
-        </ScrollView>
-    </VerticalStackLayout>
+                    <Picker x:Name="UserTypePicker" Title="Tipo de usuário">
+                        <Picker.ItemsSource>
+                            <x:Array Type="{x:Type x:String}">
+                                <x:String>Passageiro</x:String>
+                                <x:String>Motorista</x:String>
+                            </x:Array>
+                        </Picker.ItemsSource>
+                    </Picker>
+
+                    <Button Text="Entrar"
+                    BackgroundColor="Red"
+                    TextColor="White"
+                            Clicked="OnLoginClicked"/>
+
+                </VerticalStackLayout>
+
+            </ScrollView>
+        </VerticalStackLayout>
+    </ScrollView>
 
 </ContentPage>
