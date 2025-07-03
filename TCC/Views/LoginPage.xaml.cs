@@ -34,6 +34,8 @@ public partial class LoginPage : ContentPage
                 await SecureStorage.SetAsync("user_type", "passenger");
                 await SecureStorage.SetAsync("user_id", passenger.Id.ToString());
 
+                await Navigation.PushAsync(new Index()); // Redirecting to the main page after successful login
+
                 await DisplayAlert("Sucesso", "Login realizado com sucesso!", "OK");
             }
         }
@@ -45,6 +47,8 @@ public partial class LoginPage : ContentPage
             {
                 await SecureStorage.SetAsync("user_type", "driver");
                 await SecureStorage.SetAsync("user_id", driver.Id.ToString());
+
+                await Navigation.PushAsync(new Index()); // Redirecting to the main page after successful login
 
                 await DisplayAlert("Sucesso", "Login realizado com sucesso!", "OK");
             }
