@@ -37,6 +37,8 @@ public partial class LoginPage : ContentPage
                 await Navigation.PushAsync(new Index()); // Redirecting to the main page after successful login
 
                 await DisplayAlert("Sucesso", "Login realizado com sucesso!", "OK");
+
+                return;
             }
         }
         else if (userType == "Motorista")
@@ -51,9 +53,25 @@ public partial class LoginPage : ContentPage
                 await Navigation.PushAsync(new Index()); // Redirecting to the main page after successful login
 
                 await DisplayAlert("Sucesso", "Login realizado com sucesso!", "OK");
+
+                return;
             }
         }
 
         await DisplayAlert("Erro", "Usuário ou senha inválidos.", "OK");
     }
+
+    protected override async void OnAppearing() // Verifies if we already have a user logged in (so we can skip the login page)
+    {
+        base.OnAppearing();
+
+        var userType = await SecureStorage.GetAsync("user_type");
+        var userId = await SecureStorage.GetAsync("user_id");
+
+        if (!string.IsNullOrEmpty(userType) && !string.IsNullOrEmpty(userId))
+        {
+            await Navigation.PushAsync(new Index());
+        }
+    }
+
 }
