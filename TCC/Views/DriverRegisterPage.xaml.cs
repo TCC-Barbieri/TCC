@@ -39,8 +39,6 @@ public partial class DriverRegisterPage : ContentPage
                 return;
             }
 
-            var genero = MasculinoRadio.IsChecked ? "Masculino" : "Feminino";
-
             var driver = new Driver
             {
                 Name = NameEntry.Text,
@@ -53,7 +51,7 @@ public partial class DriverRegisterPage : ContentPage
                 Address = AddressEntry.Text,
                 Password = PasswordEntry.Text,
                 BirthDate = BirthDatePicker.Date,
-                Genre = genero
+                Genre = GenderPicker.SelectedItem?.ToString() ?? "Não especificado"
             };
 
             if (await _databaseService.IsEmailTaken(driver.Email))

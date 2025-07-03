@@ -40,7 +40,7 @@ namespace TCC.Models
         [NotNull, MaxLength(100), Unique]
         public string CNH { get; set; }
 
-        [NotNull, MaxLength(20), Unique]
+        [NotNull, MaxLength(20)]
         public string Genre { get; set; }
 
         [NotNull, MaxLength(200)]

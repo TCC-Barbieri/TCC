@@ -136,40 +136,19 @@
             </VerticalStackLayout>
 
             <!-- Sexo -->
+            <!-- Masculino -->
             <VerticalStackLayout Spacing="5">
-                <Label Text="Sexo" FontSize="14" TextColor="#333" />
-                <HorizontalStackLayout Spacing="20">
-
-                    <!-- Masculino -->
-                    <HorizontalStackLayout VerticalOptions="Center">
-                        <Ellipse Fill="White" Stroke="Black" StrokeThickness="1" WidthRequest="20" HeightRequest="20">
-                            <Ellipse.GestureRecognizers>
-                                <TapGestureRecognizer Command="{Binding SelectMasculinoCommand}" />
-                            </Ellipse.GestureRecognizers>
-                        </Ellipse>
-                        <Ellipse x:Name="MasculinoPreenchido" Fill="Black" IsVisible="{Binding MasculinoSelected}"
-                                 WidthRequest="12" HeightRequest="12" HorizontalOptions="Center" VerticalOptions="Center"
-                                 Margin="-16,0,0,0"/>
-                        <Label Text="Masculino" Margin="5,0,0,0" VerticalOptions="Center"/>
-                    </HorizontalStackLayout>
-
-                    <!-- Feminino -->
-                    <HorizontalStackLayout VerticalOptions="Center">
-                        <Ellipse Fill="White" Stroke="Black" StrokeThickness="1" WidthRequest="20" HeightRequest="20">
-                            <Ellipse.GestureRecognizers>
-                                <TapGestureRecognizer Command="{Binding SelectFemininoCommand}" />
-                            </Ellipse.GestureRecognizers>
-                        </Ellipse>
-                        <Ellipse x:Name="FemininoPreenchido" Fill="Black" IsVisible="{Binding FemininoSelected}"
-                                 WidthRequest="12" HeightRequest="12" HorizontalOptions="Center" VerticalOptions="Center"
-                                 Margin="-16,0,0,0"/>
-                        <Label Text="Feminino" Margin="5,0,0,0" VerticalOptions="Center"/>
-                    </HorizontalStackLayout>
-
-                    <!-- Botões Invisíveis -->
-                    <RadioButton x:Name="MasculinoRadio" GroupName="Sexo" IsChecked="True" IsVisible="False" />
-                    <RadioButton x:Name="FemininoRadio" GroupName="Sexo" IsChecked="False" IsVisible="False" />
-                </HorizontalStackLayout>
+                <Label Text="Gender" />
+                <Border Stroke="#DDDDDD" StrokeThickness="1" StrokeShape="RoundRectangle 5,5,5,5" HeightRequest="45">
+                    <Picker x:Name="GenderPicker" >
+                        <Picker.Items>
+                            <x:String>Male</x:String>
+                            <x:String>Female</x:String>
+                            <x:String>Other</x:String>
+                            <x:String>Prefer not to say</x:String>
+                        </Picker.Items>
+                    </Picker>
+                </Border>
             </VerticalStackLayout>
 
             <!-- Endereço -->

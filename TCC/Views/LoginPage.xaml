@@ -53,7 +53,6 @@
                 <HorizontalStackLayout>
                     <CheckBox />
                     <Label Text="Manter-me logado" VerticalOptions="Center" FontSize="14" />
-                    <Label HorizontalOptions="FillAndExpand"/>
                     <Button Text="Esqueci minha senha" 
                         TextColor="#FF3333" 
                         FontSize="14" 
@@ -68,13 +67,6 @@
                     FontSize="18" 
                     CornerRadius="10" 
                     HeightRequest="50" />
-
-                <!-- Register -->
-                <Button Text="Criar conta" 
-                    FontSize="14" 
-                    TextColor="Gray" 
-                    BackgroundColor="Transparent" 
-                    HorizontalOptions="Center" />
             </VerticalStackLayout>
         </ScrollView>
     </VerticalStackLayout>

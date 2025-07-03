@@ -14,6 +14,6 @@ public partial class Home : ContentPage
 
     private void loginButton_Clicked(object sender, EventArgs e)
     {
-        // Precisa completar
+        Navigation.PushAsync(new LoginPage());
     }
 }
