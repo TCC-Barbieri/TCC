@@ -27,7 +27,7 @@ public partial class LoginPage : ContentPage
 
         if (userType == "Passageiro")
         {
-            var passenger = await _databaseService.GetPassengerByEmail(email);
+            Passenger passenger = await _databaseService.GetPassengerByEmail(email);
 
             if (passenger != null && passenger.Password == password)
             {
@@ -39,7 +39,7 @@ public partial class LoginPage : ContentPage
         }
         else if (userType == "Motorista")
         {
-            var driver = await _databaseService.GetDriverByEmail(email);
+            Driver driver = await _databaseService.GetDriverByEmail(email);
 
             if (driver != null && driver.Password == password)
             {
