@@ -26,7 +26,7 @@
 
                 <!-- Logo Container -->
                 <Frame BackgroundColor="White" CornerRadius="60" Padding="10" HorizontalOptions="Center" HeightRequest="120" WidthRequest="120" HasShadow="False">
-                    <Image Source="logo.png" HeightRequest="100" WidthRequest="100" HorizontalOptions="Center" VerticalOptions="Center" />
+                    <Image Source="logo.jpg" HeightRequest="100" WidthRequest="100" HorizontalOptions="Center" VerticalOptions="Center" />
                 </Frame>
             </VerticalStackLayout>
         </Border>
