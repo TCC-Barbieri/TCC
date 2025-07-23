@@ -88,16 +88,14 @@ public partial class PassengerRegisterPage : ContentPage
         }
     }
 
-
-    // Evento do botão "Já tenho uma conta"
-    private async void OnLoginClicked(object sender, EventArgs e)
-    {
-        
-    }
-
     private async void Button_Clicked(object sender, EventArgs e)
     {
         string dbPath = FileSystem.AppDataDirectory;
         await DisplayAlert("Database Path", dbPath, "OK");
+    }
+
+    private void OnAlreadyHaveAccount_Clicked(object sender, EventArgs e)
+    {
+        Navigation.PushAsync(new Views.LoginPage());
     }
 }

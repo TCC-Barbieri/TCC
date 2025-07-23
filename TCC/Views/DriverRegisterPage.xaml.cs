@@ -69,4 +69,9 @@ public partial class DriverRegisterPage : ContentPage
             await DisplayAlert("Erro", $"Erro ao registrar motorista: {ex.Message}", "OK");
         }
     }
+    
+    private void OnAlreadyHaveAccount_Clicked(object sender, EventArgs e)
+    {
+        Navigation.PushAsync(new Views.LoginPage());
+    }
 }

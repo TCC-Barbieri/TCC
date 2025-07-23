@@ -60,7 +60,7 @@ public partial class Index : ContentPage
         SecureStorage.Remove("user_type");
 
         // Redireciona para tela de login (limpando a pilha de navegação)
-        Application.Current.MainPage = new NavigationPage(new LoginPage());
+        Application.Current.MainPage = new NavigationPage(new Home());
     }
 
 }

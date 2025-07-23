@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              x:Class="TCC.Views.PassengerRegisterPage"
-             Title="Create Account"
+             Title="Criar Conta"
              BackgroundColor="White">
 
     <ScrollView>
@@ -22,26 +22,16 @@
             <Grid HeightRequest="200" BackgroundColor="#FF0000">
                 <Path Fill="#FF3333" Data="M0,160 C150,220 250,100 400,160 L400,0 L0,0 Z" />
                 <VerticalStackLayout HorizontalOptions="Center" VerticalOptions="Center" Spacing="5">
-                    <Label Text="Create Account" FontSize="32" FontAttributes="Bold" TextColor="White" />
-                    <Label Text="Passenger" FontSize="20" TextColor="White" />
-                    <Label Text="Register to use Barbieri Transport!" FontSize="12" TextColor="White" />
+                    <Label Text="Criar Conta" FontSize="32" FontAttributes="Bold" TextColor="White" />
+                    <Label Text="Passageiro" FontSize="20" TextColor="White" />
+                    <Label Text="Registre-se para usar o Transporte Barbieri!" FontSize="12" TextColor="White" />
                 </VerticalStackLayout>
             </Grid>
 
             <!-- Registration Fields -->
             <VerticalStackLayout Spacing="5">
-                <Label Text="Name" />
-                <Entry x:Name="NameEntry" Placeholder="Full name" HeightRequest="45" />
-            </VerticalStackLayout>
-
-            <VerticalStackLayout Spacing="5">
-                <Label Text="Password" />
-                <Entry x:Name="PasswordEntry" Placeholder="Password" IsPassword="True" HeightRequest="45" />
-            </VerticalStackLayout>
-
-            <VerticalStackLayout Spacing="5">
-                <Label Text="Confirm Password" />
-                <Entry x:Name="ConfirmPasswordEntry" Placeholder="Confirm password" IsPassword="True" HeightRequest="45" />
+                <Label Text="Nome" />
+                <Entry x:Name="NameEntry" Placeholder="Nome completo" HeightRequest="45" />
             </VerticalStackLayout>
 
             <VerticalStackLayout Spacing="5">
@@ -68,13 +58,15 @@
             </VerticalStackLayout>
 
             <VerticalStackLayout Spacing="5">
-                <Label Text="Address" />
-                <Entry x:Name="AddressEntry" Placeholder="Home address" HeightRequest="45" />
+                <Label Text="Data de Nascimento" />
+                <Border Stroke="#DDDDDD" StrokeThickness="1" StrokeShape="RoundRectangle 5,5,5,5">
+                    <DatePicker x:Name="BirthDatePicker" Format="dd/MM/yyyy" />
+                </Border>
             </VerticalStackLayout>
 
             <VerticalStackLayout Spacing="5">
-                <Label Text="Phone number" />
-                <Entry x:Name="PhoneEntry" Placeholder="Phone number" HeightRequest="45" Keyboard="Telephone">
+                <Label Text="Telefone" />
+                <Entry x:Name="PhoneEntry" Placeholder="(11) 99999-9999" HeightRequest="45" Keyboard="Telephone">
                     <Entry.Behaviors>
                         <toolkit:MaskedBehavior Mask="(XX) XXXXX-XXXX" />
                     </Entry.Behaviors>
@@ -82,62 +74,70 @@
             </VerticalStackLayout>
 
             <VerticalStackLayout Spacing="5">
-                <Label Text="Gender" />
+                <Label Text="Contato de emergência" />
+                <Border Stroke="#DDDDDD" StrokeThickness="1" StrokeShape="RoundRectangle 5,5,5,5">
+                    <Entry x:Name="EmergencyPhoneEntry" Placeholder="Telefone de emergência" Keyboard="Telephone">
+                        <Entry.Behaviors>
+                            <toolkit:MaskedBehavior Mask="(XX) XXXXX-XXXX" />
+                        </Entry.Behaviors>
+                    </Entry>
+                </Border>
+            </VerticalStackLayout>
+
+            <VerticalStackLayout Spacing="5">
+                <Label Text="Gênero" />
                 <Border Stroke="#DDDDDD" StrokeThickness="1" StrokeShape="RoundRectangle 5,5,5,5" HeightRequest="45">
                     <Picker x:Name="GenderPicker" >
                         <Picker.Items>
-                            <x:String>Male</x:String>
-                            <x:String>Female</x:String>
-                            <x:String>Other</x:String>
-                            <x:String>Prefer not to say</x:String>
+                            <x:String>Masculino</x:String>
+                            <x:String>Feminino</x:String>
+                            <x:String>Outro</x:String>
+                            <x:String>Prefiro não dizer</x:String>
                         </Picker.Items>
                     </Picker>
                 </Border>
             </VerticalStackLayout>
 
             <VerticalStackLayout Spacing="5">
-                <Label Text="School" />
-                <Border Stroke="#DDDDDD" StrokeThickness="1" StrokeShape="RoundRectangle 5,5,5,5" HeightRequest="45">
-                    <Picker x:Name="SchoolPicker">
-                        <Picker.Items>
-                            <x:String>ETEC</x:String>
-                            <x:String>FATEC</x:String>
-                            <x:String>UNESP</x:String>
-                        </Picker.Items>
-                    </Picker>
-                </Border>
+                <Label Text="Endereço" />
+                <Entry x:Name="AddressEntry" Placeholder="Endereço residencial" HeightRequest="45" />
+            </VerticalStackLayout>
+
+            <VerticalStackLayout Spacing="5">
+                <Label Text="Senha" />
+                <Entry x:Name="PasswordEntry" Placeholder="Senha" IsPassword="True" HeightRequest="45" />
+            </VerticalStackLayout>
+
+            <VerticalStackLayout Spacing="5">
+                <Label Text="Confirmar Senha" />
+                <Entry x:Name="ConfirmPasswordEntry" Placeholder="Confirmar senha" IsPassword="True" HeightRequest="45" />
             </VerticalStackLayout>
 
             <!-- Additional Info -->
             <VerticalStackLayout Spacing="20">
                 <VerticalStackLayout Spacing="5">
-                    <Label Text="Birth Date" />
-                    <Border Stroke="#DDDDDD" StrokeThickness="1" StrokeShape="RoundRectangle 5,5,5,5">
-                        <DatePicker x:Name="BirthDatePicker" Format="dd/MM/yyyy" />
-                    </Border>
-                </VerticalStackLayout>
-
-                <VerticalStackLayout Spacing="5">
-                    <Label Text="Emergency contact" />
-                    <Border Stroke="#DDDDDD" StrokeThickness="1" StrokeShape="RoundRectangle 5,5,5,5">
-                        <Entry x:Name="EmergencyPhoneEntry" Placeholder="Emergency phone number" Keyboard="Telephone">
-                            <Entry.Behaviors>
-                                <toolkit:MaskedBehavior Mask="(XX) XXXXX-XXXX" />
-                            </Entry.Behaviors>
-                        </Entry>
+                    <Label Text="Escola" />
+                    <Border Stroke="#DDDDDD" StrokeThickness="1" StrokeShape="RoundRectangle 5,5,5,5" HeightRequest="45">
+                        <Picker x:Name="SchoolPicker">
+                            <Picker.Items>
+                                <x:String>ETEC</x:String>
+                                <x:String>FATEC</x:String>
+                                <x:String>UNESP</x:String>
+                            </Picker.Items>
+                        </Picker>
                     </Border>
                 </VerticalStackLayout>
 
                 <!-- Special Treatment -->
                 <VerticalStackLayout Spacing="5">
-                    <Label Text="Special treatment?" />
+                    <Label Text="Atendimento especial?" />
                     <HorizontalStackLayout Spacing="20">
                         <RadioButton x:Name="AtendimentoSimRadio"
-                                     Content="Yes"
+                                     Content="Sim"
                                      GroupName="SpecialTreatment"
                                      CheckedChanged="OnAtendimentoEspecialChanged"/>
                         <RadioButton x:Name="AtendimentoNaoRadio"
-                                     Content="No"
+                                     Content="Não"
                                      GroupName="SpecialTreatment"
                                      IsChecked="True"
                                      CheckedChanged="OnAtendimentoEspecialChanged"/>
@@ -145,29 +145,29 @@
                 </VerticalStackLayout>
 
                 <VerticalStackLayout x:Name="SpecialTreatmentDetailsLayout" IsVisible="False" Spacing="5">
-                    <Label Text="Special treatment details" />
+                    <Label Text="Detalhes do atendimento especial" />
                     <Border Stroke="#DDDDDD" StrokeThickness="1" StrokeShape="RoundRectangle 5,5,5,5">
-                        <Editor x:Name="SpecialTreatmentEditor" Placeholder="Describe any special needs" HeightRequest="100" AutoSize="TextChanges" />
+                        <Editor x:Name="SpecialTreatmentEditor" Placeholder="Descreva alguma necessidade especial" HeightRequest="100" AutoSize="TextChanges" />
                     </Border>
                 </VerticalStackLayout>
 
                 <VerticalStackLayout Spacing="5">
-                    <Label Text="Responsible person's name" />
+                    <Label Text="Nome do responsável" />
                     <Border Stroke="#DDDDDD" StrokeThickness="1" StrokeShape="RoundRectangle 5,5,5,5">
-                        <Entry x:Name="ResponsibleEntry" Placeholder="Full name of responsible" />
+                        <Entry x:Name="ResponsibleEntry" Placeholder="Nome completo do responsável" />
                     </Border>
                 </VerticalStackLayout>
 
                 <VerticalStackLayout Spacing="5">
-                    <Label Text="Backup address" />
+                    <Label Text="Endereço alternativo" />
                     <Border Stroke="#DDDDDD" StrokeThickness="1" StrokeShape="RoundRectangle 5,5,5,5">
-                        <Entry x:Name="BackupAddressEntry" Placeholder="Alternative address" />
+                        <Entry x:Name="BackupAddressEntry" Placeholder="Endereço alternativo" />
                     </Border>
                 </VerticalStackLayout>
             </VerticalStackLayout>
 
             <!-- Action Buttons -->
-            <Button Text="REGISTER"
+            <Button Text="REGISTRAR"
                     BackgroundColor="#FF3333"
                     TextColor="White"
                     CornerRadius="25"
@@ -175,11 +175,11 @@
                     FontAttributes="Bold"
                     Clicked="OnRegisterClicked" />
 
-            <Button Text="I already have an account"
+            <Button Text="Já tenho uma conta"
                     BackgroundColor="Transparent"
                     TextColor="#FF3333"
                     FontSize="14"
-                    Clicked="OnLoginClicked" />
+                    Clicked="OnAlreadyHaveAccount_Clicked" />
         </VerticalStackLayout>
     </ScrollView>
 </ContentPage>

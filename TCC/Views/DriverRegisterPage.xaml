@@ -135,17 +135,16 @@
                        HeightRequest="45" />
             </VerticalStackLayout>
 
-            <!-- Sexo -->
-            <!-- Masculino -->
+            <!-- Gênero -->
             <VerticalStackLayout Spacing="5">
-                <Label Text="Gender" />
+                <Label Text="Gênero" FontSize="14" TextColor="#333" />
                 <Border Stroke="#DDDDDD" StrokeThickness="1" StrokeShape="RoundRectangle 5,5,5,5" HeightRequest="45">
                     <Picker x:Name="GenderPicker" >
                         <Picker.Items>
-                            <x:String>Male</x:String>
-                            <x:String>Female</x:String>
-                            <x:String>Other</x:String>
-                            <x:String>Prefer not to say</x:String>
+                            <x:String>Masculino</x:String>
+                            <x:String>Feminino</x:String>
+                            <x:String>Outro</x:String>
+                            <x:String>Prefiro não dizer</x:String>
                         </Picker.Items>
                     </Picker>
                 </Border>
@@ -201,7 +200,8 @@
                     TextColor="#FF0000" 
                     FontSize="14" 
                     BorderWidth="0"
-                    HeightRequest="40" />
+                    HeightRequest="40" 
+                    Clicked="OnAlreadyHaveAccount_Clicked"/>
 
         </VerticalStackLayout>
     </ScrollView>
