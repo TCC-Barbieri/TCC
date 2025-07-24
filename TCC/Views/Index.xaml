@@ -1,21 +1,188 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="TCC.Views.Index">
+             x:Class="TCC.Views.Index"
+             BackgroundColor="#F5F5F5">
 
-    <VerticalStackLayout Padding="20" Spacing="20">
+    <ScrollView>
+        <VerticalStackLayout Spacing="0">
 
-        <Label x:Name="WelcomeLabel"
-               Text="Bem-vindo!"
-               FontSize="24"
-               HorizontalOptions="Center"/>
+            <!-- Header com gradiente vermelho -->
+            <Grid HeightRequest="200" BackgroundColor="#FF0000">
+                <Path Fill="#FF3333" Data="M0,160 C150,220 250,100 400,160 L400,0 L0,0 Z" />
 
-        <Button Text="Sair"
-                Clicked="OnLogoutClicked"
-                BackgroundColor="DarkRed"
-                TextColor="White"
-                CornerRadius="10"
-                Padding="10"
-                FontAttributes="Bold" />
+                <!-- Avatar e informações do usuário -->
+                <VerticalStackLayout HorizontalOptions="Center" VerticalOptions="Center" Spacing="10">
 
-    </VerticalStackLayout>
+                    <!-- Avatar circular -->
+                    <Frame BackgroundColor="White" 
+                           CornerRadius="40" 
+                           Padding="0" 
+                           HorizontalOptions="Center" 
+                           HeightRequest="80" 
+                           WidthRequest="80" 
+                           HasShadow="True">
+                        <Label Text="👤" 
+                               FontSize="40" 
+                               HorizontalOptions="Center" 
+                               VerticalOptions="Center"
+                               TextColor="#FF0000" />
+                    </Frame>
+
+                    <!-- Nome do usuário -->
+                    <Label x:Name="WelcomeLabel"
+                           Text="NOME DO PASSAGEIRO/MOTORISTA"
+                           FontSize="16"
+                           FontAttributes="Bold"
+                           TextColor="White"
+                           HorizontalOptions="Center"/>
+                </VerticalStackLayout>
+            </Grid>
+
+            <!-- Card principal com informações -->
+            <Frame BackgroundColor="White"
+                   Margin="20,10,20,20"
+                   CornerRadius="15"
+                   HasShadow="True"
+                   Padding="0">
+
+                <VerticalStackLayout Spacing="0">
+
+                    <!-- Grid com informações do usuário -->
+                    <Grid Padding="20" RowSpacing="15" ColumnSpacing="20">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+
+                        <!-- RG -->
+                        <VerticalStackLayout Grid.Row="0" Grid.Column="0">
+                            <Label Text="RG" FontSize="12" TextColor="#666" FontAttributes="Bold" />
+                            <Label x:Name="RGLabel" Text="XX.XXX.XXX-X" FontSize="14" TextColor="#333" />
+                        </VerticalStackLayout>
+
+                        <!-- CPF -->
+                        <VerticalStackLayout Grid.Row="0" Grid.Column="1">
+                            <Label Text="CPF" FontSize="12" TextColor="#666" FontAttributes="Bold" />
+                            <Label x:Name="CPFLabel" Text="XXX.XXX.XXX-XX" FontSize="14" TextColor="#333" />
+                        </VerticalStackLayout>
+
+                        <!-- Senha -->
+                        <VerticalStackLayout Grid.Row="1" Grid.Column="0">
+                            <Label Text="Senha" FontSize="12" TextColor="#666" FontAttributes="Bold" />
+                            <Label Text="••••••••••" FontSize="14" TextColor="#333" />
+                        </VerticalStackLayout>
+
+                        <!-- Email -->
+                        <VerticalStackLayout Grid.Row="1" Grid.Column="1">
+                            <Label Text="Email" FontSize="12" TextColor="#666" FontAttributes="Bold" />
+                            <Label x:Name="EmailLabel" Text="email@email.com" FontSize="14" TextColor="#333" />
+                        </VerticalStackLayout>
+
+                        <!-- Endereço -->
+                        <VerticalStackLayout Grid.Row="2" Grid.Column="0">
+                            <Label Text="Endereço" FontSize="12" TextColor="#666" FontAttributes="Bold" />
+                            <Label x:Name="AddressLabel" Text="Rua XV de Novembro - 4123" FontSize="14" TextColor="#333" />
+                        </VerticalStackLayout>
+
+                        <!-- Telefone -->
+                        <VerticalStackLayout Grid.Row="2" Grid.Column="1">
+                            <Label Text="Telefone" FontSize="12" TextColor="#666" FontAttributes="Bold" />
+                            <Label x:Name="PhoneLabel" Text="+55 (14) 00000-0000" FontSize="14" TextColor="#333" />
+                        </VerticalStackLayout>
+
+                        <!-- Campo específico 1 (Escola/CNH) -->
+                        <VerticalStackLayout Grid.Row="3" Grid.Column="0" x:Name="SpecificField1Layout">
+                            <Label x:Name="SpecificField1Label" Text="Escola/CNH" FontSize="12" TextColor="#666" FontAttributes="Bold" />
+                            <Label x:Name="SpecificField1Value" Text="ETEC Joaquim Ferreira do Amaral" FontSize="14" TextColor="#333" />
+                        </VerticalStackLayout>
+
+                        <!-- Campo específico 2 (Turno/Manhã/Tarde/Noite) -->
+                        <VerticalStackLayout Grid.Row="3" Grid.Column="1" x:Name="SpecificField2Layout">
+                            <Label x:Name="SpecificField2Label" Text="Turno" FontSize="12" TextColor="#666" FontAttributes="Bold" />
+                            <Label x:Name="SpecificField2Value" Text="Manhã/Tarde/Noite" FontSize="14" TextColor="#333" />
+                        </VerticalStackLayout>
+
+                        <!-- Contato de emergência -->
+                        <VerticalStackLayout Grid.Row="4" Grid.Column="0">
+                            <Label Text="Contato de emergência" FontSize="12" TextColor="#666" FontAttributes="Bold" />
+                            <Label x:Name="EmergencyContactLabel" Text="(XX) XXXX-XXXX" FontSize="14" TextColor="#333" />
+                        </VerticalStackLayout>
+
+                        <!-- Sexo -->
+                        <VerticalStackLayout Grid.Row="4" Grid.Column="1">
+                            <Label Text="Sexo" FontSize="12" TextColor="#666" FontAttributes="Bold" />
+                            <Label x:Name="GenderLabel" Text="Masculino/Feminino" FontSize="14" TextColor="#333" />
+                        </VerticalStackLayout>
+
+                        <!-- Campo específico 3 (Atendimento PCD) - Apenas para passageiros -->
+                        <VerticalStackLayout Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2" x:Name="SpecialTreatmentLayout" IsVisible="False">
+                            <Label Text="Atendimento PCD?" FontSize="12" TextColor="#666" FontAttributes="Bold" />
+                            <Label x:Name="SpecialTreatmentLabel" Text="S/N" FontSize="14" TextColor="#333" />
+                        </VerticalStackLayout>
+                    </Grid>
+
+                    <!-- Separador -->
+                    <BoxView HeightRequest="1" BackgroundColor="#E0E0E0" Margin="20,0" />
+
+                    <!-- Botões de ação -->
+                    <HorizontalStackLayout HorizontalOptions="End" Spacing="15" Padding="20">
+
+                        <!-- Botão Voltar -->
+                        <Frame BackgroundColor="#FF0000" 
+                               CornerRadius="25" 
+                               Padding="15,10" 
+                               HasShadow="False">
+                            <HorizontalStackLayout Spacing="8">
+                                <Label Text="VOLTAR" FontSize="12" TextColor="White" FontAttributes="Bold" />
+                            </HorizontalStackLayout>
+                            <Frame.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="OnBackClicked" />
+                            </Frame.GestureRecognizers>
+                        </Frame>
+
+                        <!-- Botões de ação circulares -->
+                        <HorizontalStackLayout Spacing="10">
+
+                            <!-- Botão Editar -->
+                            <Frame BackgroundColor="#FF0000" 
+                                   CornerRadius="20" 
+                                   Padding="10" 
+                                   HasShadow="False"
+                                   HeightRequest="40"
+                                   WidthRequest="40">
+                                <Label Text="✏️" FontSize="16" HorizontalOptions="Center" VerticalOptions="Center" />
+                                <Frame.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="OnEditClicked" />
+                                </Frame.GestureRecognizers>
+                            </Frame>
+
+                            <!-- Botão Fechar/Sair -->
+                            <Frame BackgroundColor="#FF0000" 
+                                   CornerRadius="20" 
+                                   Padding="10" 
+                                   HasShadow="False"
+                                   HeightRequest="40"
+                                   WidthRequest="40">
+                                <Label Text="❌" HorizontalTextAlignment="Center" FontSize="16" HorizontalOptions="Center" VerticalOptions="Center" />
+                                <Frame.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="OnLogoutClicked" />
+                                </Frame.GestureRecognizers>
+                            </Frame>
+
+                        </HorizontalStackLayout>
+                    </HorizontalStackLayout>
+                </VerticalStackLayout>
+            </Frame>
+
+        </VerticalStackLayout>
+    </ScrollView>
 </ContentPage>
