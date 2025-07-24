@@ -135,16 +135,13 @@ public partial class Index : ContentPage
 
     private async void OnEditClicked(object sender, EventArgs e)
     {
-        await DisplayAlert("Editar", "Funcionalidade de edição em desenvolvimento", "OK");
-
-        // Aqui você pode implementar a navegação para uma página de edição
-        // if (_currentUserType == "passenger")
-        // {
-        //     await Navigation.PushAsync(new PassengerEditPage(_currentUserId));
-        // }
-        // else if (_currentUserType == "driver")
-        // {
-        //     await Navigation.PushAsync(new DriverEditPage(_currentUserId));
-        // }
+        if (_currentUserType == "passenger")
+        {
+            await Navigation.PushAsync(new PassengerEditPage(_currentUserId));
+        }
+        else if (_currentUserType == "driver")
+        {
+            await Navigation.PushAsync(new DriverEditPage(_currentUserId));
+        }
     }
 }
