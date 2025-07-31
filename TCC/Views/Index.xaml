@@ -165,6 +165,7 @@
                                 </Frame.GestureRecognizers>
                             </Frame>
 
+                                    <TapGestureRecognizer Tapped="OnEditClicked" />
                             <!-- Botão Fechar/Sair -->
                             <Frame BackgroundColor="#FF0000" 
                                    CornerRadius="20" 
