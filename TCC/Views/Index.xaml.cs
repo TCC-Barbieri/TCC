@@ -16,6 +16,12 @@ public partial class Index : ContentPage
         _databaseService = new DatabaseService();
     }
 
+    private void OnIniciarViagemClicked(object sender, EventArgs e)
+    {
+        // Navegar para a página de viagem
+        Navigation.PushAsync(new Views.ViagemPage());
+    }
+
     protected override async void OnAppearing()
     {
         base.OnAppearing();
