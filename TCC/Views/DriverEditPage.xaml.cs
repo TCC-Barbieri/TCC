@@ -96,14 +96,21 @@ public partial class DriverEditPage : ContentPage
                 }
             }
 
-            // Verifica se o email foi alterado e se já está em uso
-            if (_currentDriver.Email != EmailEntry.Text)
+            // Verifica se algum dado foi alterado e se já está em uso por outro usuário
+            var validationResult = await _databaseService.ValidateUniqueUserData(
+                rg: RGEntry.Text.Trim(),
+                cpf: CPFEntry.Text.Trim(),
+                email: EmailEntry.Text.Trim(),
+                phone: PhoneEntry.Text.Trim(),
+                cnh: CNHEntry.Text.Trim(),
+                excludeUserId: _driverId,
+                userType: "driver"
+            );
+
+            if (!validationResult.IsValid)
             {
-                if (await _databaseService.IsEmailTaken(EmailEntry.Text))
-                {
-                    await DisplayAlert("Erro", "Este e-mail já está em uso por outro usuário.", "OK");
-                    return;
-                }
+                await DisplayAlert("Dados já cadastrados", validationResult.Message, "OK");
+                return;
             }
 
             // Atualiza os dados do motorista

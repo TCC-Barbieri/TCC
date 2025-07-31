@@ -10,26 +10,30 @@
         <VerticalStackLayout Padding="20" Spacing="15">
 
             <!-- Cabeçalho -->
-            <Border BackgroundColor="#FF0000" 
-                    Padding="20,30" 
-                    StrokeThickness="0"
-                    StrokeShape="RoundRectangle,8">
-                <VerticalStackLayout HorizontalOptions="Center" Spacing="5">
+            <!-- Opção 2: Grid com imagem de fundo e overlay -->
+            <Grid HeightRequest="120">
+                <Image Source="fundovermelho.jpg" 
+           Aspect="AspectFill" />
+                <!-- Overlay semitransparente opcional para melhorar legibilidade -->
+                <BoxView BackgroundColor="#80000000" />
+                <VerticalStackLayout HorizontalOptions="Center" 
+                         VerticalOptions="Center" 
+                         Spacing="5">
                     <Label Text="Editar Perfil" 
-                           FontSize="24" 
-                           HorizontalOptions="Center" 
-                           FontAttributes="Bold"
-                           TextColor="White" />
+               FontSize="24" 
+               HorizontalOptions="Center" 
+               FontAttributes="Bold"
+               TextColor="White" />
                     <Label Text="Motorista" 
-                           FontSize="16" 
-                           HorizontalOptions="Center" 
-                           TextColor="White" />
+               FontSize="16" 
+               HorizontalOptions="Center" 
+               TextColor="White" />
                     <Label Text="Atualize suas informações no transporte Barbieri!" 
-                           FontSize="12" 
-                           HorizontalOptions="Center" 
-                           TextColor="White" />
+               FontSize="12" 
+               HorizontalOptions="Center" 
+               TextColor="White" />
                 </VerticalStackLayout>
-            </Border>
+            </Grid>
 
             <!-- Nome -->
             <VerticalStackLayout Spacing="5">

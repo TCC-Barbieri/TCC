@@ -16,6 +16,12 @@ public partial class Index : ContentPage
         _databaseService = new DatabaseService();
     }
 
+    private void OnIniciarViagemClicked(object sender, EventArgs e)
+    {
+        // Navegar para a página de viagem
+        Navigation.PushAsync(new Views.ViagemPage());
+    }
+
     protected override async void OnAppearing()
     {
         base.OnAppearing();
@@ -126,6 +132,11 @@ public partial class Index : ContentPage
             // Redireciona para tela inicial (limpando a pilha de navegação)
             Application.Current.MainPage = new NavigationPage(new Home());
         }
+    }
+
+    private async void OnGroupViewClicked(object sender, EventArgs e)
+    {
+        Application.Current.MainPage = new NavigationPage(new GroupViewPage());
     }
 
     private async void OnBackClicked(object sender, EventArgs e)

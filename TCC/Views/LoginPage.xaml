@@ -7,47 +7,46 @@
 
     <ScrollView>
         <VerticalStackLayout>
+
             <!-- Header occupying the entire top part -->
-            <Border BackgroundColor="#FF3333" 
-                    Padding="20" StrokeThickness="0" 
-                    HeightRequest="300">
-                
+            <Grid HeightRequest="300">
+                <Image Source="fundovermelho.jpg" 
+           Aspect="AspectFill" />
+                <!-- Overlay semitransparente opcional para melhorar legibilidade -->
+                <BoxView BackgroundColor="#80000000" />
                 <VerticalStackLayout HorizontalOptions="Center"
-                                     Spacing="8">
+                         VerticalOptions="Center"
+                         Spacing="8">
                     <Label Text="🎉 Seja Bem-Vindo! 🎉" 
-                           FontSize="26" 
-                           HorizontalOptions="Center" 
-                           FontAttributes="Bold"
-                           TextColor="White" />
-
+               FontSize="26" 
+               HorizontalOptions="Center" 
+               FontAttributes="Bold"
+               TextColor="White" />
                     <Label Text="Conecte-se ao serviço de transporte Barbieri!" 
-                           FontSize="16" 
-                           HorizontalOptions="Center" 
-                           TextColor="White" />
-
+               FontSize="16" 
+               HorizontalOptions="Center" 
+               TextColor="White" />
                     <Label Text="Prepare-se para embarcar rumo aos seus sonhos 🚋" 
-                           FontSize="16" 
-                           HorizontalOptions="Center" 
-                           FontAttributes="Bold"
-                           TextColor="White" />
-
+               FontSize="16" 
+               HorizontalOptions="Center" 
+               FontAttributes="Bold"
+               TextColor="White" />
                     <!-- Logo Container -->
                     <Frame BackgroundColor="White" 
-                           CornerRadius="60" 
-                           Padding="10" 
-                           HorizontalOptions="Center" 
-                           HeightRequest="120" 
-                           WidthRequest="120" 
-                           HasShadow="False">
-
+               CornerRadius="60" 
+               Padding="10" 
+               HorizontalOptions="Center" 
+               HeightRequest="120" 
+               WidthRequest="120" 
+               HasShadow="False">
                         <Image Source="logo.jpg" 
-                                HeightRequest="100" 
-                                WidthRequest="100" 
-                                HorizontalOptions="Center" 
-                                VerticalOptions="Center" />
+                    HeightRequest="100" 
+                    WidthRequest="100" 
+                    HorizontalOptions="Center" 
+                    VerticalOptions="Center" />
                     </Frame>
                 </VerticalStackLayout>
-            </Border>
+            </Grid>
 
             <ScrollView>
                 <VerticalStackLayout Padding="20" 
