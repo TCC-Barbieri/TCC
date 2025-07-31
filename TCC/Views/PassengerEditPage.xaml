@@ -9,13 +9,29 @@
     <ScrollView>
         <VerticalStackLayout Padding="20" Spacing="20">
 
-            <!-- Header -->
-            <Grid HeightRequest="200" BackgroundColor="#FF0000">
-                <Path Fill="#FF3333" Data="M0,160 C150,220 250,100 400,160 L400,0 L0,0 Z" />
-                <VerticalStackLayout HorizontalOptions="Center" VerticalOptions="Center" Spacing="5">
-                    <Label Text="Editar Perfil" FontSize="32" FontAttributes="Bold" TextColor="White" />
-                    <Label Text="Passageiro" FontSize="20" TextColor="White" />
-                    <Label Text="Atualize suas informações no Transporte Barbieri!" FontSize="12" TextColor="White" />
+            <!-- Cabeçalho -->
+            <!-- Opção 2: Grid com imagem de fundo e overlay -->
+            <Grid HeightRequest="120">
+                <Image Source="fundovermelho.jpg" 
+           Aspect="AspectFill" />
+                <!-- Overlay semitransparente opcional para melhorar legibilidade -->
+                <BoxView BackgroundColor="#80000000" />
+                <VerticalStackLayout HorizontalOptions="Center" 
+                         VerticalOptions="Center" 
+                         Spacing="5">
+                    <Label Text="Editar Perfil" 
+               FontSize="24" 
+               HorizontalOptions="Center" 
+               FontAttributes="Bold"
+               TextColor="White" />
+                    <Label Text="Passageiro" 
+               FontSize="16" 
+               HorizontalOptions="Center" 
+               TextColor="White" />
+                    <Label Text="Atualize suas informações no Transporte Barbieri!" 
+               FontSize="12" 
+               HorizontalOptions="Center" 
+               TextColor="White" />
                 </VerticalStackLayout>
             </Grid>
 
