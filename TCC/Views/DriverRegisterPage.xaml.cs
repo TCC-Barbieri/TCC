@@ -33,43 +33,83 @@ public partial class DriverRegisterPage : ContentPage
                 return;
             }
 
+            // Verificação de senhas
             if (PasswordEntry.Text != ConfirmPasswordEntry.Text)
             {
                 await DisplayAlert("Erro", "As senhas não coincidem.", "OK");
                 return;
             }
 
+            if (PasswordEntry.Text.Length < 6)
+            {
+                await DisplayAlert("Erro", "A senha deve ter pelo menos 6 caracteres.", "OK");
+                return;
+            }
+
+            // Validação de dados únicos (RG, CPF, Email, Telefone, CNH)
+            var validationResult = await _databaseService.ValidateUniqueUserData(
+                rg: RGEntry.Text.Trim(),
+                cpf: CPFEntry.Text.Trim(),
+                email: EmailEntry.Text.Trim(),
+                phone: PhoneEntry.Text.Trim(),
+                cnh: CNHEntry.Text.Trim()
+            );
+
+            if (!validationResult.IsValid)
+            {
+                await DisplayAlert("Dados já cadastrados", validationResult.Message, "OK");
+                return;
+            }
+
+            // Cria o objeto motorista
             var driver = new Driver
             {
-                Name = NameEntry.Text,
-                RG = RGEntry.Text,
-                CPF = CPFEntry.Text,
-                Email = EmailEntry.Text,
-                PhoneNumber = PhoneEntry.Text,
-                EmergencyPhoneNumber = ContatoEmergenciaEntry.Text,
-                CNH = CNHEntry.Text,
-                Address = AddressEntry.Text,
+                Name = NameEntry.Text.Trim(),
+                RG = RGEntry.Text.Trim(),
+                CPF = CPFEntry.Text.Trim(),
+                Email = EmailEntry.Text.Trim(),
+                PhoneNumber = PhoneEntry.Text.Trim(),
+                EmergencyPhoneNumber = ContatoEmergenciaEntry.Text.Trim(),
+                CNH = CNHEntry.Text.Trim(),
+                Address = AddressEntry.Text.Trim(),
                 Password = PasswordEntry.Text,
                 BirthDate = BirthDatePicker.Date,
                 Genre = GenderPicker.SelectedItem?.ToString() ?? "Não especificado"
             };
 
-            if (await _databaseService.IsEmailTaken(driver.Email))
-            {
-                await DisplayAlert("Erro", "Este e-mail já está em uso.", "OK");
-                return;
-            }
-
+            // Registra o motorista
             await _databaseService.CreateDriver(driver);
+
             await DisplayAlert("Sucesso", "Motorista registrado com sucesso!", "OK");
-            // Navegação ou limpeza dos campos pode ser feita aqui
+
+            // Limpa os campos após registro bem-sucedido
+            ClearFields();
+
+            // Opcional: Navegar para página de login
+            // await Navigation.PushAsync(new Views.LoginPage());
         }
         catch (Exception ex)
         {
             await DisplayAlert("Erro", $"Erro ao registrar motorista: {ex.Message}", "OK");
         }
     }
-    
+
+    private void ClearFields()
+    {
+        NameEntry.Text = string.Empty;
+        RGEntry.Text = string.Empty;
+        CPFEntry.Text = string.Empty;
+        EmailEntry.Text = string.Empty;
+        PhoneEntry.Text = string.Empty;
+        ContatoEmergenciaEntry.Text = string.Empty;
+        CNHEntry.Text = string.Empty;
+        AddressEntry.Text = string.Empty;
+        PasswordEntry.Text = string.Empty;
+        ConfirmPasswordEntry.Text = string.Empty;
+        GenderPicker.SelectedIndex = -1;
+        BirthDatePicker.Date = DateTime.Today;
+    }
+
     private void OnAlreadyHaveAccount_Clicked(object sender, EventArgs e)
     {
         Navigation.PushAsync(new Views.LoginPage());

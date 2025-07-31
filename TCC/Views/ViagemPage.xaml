@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="TCC.Views.ViagemPage"
+             Title="Viagem"
+             BackgroundColor="#F5F5F5">
+
+    <ScrollView>
+        <VerticalStackLayout Spacing="0">
+
+            <!-- Header com gradiente vermelho -->
+            <Border BackgroundColor="#FF0000" 
+                    Padding="20,30" 
+                    StrokeThickness="0"
+                    StrokeShape="RoundRectangle,0,0,15,15">
+                <VerticalStackLayout HorizontalOptions="Center" Spacing="5">
+                    <Label Text="🚗 Viagem Iniciada" 
+                           FontSize="24" 
+                           HorizontalOptions="Center" 
+                           FontAttributes="Bold"
+                           TextColor="White" />
+                    <Label Text="Transporte Barbieri" 
+                           FontSize="16" 
+                           HorizontalOptions="Center" 
+                           TextColor="White" />
+                    <Label Text="Acompanhe sua viagem em tempo real!" 
+                           FontSize="12" 
+                           HorizontalOptions="Center" 
+                           TextColor="White" />
+                </VerticalStackLayout>
+            </Border>
+
+            <!-- Status da Viagem -->
+            <Frame BackgroundColor="White"
+                   Margin="20,20,20,10"
+                   CornerRadius="15"
+                   HasShadow="True"
+                   Padding="20">
+                <VerticalStackLayout Spacing="15">
+                    <Label Text="Status da Viagem" 
+                           FontSize="18" 
+                           FontAttributes="Bold" 
+                           TextColor="#333" 
+                           HorizontalOptions="Center" />
+
+                    <VerticalStackLayout Spacing="10">
+                        <HorizontalStackLayout Spacing="10">
+                            <Frame BackgroundColor="#4CAF50" 
+                                   CornerRadius="10" 
+                                   Padding="5" 
+                                   HasShadow="False">
+                                <Label Text="✓" FontSize="12" TextColor="White" FontAttributes="Bold" />
+                            </Frame>
+                            <Label Text="Viagem iniciada" FontSize="14" TextColor="#333" VerticalOptions="Center" />
+                        </HorizontalStackLayout>
+
+                        <HorizontalStackLayout Spacing="10">
+                            <Frame BackgroundColor="#FFC107" 
+                                   CornerRadius="10" 
+                                   Padding="5" 
+                                   HasShadow="False">
+                                <Label Text="⏱" FontSize="12" TextColor="White" FontAttributes="Bold" />
+                            </Frame>
+                            <Label Text="Em andamento..." FontSize="14" TextColor="#333" VerticalOptions="Center" />
+                        </HorizontalStackLayout>
+                    </VerticalStackLayout>
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- Informações da Viagem -->
+            <Frame BackgroundColor="White"
+                   Margin="20,10,20,10"
+                   CornerRadius="15"
+                   HasShadow="True"
+                   Padding="20">
+                <VerticalStackLayout Spacing="15">
+                    <Label Text="Detalhes da Viagem" 
+                           FontSize="18" 
+                           FontAttributes="Bold" 
+                           TextColor="#333" 
+                           HorizontalOptions="Center" />
+
+                    <Grid RowSpacing="10" ColumnSpacing="15">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+
+                        <!-- Origem -->
+                        <VerticalStackLayout Grid.Row="0" Grid.Column="0">
+                            <Label Text="Origem" FontSize="12" TextColor="#666" FontAttributes="Bold" />
+                            <Label Text="ETEC Joaquim Ferreira" FontSize="13" TextColor="#333" />
+                        </VerticalStackLayout>
+
+                        <!-- Destino -->
+                        <VerticalStackLayout Grid.Row="0" Grid.Column="1">
+                            <Label Text="Destino" FontSize="12" TextColor="#666" FontAttributes="Bold" />
+                            <Label Text="Centro da Cidade" FontSize="13" TextColor="#333" />
+                        </VerticalStackLayout>
+
+                        <!-- Horário Saída -->
+                        <VerticalStackLayout Grid.Row="1" Grid.Column="0">
+                            <Label Text="Horário de Saída" FontSize="12" TextColor="#666" FontAttributes="Bold" />
+                            <Label Text="07:30" FontSize="13" TextColor="#333" />
+                        </VerticalStackLayout>
+
+                        <!-- Previsão Chegada -->
+                        <VerticalStackLayout Grid.Row="1" Grid.Column="1">
+                            <Label Text="Previsão Chegada" FontSize="12" TextColor="#666" FontAttributes="Bold" />
+                            <Label Text="08:15" FontSize="13" TextColor="#333" />
+                        </VerticalStackLayout>
+
+                        <!-- Motorista -->
+                        <VerticalStackLayout Grid.Row="2" Grid.Column="0">
+                            <Label Text="Motorista" FontSize="12" TextColor="#666" FontAttributes="Bold" />
+                            <Label Text="João Silva" FontSize="13" TextColor="#333" />
+                        </VerticalStackLayout>
+
+                        <!-- Veículo -->
+                        <VerticalStackLayout Grid.Row="2" Grid.Column="1">
+                            <Label Text="Veículo" FontSize="12" TextColor="#666" FontAttributes="Bold" />
+                            <Label Text="Ônibus - ABC-1234" FontSize="13" TextColor="#333" />
+                        </VerticalStackLayout>
+
+                        <!-- Passageiros -->
+                        <VerticalStackLayout Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2">
+                            <Label Text="Passageiros a Bordo" FontSize="12" TextColor="#666" FontAttributes="Bold" />
+                            <Label Text="25/40" FontSize="13" TextColor="#333" />
+                        </VerticalStackLayout>
+                    </Grid>
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- Botões de Ação -->
+            <VerticalStackLayout Spacing="10" Margin="20,10,20,30">
+                <!-- Botão Finalizar Viagem -->
+                <Button Text="🏁 FINALIZAR VIAGEM"
+                        BackgroundColor="#4CAF50"
+                        TextColor="White"
+                        CornerRadius="25"
+                        HeightRequest="50"
+                        FontSize="14"
+                        FontAttributes="Bold"
+                        Clicked="OnFinalizarViagemClicked" />
+
+                <!-- Botão Voltar -->
+                <Button Text="← Voltar"
+                        BackgroundColor="Transparent"
+                        TextColor="#FF0000"
+                        FontSize="14"
+                        BorderWidth="0"
+                        HeightRequest="40"
+                        Clicked="OnVoltarClicked" />
+            </VerticalStackLayout>
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>
