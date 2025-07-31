@@ -99,10 +99,11 @@ public partial class PassengerEditPage : ContentPage
         try
         {
             // Validação de campos obrigatórios
-            var validationResult = ValidateFields();
-            if (!validationResult.IsValid)
+            var fieldsValidation = ValidateFields();
+
+            if (!fieldsValidation.IsValid)
             {
-                await DisplayAlert("Campos Obrigatórios", validationResult.Message, "OK");
+                await DisplayAlert("Campos Obrigatórios", fieldsValidation.Message, "OK");
                 return;
             }
 
@@ -113,14 +114,20 @@ public partial class PassengerEditPage : ContentPage
                 return;
             }
 
-            // Verifica se o email foi alterado e se já está em uso
-            if (_currentPassenger.Email != EmailEntry.Text.Trim())
+            // Verifica se algum dado foi alterado e se já está em uso por outro usuário
+            var validationResult = await _databaseService.ValidateUniqueUserData(
+                rg: RGEntry.Text.Trim(),
+                cpf: CPFEntry.Text.Trim(),
+                email: EmailEntry.Text.Trim(),
+                phone: PhoneEntry.Text.Trim(),
+                excludeUserId: _passengerId,
+                userType: "passenger"
+            );
+
+            if (!validationResult.IsValid)
             {
-                if (await _databaseService.IsEmailTaken(EmailEntry.Text.Trim()))
-                {
-                    await DisplayAlert("Erro", "Este e-mail já está em uso por outro usuário.", "OK");
-                    return;
-                }
+                await DisplayAlert("Dados já cadastrados", validationResult.Message, "OK");
+                return;
             }
 
             // Atualiza os dados do passageiro

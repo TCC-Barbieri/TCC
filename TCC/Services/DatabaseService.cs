@@ -139,6 +139,82 @@ namespace TCC.Services
 
         #endregion
 
+        public async Task<(bool IsValid, string Message)> ValidateUniqueUserData(string rg, string cpf, string email, string phone, string cnh = null, int? excludeUserId = null, string userType = null)
+        {
+            try
+            {
+                var drivers = await GetDrivers();
+                var passengers = await GetPassengers();
+
+                // Removes actual user to edit 
+                if (excludeUserId.HasValue && !string.IsNullOrEmpty(userType))
+                {
+                    if (userType == "driver")
+                        drivers = drivers.Where(d => d.Id != excludeUserId.Value).ToList();
+                    else if (userType == "passenger")
+                        passengers = passengers.Where(p => p.Id != excludeUserId.Value).ToList();
+                }
+
+                // Verifiy RG
+                if (!string.IsNullOrEmpty(rg))
+                {
+                    if (drivers.Any(d => d.RG == rg) || passengers.Any(p => p.RG == rg))
+                    {
+                        return (false, "Este RG já está cadastrado no sistema.");
+                    }
+                }
+
+                // Verifiy CPF
+                if (!string.IsNullOrEmpty(cpf))
+                {
+                    if (drivers.Any(d => d.CPF == cpf) || passengers.Any(p => p.CPF == cpf))
+                    {
+                        return (false, "Este CPF já está cadastrado no sistema.");
+                    }
+                }
+
+                // Verifiy Email
+                if (!string.IsNullOrEmpty(email))
+                {
+                    if (drivers.Any(d => d.Email == email) || passengers.Any(p => p.Email == email))
+                    {
+                        return (false, "Este e-mail já está cadastrado no sistema.");
+                    }
+                }
+
+                // Verifiy phone number
+                if (!string.IsNullOrEmpty(phone))
+                {
+                    if (drivers.Any(d => d.PhoneNumber == phone) || passengers.Any(p => p.PhoneNumber == phone))
+                    {
+                        return (false, "Este número de telefone já está cadastrado no sistema.");
+                    }
+                }
+
+                // Verify CNH (Drivers only)
+                if (!string.IsNullOrEmpty(cnh))
+                {
+                    if (drivers.Any(d => d.CNH == cnh))
+                    {
+                        return (false, "Esta CNH já está cadastrada no sistema.");
+                    }
+                }
+
+                return (true, string.Empty);
+            }
+            catch (Exception ex)
+            {
+                return (false, $"Erro ao validar dados: {ex.Message}");
+            }
+        }
+
+        // Simplified method to check email (only)
+        public async Task<bool> IsEmailTaken(string email, int? excludeUserId = null, string userType = null)
+        {
+            var result = await ValidateUniqueUserData(null, null, email, null, null, excludeUserId, userType);
+            return !result.IsValid;
+        }
+
         // Método para fechar a conexão quando necessário
         public async Task CloseConnection()
         {
