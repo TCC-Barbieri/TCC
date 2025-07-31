@@ -29,13 +29,13 @@
                     HeightRequest="55"
                     SemanticProperties.Hint="Entrar como motorista"
                     Clicked="registerButton_Clicked">
-                <Button.ImageSource>
-                    <FontImageSource Glyph="➔"
-                                     Size="20"
-                                     Color="Red"
-                                     FontFamily="Arial" />
-                </Button.ImageSource>
+
+                <Button.GestureRecognizers>
+                    <PointerGestureRecognizer PointerEntered="OnPointerEntered" PointerExited="OnPointerExited"/>
+                </Button.GestureRecognizers>
+
             </Button>
+
 
             <Button x:Name="loginButton"
                     Text="Login"
@@ -46,12 +46,11 @@
                     HeightRequest="55"
                     SemanticProperties.Hint="Entrar como passageiro"
                     Clicked="loginButton_Clicked">
-                <Button.ImageSource>
-                    <FontImageSource Glyph="➔"
-                                     Size="20"
-                                     Color="Red"
-                                     FontFamily="Arial" />
-                </Button.ImageSource>
+                
+                <Button.GestureRecognizers>
+                    <PointerGestureRecognizer PointerEntered="OnPointerEntered" PointerExited="OnPointerExited"/>
+                </Button.GestureRecognizers>
+
             </Button>
 
         </VerticalStackLayout>
