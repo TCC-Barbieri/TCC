@@ -7,211 +7,214 @@
              BackgroundColor="#F5F5F5">
 
     <ScrollView>
-        <VerticalStackLayout Padding="20" Spacing="15">
+        <VerticalStackLayout Spacing="0">
 
-            <!-- Cabeçalho -->
-            <!-- Opção 2: Grid com imagem de fundo e overlay -->
-            <Grid HeightRequest="120">
+            <!-- Cabeçalho - Full Width -->
+            <Grid HeightRequest="120" Margin="0">
                 <Image Source="fundovermelho.jpg" 
-           Aspect="AspectFill" />
+                       Aspect="AspectFill" />
                 <!-- Overlay semitransparente opcional para melhorar legibilidade -->
                 <BoxView BackgroundColor="#80000000" />
                 <VerticalStackLayout HorizontalOptions="Center" 
-                         VerticalOptions="Center" 
-                         Spacing="5">
+                                   VerticalOptions="Center" 
+                                   Spacing="5">
                     <Label Text="Editar Perfil" 
-               FontSize="24" 
-               HorizontalOptions="Center" 
-               FontAttributes="Bold"
-               TextColor="White" />
+                           FontSize="24" 
+                           HorizontalOptions="Center" 
+                           FontAttributes="Bold"
+                           TextColor="White" />
                     <Label Text="Motorista" 
-               FontSize="16" 
-               HorizontalOptions="Center" 
-               TextColor="White" />
+                           FontSize="16" 
+                           HorizontalOptions="Center" 
+                           TextColor="White" />
                     <Label Text="Atualize suas informações no transporte Barbieri!" 
-               FontSize="12" 
-               HorizontalOptions="Center" 
-               TextColor="White" />
+                           FontSize="12" 
+                           HorizontalOptions="Center" 
+                           TextColor="White" />
                 </VerticalStackLayout>
             </Grid>
 
-            <!-- Nome -->
-            <VerticalStackLayout Spacing="5">
-                <Label Text="Nome Completo" FontSize="14" TextColor="#333" />
-                <Entry x:Name="NameEntry" Placeholder="Digite seu nome completo" 
-                       FontSize="16" 
-                       BackgroundColor="White" 
-                       TextColor="#333" 
-                       HeightRequest="45" />
-            </VerticalStackLayout>
+            <!-- Conteúdo do formulário com padding -->
+            <VerticalStackLayout Padding="20" Spacing="15">
 
-            <!-- RG -->
-            <VerticalStackLayout Spacing="5">
-                <Label Text="RG" FontSize="14" TextColor="#333" />
-                <Entry x:Name="RGEntry" Placeholder="00.000.000-0" 
-                       FontSize="16" 
-                       BackgroundColor="White" 
-                       TextColor="#333" 
-                       Keyboard="Numeric"
-                       HeightRequest="45">
-                    <Entry.Behaviors>
-                        <toolkit:MaskedBehavior Mask="XX.XXX.XXX-X" />
-                    </Entry.Behaviors>
-                </Entry>
-            </VerticalStackLayout>
+                <!-- Nome -->
+                <VerticalStackLayout Spacing="5">
+                    <Label Text="Nome Completo" FontSize="14" TextColor="#333" />
+                    <Entry x:Name="NameEntry" Placeholder="Digite seu nome completo" 
+                           FontSize="16" 
+                           BackgroundColor="White" 
+                           TextColor="#333" 
+                           HeightRequest="45" />
+                </VerticalStackLayout>
 
-            <!-- CPF -->
-            <VerticalStackLayout Spacing="5">
-                <Label Text="CPF" FontSize="14" TextColor="#333" />
-                <Entry x:Name="CPFEntry" Placeholder="000.000.000-00" 
-                       FontSize="16" 
-                       BackgroundColor="White" 
-                       TextColor="#333" 
-                       Keyboard="Numeric"
-                       HeightRequest="45">
-                    <Entry.Behaviors>
-                        <toolkit:MaskedBehavior Mask="XXX.XXX.XXX-XX" />
-                    </Entry.Behaviors>
-                </Entry>
-            </VerticalStackLayout>
+                <!-- RG -->
+                <VerticalStackLayout Spacing="5">
+                    <Label Text="RG" FontSize="14" TextColor="#333" />
+                    <Entry x:Name="RGEntry" Placeholder="00.000.000-0" 
+                           FontSize="16" 
+                           BackgroundColor="White" 
+                           TextColor="#333" 
+                           Keyboard="Numeric"
+                           HeightRequest="45">
+                        <Entry.Behaviors>
+                            <toolkit:MaskedBehavior Mask="XX.XXX.XXX-X" />
+                        </Entry.Behaviors>
+                    </Entry>
+                </VerticalStackLayout>
 
-            <!-- Email -->
-            <VerticalStackLayout Spacing="5">
-                <Label Text="Email" FontSize="14" TextColor="#333" />
-                <Entry x:Name="EmailEntry" Placeholder="seu@email.com" 
-                       FontSize="16" 
-                       BackgroundColor="White" 
-                       TextColor="#333" 
-                       Keyboard="Email"
-                       HeightRequest="45" />
-            </VerticalStackLayout>
+                <!-- CPF -->
+                <VerticalStackLayout Spacing="5">
+                    <Label Text="CPF" FontSize="14" TextColor="#333" />
+                    <Entry x:Name="CPFEntry" Placeholder="000.000.000-00" 
+                           FontSize="16" 
+                           BackgroundColor="White" 
+                           TextColor="#333" 
+                           Keyboard="Numeric"
+                           HeightRequest="45">
+                        <Entry.Behaviors>
+                            <toolkit:MaskedBehavior Mask="XXX.XXX.XXX-XX" />
+                        </Entry.Behaviors>
+                    </Entry>
+                </VerticalStackLayout>
 
-            <!-- Data de Nascimento -->
-            <VerticalStackLayout Spacing="5">
-                <Label Text="Data de Nascimento" FontSize="14" TextColor="#333" />
-                <DatePicker x:Name="BirthDatePicker"
-                            BackgroundColor="White" 
-                            TextColor="#333" 
+                <!-- Email -->
+                <VerticalStackLayout Spacing="5">
+                    <Label Text="Email" FontSize="14" TextColor="#333" />
+                    <Entry x:Name="EmailEntry" Placeholder="seu@email.com" 
+                           FontSize="16" 
+                           BackgroundColor="White" 
+                           TextColor="#333" 
+                           Keyboard="Email"
+                           HeightRequest="45" />
+                </VerticalStackLayout>
+
+                <!-- Data de Nascimento -->
+                <VerticalStackLayout Spacing="5">
+                    <Label Text="Data de Nascimento" FontSize="14" TextColor="#333" />
+                    <DatePicker x:Name="BirthDatePicker"
+                                BackgroundColor="White" 
+                                TextColor="#333" 
+                                FontSize="16"
+                                HeightRequest="45" />
+                </VerticalStackLayout>
+
+                <!-- Telefone -->
+                <VerticalStackLayout Spacing="5">
+                    <Label Text="Telefone" FontSize="14" TextColor="#333" />
+                    <Entry x:Name="PhoneEntry" Placeholder="(11) 99999-9999" 
+                           FontSize="16" 
+                           BackgroundColor="White" 
+                           TextColor="#333" 
+                           Keyboard="Telephone"
+                           HeightRequest="45">
+                        <Entry.Behaviors>
+                            <toolkit:MaskedBehavior Mask="(XX) XXXXX-XXXX" />
+                        </Entry.Behaviors>
+                    </Entry>
+                </VerticalStackLayout>
+
+                <!-- Contato de Emergência -->
+                <VerticalStackLayout Spacing="5">
+                    <Label Text="Contato de Emergência" FontSize="14" TextColor="#333" />
+                    <Entry x:Name="ContatoEmergenciaEntry"
+                           Placeholder="(11) 99999-9999" 
+                           FontSize="16" 
+                           BackgroundColor="White" 
+                           TextColor="#333" 
+                           Keyboard="Telephone"
+                           HeightRequest="45">
+                        <Entry.Behaviors>
+                            <toolkit:MaskedBehavior Mask="(XX) XXXXX-XXXX" />
+                        </Entry.Behaviors>
+                    </Entry>
+                </VerticalStackLayout>
+
+                <!-- CNH -->
+                <VerticalStackLayout Spacing="5">
+                    <Label Text="CNH" FontSize="14" TextColor="#333" />
+                    <Entry x:Name="CNHEntry"
+                           Placeholder="Número da CNH" 
+                           FontSize="16" 
+                           BackgroundColor="White" 
+                           TextColor="#333" 
+                           Keyboard="Numeric"
+                           HeightRequest="45" />
+                </VerticalStackLayout>
+
+                <!-- Gênero -->
+                <VerticalStackLayout Spacing="5">
+                    <Label Text="Gênero" FontSize="14" TextColor="#333" />
+                    <Border Stroke="#DDDDDD" StrokeThickness="1" StrokeShape="RoundRectangle 5,5,5,5" HeightRequest="45">
+                        <Picker x:Name="GenderPicker" >
+                            <Picker.Items>
+                                <x:String>Masculino</x:String>
+                                <x:String>Feminino</x:String>
+                                <x:String>Outro</x:String>
+                                <x:String>Prefiro não dizer</x:String>
+                            </Picker.Items>
+                        </Picker>
+                    </Border>
+                </VerticalStackLayout>
+
+                <!-- Endereço -->
+                <VerticalStackLayout Spacing="5">
+                    <Label Text="Endereço" FontSize="14" TextColor="#333" />
+                    <Entry x:Name="AddressEntry" Placeholder="Rua, número, bairro, cidade" 
+                           FontSize="16" 
+                           BackgroundColor="White" 
+                           TextColor="#333" 
+                           HeightRequest="45" />
+                </VerticalStackLayout>
+
+                <!-- Alterar Senha -->
+                <VerticalStackLayout Spacing="10" Margin="0,20,0,0">
+                    <Label Text="Alterar Senha (opcional)" FontSize="16" TextColor="#333" FontAttributes="Bold" />
+
+                    <VerticalStackLayout Spacing="5">
+                        <Label Text="Nova Senha" FontSize="14" TextColor="#333" />
+                        <Entry x:Name="NewPasswordEntry" Placeholder="Deixe em branco para manter a atual" 
+                               FontSize="16" 
+                               BackgroundColor="White" 
+                               TextColor="#333" 
+                               IsPassword="True"
+                               HeightRequest="45" />
+                    </VerticalStackLayout>
+
+                    <VerticalStackLayout Spacing="5">
+                        <Label Text="Confirmar Nova Senha" FontSize="14" TextColor="#333" />
+                        <Entry x:Name="ConfirmNewPasswordEntry" Placeholder="Confirme a nova senha" 
+                               FontSize="16" 
+                               BackgroundColor="White" 
+                               TextColor="#333" 
+                               IsPassword="True"
+                               HeightRequest="45" />
+                    </VerticalStackLayout>
+                </VerticalStackLayout>
+
+                <!-- Botões -->
+                <VerticalStackLayout Spacing="10" Margin="0,30,0,10">
+                    <!-- Botão Salvar Alterações -->
+                    <Button Text="SALVAR ALTERAÇÕES" 
+                            x:Name="SaveButton"
+                            BackgroundColor="#FF0000" 
+                            TextColor="White" 
+                            CornerRadius="8" 
+                            HeightRequest="50" 
                             FontSize="16"
-                            HeightRequest="45" />
-            </VerticalStackLayout>
+                            FontAttributes="Bold"
+                            Clicked="OnSave_Clicked"/>
 
-            <!-- Telefone -->
-            <VerticalStackLayout Spacing="5">
-                <Label Text="Telefone" FontSize="14" TextColor="#333" />
-                <Entry x:Name="PhoneEntry" Placeholder="(11) 99999-9999" 
-                       FontSize="16" 
-                       BackgroundColor="White" 
-                       TextColor="#333" 
-                       Keyboard="Telephone"
-                       HeightRequest="45">
-                    <Entry.Behaviors>
-                        <toolkit:MaskedBehavior Mask="(XX) XXXXX-XXXX" />
-                    </Entry.Behaviors>
-                </Entry>
-            </VerticalStackLayout>
-
-            <!-- Contato de Emergência -->
-            <VerticalStackLayout Spacing="5">
-                <Label Text="Contato de Emergência" FontSize="14" TextColor="#333" />
-                <Entry x:Name="ContatoEmergenciaEntry"
-                       Placeholder="(11) 99999-9999" 
-                       FontSize="16" 
-                       BackgroundColor="White" 
-                       TextColor="#333" 
-                       Keyboard="Telephone"
-                       HeightRequest="45">
-                    <Entry.Behaviors>
-                        <toolkit:MaskedBehavior Mask="(XX) XXXXX-XXXX" />
-                    </Entry.Behaviors>
-                </Entry>
-            </VerticalStackLayout>
-
-            <!-- CNH -->
-            <VerticalStackLayout Spacing="5">
-                <Label Text="CNH" FontSize="14" TextColor="#333" />
-                <Entry x:Name="CNHEntry"
-                       Placeholder="Número da CNH" 
-                       FontSize="16" 
-                       BackgroundColor="White" 
-                       TextColor="#333" 
-                       Keyboard="Numeric"
-                       HeightRequest="45" />
-            </VerticalStackLayout>
-
-            <!-- Gênero -->
-            <VerticalStackLayout Spacing="5">
-                <Label Text="Gênero" FontSize="14" TextColor="#333" />
-                <Border Stroke="#DDDDDD" StrokeThickness="1" StrokeShape="RoundRectangle 5,5,5,5" HeightRequest="45">
-                    <Picker x:Name="GenderPicker" >
-                        <Picker.Items>
-                            <x:String>Masculino</x:String>
-                            <x:String>Feminino</x:String>
-                            <x:String>Outro</x:String>
-                            <x:String>Prefiro não dizer</x:String>
-                        </Picker.Items>
-                    </Picker>
-                </Border>
-            </VerticalStackLayout>
-
-            <!-- Endereço -->
-            <VerticalStackLayout Spacing="5">
-                <Label Text="Endereço" FontSize="14" TextColor="#333" />
-                <Entry x:Name="AddressEntry" Placeholder="Rua, número, bairro, cidade" 
-                       FontSize="16" 
-                       BackgroundColor="White" 
-                       TextColor="#333" 
-                       HeightRequest="45" />
-            </VerticalStackLayout>
-
-            <!-- Alterar Senha -->
-            <VerticalStackLayout Spacing="10" Margin="0,20,0,0">
-                <Label Text="Alterar Senha (opcional)" FontSize="16" TextColor="#333" FontAttributes="Bold" />
-
-                <VerticalStackLayout Spacing="5">
-                    <Label Text="Nova Senha" FontSize="14" TextColor="#333" />
-                    <Entry x:Name="NewPasswordEntry" Placeholder="Deixe em branco para manter a atual" 
-                           FontSize="16" 
-                           BackgroundColor="White" 
-                           TextColor="#333" 
-                           IsPassword="True"
-                           HeightRequest="45" />
+                    <!-- Botão Cancelar -->
+                    <Button Text="Cancelar" 
+                            BackgroundColor="Transparent" 
+                            TextColor="#FF0000" 
+                            FontSize="14" 
+                            BorderWidth="0"
+                            HeightRequest="40" 
+                            Clicked="OnCancel_Clicked"/>
                 </VerticalStackLayout>
 
-                <VerticalStackLayout Spacing="5">
-                    <Label Text="Confirmar Nova Senha" FontSize="14" TextColor="#333" />
-                    <Entry x:Name="ConfirmNewPasswordEntry" Placeholder="Confirme a nova senha" 
-                           FontSize="16" 
-                           BackgroundColor="White" 
-                           TextColor="#333" 
-                           IsPassword="True"
-                           HeightRequest="45" />
-                </VerticalStackLayout>
             </VerticalStackLayout>
-
-            <!-- Botões -->
-            <VerticalStackLayout Spacing="10" Margin="0,30,0,10">
-                <!-- Botão Salvar Alterações -->
-                <Button Text="SALVAR ALTERAÇÕES" 
-                        x:Name="SaveButton"
-                        BackgroundColor="#FF0000" 
-                        TextColor="White" 
-                        CornerRadius="8" 
-                        HeightRequest="50" 
-                        FontSize="16"
-                        FontAttributes="Bold"
-                        Clicked="OnSave_Clicked"/>
-
-                <!-- Botão Cancelar -->
-                <Button Text="Cancelar" 
-                        BackgroundColor="Transparent" 
-                        TextColor="#FF0000" 
-                        FontSize="14" 
-                        BorderWidth="0"
-                        HeightRequest="40" 
-                        Clicked="OnCancel_Clicked"/>
-            </VerticalStackLayout>
-
         </VerticalStackLayout>
     </ScrollView>
 </ContentPage>
