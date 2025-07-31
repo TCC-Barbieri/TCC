@@ -165,7 +165,19 @@
                                 </Frame.GestureRecognizers>
                             </Frame>
 
-                                    <TapGestureRecognizer Tapped="OnEditClicked" />
+                            <!-- Botão Editar -->
+                            <Frame BackgroundColor="#FF0000" 
+                                   CornerRadius="20" 
+                                   Padding="10" 
+                                   HasShadow="False"
+                                   HeightRequest="40"
+                                   WidthRequest="40">
+                                <Label Text="👥" FontSize="16" HorizontalOptions="Center" VerticalOptions="Center" />
+                                <Frame.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="OnGroupViewClicked" />
+                                </Frame.GestureRecognizers>
+                            </Frame>
+
                             <!-- Botão Fechar/Sair -->
                             <Frame BackgroundColor="#FF0000" 
                                    CornerRadius="20" 

@@ -128,6 +128,21 @@ public partial class Index : ContentPage
         }
     }
 
+    private async void OnGroupViewClicked(object sender, EventArgs e)
+    {
+        bool confirm = await DisplayAlert("Sair", "Deseja realmente sair da sua conta?", "Sim", "Não");
+
+        if (confirm)
+        {
+            // Remove dados da sessão
+            SecureStorage.Remove("user_id");
+            SecureStorage.Remove("user_type");
+
+            // Redireciona para tela inicial (limpando a pilha de navegação)
+            Application.Current.MainPage = new NavigationPage(new Home());
+        }
+    }
+
     private async void OnBackClicked(object sender, EventArgs e)
     {
         await Navigation.PopAsync();
