@@ -114,4 +114,27 @@ public partial class DriverRegisterPage : ContentPage
     {
         Navigation.PushAsync(new Views.LoginPage());
     }
+    private void OnPointerEntered(object sender, PointerEventArgs e)
+    {
+        // Ação quando o mouse entra no botão
+        ((Button)sender).BackgroundColor = Colors.DarkRed; // Muda a cor do botão
+    }
+
+    private void OnPointerExited(object sender, PointerEventArgs e)
+    {
+        // Ação quando o mouse sai do botão
+        ((Button)sender).BackgroundColor = Colors.Red; // Volta à cor original
+    }
+
+    private void OnPointer2Entered(object sender, PointerEventArgs e)
+    {
+        // Ação quando o mouse entra no botão
+        ((Button)sender).TextColor = Colors.DarkRed; // Muda a cor do botão
+    }
+
+    private void OnPointer2Exited(object sender, PointerEventArgs e)
+    {
+        // Ação quando o mouse sai do botão
+        ((Button)sender).TextColor = Colors.Red; // Volta à cor original
+    }
 }

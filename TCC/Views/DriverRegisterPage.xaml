@@ -198,7 +198,12 @@
                         FontSize="16"
                         FontAttributes="Bold"
                         Margin="0,20,0,10"
-                        Clicked="OnRegister_Clicked"/>
+                        Clicked="OnRegister_Clicked">
+                        
+                        <Button.GestureRecognizers>
+                    <PointerGestureRecognizer PointerEntered="OnPointerEntered" PointerExited="OnPointerExited"/>
+                    </Button.GestureRecognizers>
+                </Button>
 
                 <!-- Botão Já tenho conta -->
                 <Button Text="Já tenho uma conta" 
@@ -207,7 +212,13 @@
                         FontSize="14" 
                         BorderWidth="0"
                         HeightRequest="40" 
-                        Clicked="OnAlreadyHaveAccount_Clicked"/>
+                        Clicked="OnAlreadyHaveAccount_Clicked">
+                    
+                    <Button.GestureRecognizers>
+                        <PointerGestureRecognizer PointerEntered="OnPointer2Entered" PointerExited="OnPointer2Exited"/>
+                    </Button.GestureRecognizers>
+
+                </Button>
 
             </VerticalStackLayout>
         </VerticalStackLayout>

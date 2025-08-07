@@ -44,7 +44,10 @@
                         FontSize="12"
                         Clicked="Button_Clicked"
                         CornerRadius="10"
-                        HeightRequest="40" />
+                        HeightRequest="40">
+
+                </Button>
+
 
                 <!-- Registration Fields -->
                 <VerticalStackLayout Spacing="5">
@@ -186,18 +189,30 @@
 
                 <!-- Action Buttons -->
                 <Button Text="REGISTRAR"
-                        BackgroundColor="#FF3333"
+                        BackgroundColor="Red"
                         TextColor="White"
                         CornerRadius="25"
                         HeightRequest="50"
                         FontAttributes="Bold"
-                        Clicked="OnRegisterClicked" />
+                        Clicked="OnRegisterClicked">
+                    
+                    <Button.GestureRecognizers>
+                        <PointerGestureRecognizer PointerEntered="OnPointerEntered" PointerExited="OnPointerExited"/>
+                    </Button.GestureRecognizers>
+
+                </Button>
 
                 <Button Text="Já tenho uma conta"
                         BackgroundColor="Transparent"
-                        TextColor="#FF3333"
+                        TextColor="Red"
                         FontSize="14"
-                        Clicked="OnAlreadyHaveAccount_Clicked" />
+                        Clicked="OnAlreadyHaveAccount_Clicked">
+
+                    <Button.GestureRecognizers>
+                        <PointerGestureRecognizer PointerEntered="OnPointer2Entered" PointerExited="OnPointer2Exited"/>
+                    </Button.GestureRecognizers>
+
+                </Button>
 
             </VerticalStackLayout>
         </VerticalStackLayout>

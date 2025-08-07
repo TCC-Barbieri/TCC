@@ -196,22 +196,34 @@
                     <!-- Botão Salvar Alterações -->
                     <Button Text="SALVAR ALTERAÇÕES" 
                             x:Name="SaveButton"
-                            BackgroundColor="#FF0000" 
+                            BackgroundColor="Red" 
                             TextColor="White" 
                             CornerRadius="8" 
                             HeightRequest="50" 
                             FontSize="16"
                             FontAttributes="Bold"
-                            Clicked="OnSave_Clicked"/>
+                            Clicked="OnSave_Clicked">
+
+                        <Button.GestureRecognizers>
+                            <PointerGestureRecognizer PointerEntered="OnPointer2Entered" PointerExited="OnPointer2Exited"/>
+                        </Button.GestureRecognizers>
+
+                    </Button>
 
                     <!-- Botão Cancelar -->
                     <Button Text="Cancelar" 
                             BackgroundColor="Transparent" 
-                            TextColor="#FF0000" 
+                            TextColor="Red" 
                             FontSize="14" 
                             BorderWidth="0"
                             HeightRequest="40" 
-                            Clicked="OnCancel_Clicked"/>
+                            Clicked="OnCancel_Clicked">
+
+                        <Button.GestureRecognizers>
+                            <PointerGestureRecognizer PointerEntered="OnPointer2Entered" PointerExited="OnPointer2Exited"/>
+                        </Button.GestureRecognizers>
+
+                    </Button>
                 </VerticalStackLayout>
 
             </VerticalStackLayout>

@@ -76,7 +76,14 @@
                     <Button Text="Entrar"
                             BackgroundColor="Red"
                             TextColor="White"
-                            Clicked="OnLoginClicked"/>
+                            Clicked="OnLoginClicked">
+
+                        <Button.GestureRecognizers>
+                            <PointerGestureRecognizer PointerEntered="OnPointerEntered" PointerExited="OnPointerExited"/>
+                        </Button.GestureRecognizers>
+
+                    </Button>
+                    
 
                 </VerticalStackLayout>
             </ScrollView>
