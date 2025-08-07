@@ -54,6 +54,11 @@
                         HeightRequest="60"
                         CornerRadius="15"
                         Clicked="OnIniciarViagemClicked">
+
+                    <Button.GestureRecognizers>
+                        <PointerGestureRecognizer PointerEntered="OnPointerEntered" PointerExited="OnPointerExited"/>
+                    </Button.GestureRecognizers>
+
                     <Button.Shadow>
                         <Shadow Brush="Black" Opacity="0.3" Radius="10" Offset="0,3" />
                     </Button.Shadow>
@@ -166,6 +171,7 @@
                                 <Label Text="VOLTAR" FontSize="12" TextColor="White" FontAttributes="Bold" />
                             </HorizontalStackLayout>
                             <Frame.GestureRecognizers>
+                                <PointerGestureRecognizer PointerEntered="OnPointer2Entered" PointerExited="OnPointer2Exited"/>
                                 <TapGestureRecognizer Tapped="OnBackClicked" />
                             </Frame.GestureRecognizers>
                         </Frame>
@@ -180,8 +186,10 @@
                                    HasShadow="False"
                                    HeightRequest="40"
                                    WidthRequest="40">
+
                                 <Label Text="✏️" FontSize="16" HorizontalOptions="Center" VerticalOptions="Center" />
                                 <Frame.GestureRecognizers>
+                                    <PointerGestureRecognizer PointerEntered="OnPointer2Entered" PointerExited="OnPointer2Exited"/>
                                     <TapGestureRecognizer Tapped="OnEditClicked" />
                                 </Frame.GestureRecognizers>
                             </Frame>
@@ -195,6 +203,7 @@
                                    WidthRequest="40">
                                 <Label Text="👥" FontSize="16" HorizontalOptions="Center" VerticalOptions="Center" />
                                 <Frame.GestureRecognizers>
+                                    <PointerGestureRecognizer PointerEntered="OnPointer2Entered" PointerExited="OnPointer2Exited"/>
                                     <TapGestureRecognizer Tapped="OnGroupViewClicked" />
                                 </Frame.GestureRecognizers>
                             </Frame>
@@ -208,6 +217,7 @@
                                    WidthRequest="40">
                                 <Label Text="❌" HorizontalTextAlignment="Center" FontSize="16" HorizontalOptions="Center" VerticalOptions="Center" />
                                 <Frame.GestureRecognizers>
+                                    <PointerGestureRecognizer PointerEntered="OnPointer2Entered" PointerExited="OnPointer2Exited"/>
                                     <TapGestureRecognizer Tapped="OnLogoutClicked" />
                                 </Frame.GestureRecognizers>
                             </Frame>

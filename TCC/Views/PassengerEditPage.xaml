@@ -240,22 +240,34 @@
                     <!-- Botão Salvar -->
                     <Button Text="SALVAR ALTERAÇÕES"
                             x:Name="SaveButton"
-                            BackgroundColor="#FF3333"
+                            BackgroundColor="Red"
                             TextColor="White"
                             CornerRadius="25"
                             HeightRequest="50"
                             FontSize="16"
                             FontAttributes="Bold"
-                            Clicked="OnSave_Clicked" />
+                            Clicked="OnSave_Clicked">
+
+                        <Button.GestureRecognizers>
+                            <PointerGestureRecognizer PointerEntered="OnPointerEntered" PointerExited="OnPointerExited"/>
+                        </Button.GestureRecognizers>
+
+                    </Button>
 
                     <!-- Botão Cancelar -->
                     <Button Text="Cancelar"
                             BackgroundColor="Transparent"
-                            TextColor="#FF3333"
+                            TextColor="Red"
                             FontSize="14"
                             BorderWidth="0"
                             HeightRequest="40"
-                            Clicked="OnCancel_Clicked" />
+                            Clicked="OnCancel_Clicked">
+                        
+                        <Button.GestureRecognizers>
+                            <PointerGestureRecognizer PointerEntered="OnPointer2Entered" PointerExited="OnPointer2Exited"/>
+                        </Button.GestureRecognizers>
+
+                    </Button>
                 </VerticalStackLayout>
 
             </VerticalStackLayout>
