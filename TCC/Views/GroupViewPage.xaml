@@ -2,11 +2,230 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="TCC.Views.GroupViewPage"
-             Title="GroupViewPage">
-    <VerticalStackLayout>
-        <Label 
-            Text="Welcome to .NET MAUI!"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" />
-    </VerticalStackLayout>
+             Title="Visualizar Grupos">
+
+    <ScrollView>
+        <StackLayout Padding="20" Spacing="20">
+
+            <!-- Header -->
+            <Label Text="Grupos por Escola" 
+                   FontSize="24" 
+                   FontAttributes="Bold" 
+                   HorizontalOptions="Center" 
+                   TextColor="#2C3E50" />
+
+            <!-- ETEC Group -->
+            <Frame BackgroundColor="#E8F6F3" 
+                   BorderColor="#16A085" 
+                   CornerRadius="10" 
+                   Padding="15">
+                <StackLayout>
+                    <Label Text="ETEC" 
+                           FontSize="20" 
+                           FontAttributes="Bold" 
+                           TextColor="#16A085" 
+                           HorizontalOptions="Center" />
+
+                    <Label x:Name="EtecCountLabel" 
+                           Text="0 usuários" 
+                           FontSize="14" 
+                           TextColor="#7F8C8D" 
+                           HorizontalOptions="Center" 
+                           Margin="0,0,0,10" />
+
+                    <CollectionView x:Name="EtecCollectionView" 
+                                    ItemsSource="{Binding EtecUsers}"
+                                    BackgroundColor="Transparent">
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+                                <Grid Padding="10,5" ColumnDefinitions="*,Auto">
+                                    <StackLayout Grid.Column="0">
+                                        <Label Text="{Binding Name}" 
+                                               FontSize="16" 
+                                               FontAttributes="Bold" 
+                                               TextColor="#2C3E50" />
+                                        <Label Text="{Binding UserType}" 
+                                               FontSize="12" 
+                                               TextColor="#7F8C8D" />
+                                        <Label Text="{Binding Email}" 
+                                               FontSize="12" 
+                                               TextColor="#7F8C8D" />
+                                    </StackLayout>
+                                    <Label Grid.Column="1" 
+                                           Text="📚" 
+                                           FontSize="20" 
+                                           VerticalOptions="Center" />
+                                </Grid>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+                </StackLayout>
+            </Frame>
+
+            <!-- FATEC Group -->
+            <Frame BackgroundColor="#FDF2E9" 
+                   BorderColor="#E67E22" 
+                   CornerRadius="10" 
+                   Padding="15">
+                <StackLayout>
+                    <Label Text="FATEC" 
+                           FontSize="20" 
+                           FontAttributes="Bold" 
+                           TextColor="#E67E22" 
+                           HorizontalOptions="Center" />
+
+                    <Label x:Name="FatecCountLabel" 
+                           Text="0 usuários" 
+                           FontSize="14" 
+                           TextColor="#7F8C8D" 
+                           HorizontalOptions="Center" 
+                           Margin="0,0,0,10" />
+
+                    <CollectionView x:Name="FatecCollectionView" 
+                                    ItemsSource="{Binding FatecUsers}"
+                                    BackgroundColor="Transparent">
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+                                <Grid Padding="10,5" ColumnDefinitions="*,Auto">
+                                    <StackLayout Grid.Column="0">
+                                        <Label Text="{Binding Name}" 
+                                               FontSize="16" 
+                                               FontAttributes="Bold" 
+                                               TextColor="#2C3E50" />
+                                        <Label Text="{Binding UserType}" 
+                                               FontSize="12" 
+                                               TextColor="#7F8C8D" />
+                                        <Label Text="{Binding Email}" 
+                                               FontSize="12" 
+                                               TextColor="#7F8C8D" />
+                                    </StackLayout>
+                                    <Label Grid.Column="1" 
+                                           Text="🎓" 
+                                           FontSize="20" 
+                                           VerticalOptions="Center" />
+                                </Grid>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+                </StackLayout>
+            </Frame>
+
+            <!-- UNESP Group -->
+            <Frame BackgroundColor="#EBF5FB" 
+                   BorderColor="#3498DB" 
+                   CornerRadius="10" 
+                   Padding="15">
+                <StackLayout>
+                    <Label Text="UNESP" 
+                           FontSize="20" 
+                           FontAttributes="Bold" 
+                           TextColor="#3498DB" 
+                           HorizontalOptions="Center" />
+
+                    <Label x:Name="UnespCountLabel" 
+                           Text="0 usuários" 
+                           FontSize="14" 
+                           TextColor="#7F8C8D" 
+                           HorizontalOptions="Center" 
+                           Margin="0,0,0,10" />
+
+                    <CollectionView x:Name="UnespCollectionView" 
+                                    ItemsSource="{Binding UnespUsers}"
+                                    BackgroundColor="Transparent">
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+                                <Grid Padding="10,5" ColumnDefinitions="*,Auto">
+                                    <StackLayout Grid.Column="0">
+                                        <Label Text="{Binding Name}" 
+                                               FontSize="16" 
+                                               FontAttributes="Bold" 
+                                               TextColor="#2C3E50" />
+                                        <Label Text="{Binding UserType}" 
+                                               FontSize="12" 
+                                               TextColor="#7F8C8D" />
+                                        <Label Text="{Binding Email}" 
+                                               FontSize="12" 
+                                               TextColor="#7F8C8D" />
+                                    </StackLayout>
+                                    <Label Grid.Column="1" 
+                                           Text="🏛️" 
+                                           FontSize="20" 
+                                           VerticalOptions="Center" />
+                                </Grid>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+                </StackLayout>
+            </Frame>
+
+            <!-- Motoristas sem escola -->
+            <Frame BackgroundColor="#F8F9FA" 
+                   BorderColor="#6C757D" 
+                   CornerRadius="10" 
+                   Padding="15">
+                <StackLayout>
+                    <Label Text="Motoristas" 
+                           FontSize="20" 
+                           FontAttributes="Bold" 
+                           TextColor="#6C757D" 
+                           HorizontalOptions="Center" />
+
+                    <Label x:Name="DriversCountLabel" 
+                           Text="0 motoristas" 
+                           FontSize="14" 
+                           TextColor="#7F8C8D" 
+                           HorizontalOptions="Center" 
+                           Margin="0,0,0,10" />
+
+                    <CollectionView x:Name="DriversCollectionView" 
+                                    ItemsSource="{Binding Drivers}"
+                                    BackgroundColor="Transparent">
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+                                <Grid Padding="10,5" ColumnDefinitions="*,Auto">
+                                    <StackLayout Grid.Column="0">
+                                        <Label Text="{Binding Name}" 
+                                               FontSize="16" 
+                                               FontAttributes="Bold" 
+                                               TextColor="#2C3E50" />
+                                        <Label Text="{Binding UserType}" 
+                                               FontSize="12" 
+                                               TextColor="#7F8C8D" />
+                                        <Label Text="{Binding Email}" 
+                                               FontSize="12" 
+                                               TextColor="#7F8C8D" />
+                                        <Label Text="{Binding CNH}" 
+                                               FontSize="12" 
+                                               TextColor="#95A5A6" />
+                                    </StackLayout>
+                                    <Label Grid.Column="1" 
+                                           Text="🚗" 
+                                           FontSize="20" 
+                                           VerticalOptions="Center" />
+                                </Grid>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+                </StackLayout>
+            </Frame>
+
+            <!-- Refresh Button -->
+            <Button x:Name="RefreshButton" 
+                    Text="Atualizar Dados" 
+                    BackgroundColor="#3498DB" 
+                    TextColor="White" 
+                    CornerRadius="25" 
+                    FontAttributes="Bold"
+                    Clicked="OnRefreshClicked" />
+
+            <Button x:Name="BackButton"
+                    Text="Back"
+                    BackgroundColor="Red"
+                    TextColor="White"
+                    CornerRadius="25"
+                    FontAttributes="Bold"
+                    Clicked="BackButton_Clicked" />
+
+        </StackLayout>
+    </ScrollView>
 </ContentPage>

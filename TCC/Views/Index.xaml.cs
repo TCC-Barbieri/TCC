@@ -141,7 +141,7 @@ public partial class Index : ContentPage
 
     private async void OnBackClicked(object sender, EventArgs e)
     {
-        await Navigation.PopAsync();
+        await Navigation.PushAsync(new Home());
     }
 
     private async void OnEditClicked(object sender, EventArgs e)

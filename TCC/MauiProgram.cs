@@ -1,5 +1,7 @@
 ﻿using Microsoft.Extensions.Logging;
 using CommunityToolkit.Maui;
+using TCC.Services;
+using TCC.Views;
 
 namespace TCC
 {
@@ -16,6 +18,12 @@ namespace TCC
                     fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
                     fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
                 });
+
+            // Registrar serviços
+            builder.Services.AddSingleton<DatabaseService>();
+
+            // Registrar páginas
+            builder.Services.AddTransient<GroupViewPage>();
 
 #if DEBUG
             builder.Logging.AddDebug();
