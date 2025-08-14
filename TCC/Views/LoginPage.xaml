@@ -32,19 +32,13 @@
                FontAttributes="Bold"
                TextColor="White" />
                     <!-- Logo Container -->
-                    <Frame BackgroundColor="White" 
-               CornerRadius="60" 
-               Padding="10" 
-               HorizontalOptions="Center" 
-               HeightRequest="120" 
-               WidthRequest="120" 
-               HasShadow="False">
-                        <Image Source="logo.jpg" 
-                    HeightRequest="100" 
-                    WidthRequest="100" 
-                    HorizontalOptions="Center" 
-                    VerticalOptions="Center" />
-                    </Frame>
+
+                        <Image Source="logo_sem_fundo.png"
+                               HeightRequest="150" 
+                               WidthRequest="150"
+                               HorizontalOptions="Center" 
+                               VerticalOptions="Center"/>
+
                 </VerticalStackLayout>
             </Grid>
 

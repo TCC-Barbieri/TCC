@@ -28,4 +28,15 @@ public partial class Home : ContentPage
         ((Button)sender).BackgroundColor = Colors.White; // Volta à cor original
     }
 
+    private void OnPointer2Entered(object sender, PointerEventArgs e)
+    {
+        // Ação quando o mouse entra no botão
+        ((Button)sender).TextColor = Colors.Gainsboro; // Muda a cor do botão
+    }
+
+    private void OnPointer2Exited(object sender, PointerEventArgs e)
+    {
+        // Ação quando o mouse sai do botão
+        ((Button)sender).TextColor = Colors.White; // Volta à cor original
+    }
 }

@@ -1,51 +1,91 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="TCC.Views.ChoicePage"
              Title="ChoicePage"
-             BackgroundColor="Red">
+             BackgroundColor="#e86464">
 
-    <VerticalStackLayout Spacing="40"
-                     Padding="30"
-                     VerticalOptions="Center"
-                     HorizontalOptions="Center">
+        <Grid>
 
-        <!-- Botões -->
-        <VerticalStackLayout Spacing="20" WidthRequest="250">
+            <!-- Ondas decorativas no fundo -->
+            <Path Fill="#e04141"
+              Opacity="1"
+              Data="M0,40 
+                    C200,0 600,100 1000,40 
+                    L1000,0 L0,0 Z"
+              HorizontalOptions="FillAndExpand"
+              VerticalOptions="Start"
+              Aspect="Fill" />
 
-            <Button x:Name="driverButton"
-                    Text="Sou motorista"
-                    TextColor="Black"
-                    FontAttributes="Bold"
-                    BackgroundColor="White"
-                    CornerRadius="30"
-                    HeightRequest="55"
-                    SemanticProperties.Hint="Entrar como motorista"
-                    Clicked="driverButton_Clicked">
+            <Path Fill="#5c0e0e"
+              Opacity="0.25"
+              Data="M0,800 L1000,800 
+                    L1000,760 
+                    Q700,720 500,740 
+                    Q300,760 0,730 
+                    Z"
+              HorizontalOptions="FillAndExpand"
+              VerticalOptions="End"
+              Aspect="Fill" />
 
-                <Button.GestureRecognizers>
-                    <PointerGestureRecognizer PointerEntered="OnPointerEntered" PointerExited="OnPointerExited"/>
-                </Button.GestureRecognizers>
-                
-            </Button>
+            <!-- Conteúdo principal -->
+            <VerticalStackLayout Spacing="40"
+                             Padding="0"
+                             VerticalOptions="Center"
+                             HorizontalOptions="Center">
 
-            <Button x:Name="passengerButton"
-                    Text="Sou passageiro"
-                    TextColor="Black"
-                    FontAttributes="Bold"
-                    BackgroundColor="White"
-                    CornerRadius="30"
-                    HeightRequest="55"
-                    SemanticProperties.Hint="Entrar como passageiro"
-                    Clicked="passengerButton_Clicked">
+                <!-- Texto de Boas-vindas -->
+                <Label Text="Escolha seu perfil"
+                   FontSize="36"
+                   FontAttributes="Bold"
+                   TextColor="White"
+                   HorizontalOptions="Center"
+                   VerticalOptions="Center">
+                    <Label.Shadow>
+                        <Shadow Brush="Black" Offset="2,2" Radius="5" Opacity="0.3"/>
+                    </Label.Shadow>
+                </Label>
 
-                <Button.GestureRecognizers>
-                    <PointerGestureRecognizer PointerEntered="OnPointerEntered" PointerExited="OnPointerExited"/>
-                </Button.GestureRecognizers>
+                <!-- Botões -->
+                <VerticalStackLayout Spacing="20" WidthRequest="250">
 
-            </Button>
+                    <Button x:Name="driverButton"
+                        Text="Sou motorista"
+                        TextColor="#2C3E50"
+                        FontAttributes="Bold"
+                        BackgroundColor="White"
+                        CornerRadius="25"
+                        HeightRequest="55"
+                        SemanticProperties.Hint="Entrar como motorista"
+                        Clicked="driverButton_Clicked">
+                        <Button.Shadow>
+                            <Shadow Brush="Black" Offset="0,4" Radius="8" Opacity="0.2"/>
+                        </Button.Shadow>
+                        <Button.GestureRecognizers>
+                            <PointerGestureRecognizer PointerEntered="OnPointerEntered" PointerExited="OnPointerExited"/>
+                        </Button.GestureRecognizers>
+                    </Button>
 
-        </VerticalStackLayout>
+                    <Button x:Name="passengerButton"
+                        Text="Sou passageiro"
+                        TextColor="#2C3E50"
+                        FontAttributes="Bold"
+                        BackgroundColor="White"
+                        CornerRadius="25"
+                        HeightRequest="55"
+                        SemanticProperties.Hint="Entrar como passageiro"
+                        Clicked="passengerButton_Clicked">
+                        <Button.Shadow>
+                            <Shadow Brush="Black" Offset="0,4" Radius="8" Opacity="0.2"/>
+                        </Button.Shadow>
+                        <Button.GestureRecognizers>
+                            <PointerGestureRecognizer PointerEntered="OnPointerEntered" PointerExited="OnPointerExited"/>
+                        </Button.GestureRecognizers>
+                    </Button>
 
-    </VerticalStackLayout>
-</ContentPage>
+                </VerticalStackLayout>
+
+            </VerticalStackLayout>
+
+        </Grid>
+    </ContentPage>
