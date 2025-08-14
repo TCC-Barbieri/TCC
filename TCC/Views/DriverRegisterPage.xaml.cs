@@ -33,6 +33,7 @@ public partial class DriverRegisterPage : ContentPage
                 return;
             }
 
+
             // Verificação de senhas
             if (PasswordEntry.Text != ConfirmPasswordEntry.Text)
             {
@@ -43,6 +44,12 @@ public partial class DriverRegisterPage : ContentPage
             if (PasswordEntry.Text.Length < 6)
             {
                 await DisplayAlert("Erro", "A senha deve ter pelo menos 6 caracteres.", "OK");
+                return;
+            }
+
+            if (GenderPicker.SelectedIndex == -1)
+            {
+                await DisplayAlert("Campos Obrigatórios", "Por favor preencha todos os campos.", "OK");
                 return;
             }
 

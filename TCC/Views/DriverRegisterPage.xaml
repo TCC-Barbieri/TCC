@@ -145,7 +145,7 @@
                 <VerticalStackLayout Spacing="5">
                     <Label Text="Gênero" FontSize="14" TextColor="#333" />
                     <Border Stroke="#DDDDDD" StrokeThickness="1" StrokeShape="RoundRectangle 5,5,5,5" HeightRequest="45">
-                        <Picker x:Name="GenderPicker" >
+                        <Picker x:Name="GenderPicker" SelectedIndex="0">
                             <Picker.Items>
                                 <x:String>Masculino</x:String>
                                 <x:String>Feminino</x:String>
@@ -169,7 +169,7 @@
                 <!-- Senha -->
                 <VerticalStackLayout Spacing="5">
                     <Label Text="Senha" FontSize="14" TextColor="#333" />
-                    <Entry x:Name="PasswordEntry" Placeholder="Mínimo 8 caracteres" 
+                    <Entry x:Name="PasswordEntry" Placeholder="Mínimo 6 caracteres" 
                            FontSize="16" 
                            BackgroundColor="White" 
                            TextColor="#333" 

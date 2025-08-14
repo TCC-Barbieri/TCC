@@ -141,7 +141,7 @@
             <VerticalStackLayout Spacing="10" Margin="20,10,20,30">
                 <!-- Botão Finalizar Viagem -->
                 <Button Text="🏁 FINALIZAR VIAGEM"
-                        BackgroundColor="#4CAF50"
+                        BackgroundColor="Green"
                         TextColor="White"
                         HeightRequest="50"
                         FontSize="14"
@@ -161,7 +161,13 @@
                         BorderWidth="0"
                         HeightRequest="40"
                         FontAttributes="Bold"
-                        Clicked="OnVoltarClicked" />
+                        Clicked="OnVoltarClicked">
+
+                    <Button.GestureRecognizers>
+                    <PointerGestureRecognizer PointerEntered="OnPointer2Entered" PointerExited="OnPointer2Exited"/>
+                    </Button.GestureRecognizers>
+                </Button>
+                
             </VerticalStackLayout>
 
         </VerticalStackLayout>

@@ -62,6 +62,12 @@ public partial class PassengerRegisterPage : ContentPage
                 return;
             }
 
+            if (GenderPicker.SelectedIndex == -1)
+            {
+                await DisplayAlert("Campos Obrigatórios", "Por favor informe seu gênero", "OK");
+                return;
+            }
+
             // Validação de dados únicos (RG, CPF, Email, Telefone)
             var uniqueDataValidation = await _databaseService.ValidateUniqueUserData(
                 rg: RGEntry.Text.Trim(),

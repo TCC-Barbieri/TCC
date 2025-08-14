@@ -126,12 +126,12 @@
 
                 <VerticalStackLayout Spacing="5">
                     <Label Text="Senha" />
-                    <Entry x:Name="PasswordEntry" Placeholder="Senha" IsPassword="True" HeightRequest="45" />
+                    <Entry x:Name="PasswordEntry" Placeholder="Mínimo 6 caracteres" IsPassword="True" HeightRequest="45" />
                 </VerticalStackLayout>
 
                 <VerticalStackLayout Spacing="5">
                     <Label Text="Confirmar Senha" />
-                    <Entry x:Name="ConfirmPasswordEntry" Placeholder="Confirmar senha" IsPassword="True" HeightRequest="45" />
+                    <Entry x:Name="ConfirmPasswordEntry" Placeholder="Digite a senha novamente" IsPassword="True" HeightRequest="45" />
                 </VerticalStackLayout>
 
                 <!-- Additional Info -->
