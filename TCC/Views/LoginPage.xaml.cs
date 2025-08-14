@@ -1,4 +1,4 @@
-using Microsoft.Maui.Storage;
+using Microsoft.Maui.Controls;
 using TCC.Models;
 using TCC.Services;
 
@@ -11,79 +11,86 @@ public partial class LoginPage : ContentPage
     public LoginPage()
     {
         InitializeComponent();
-        _databaseService = new DatabaseService(); // Instancia o serviço de banco
+        _databaseService = new DatabaseService();
     }
 
     private async void OnLoginClicked(object sender, EventArgs e)
     {
-        string? email = EmailEntry.Text.Trim();
-        string password = PasswordEntry.Text;
-        string? userType = UserTypePicker.SelectedItem as string;
-
-        if (string.IsNullOrWhiteSpace(email) || string.IsNullOrWhiteSpace(password) || string.IsNullOrWhiteSpace(userType))
+        try
         {
-            await DisplayAlert("Erro", "Preencha todos os campos.", "OK");
-        }
+            string email = EmailEntry.Text?.Trim();
+            string password = PasswordEntry.Text?.Trim();
+            string userType = UserTypePicker.SelectedItem?.ToString();
 
-        if (userType == "Passageiro")
-        {
-            Passenger passenger = await _databaseService.GetPassengerByEmail(email);
-
-            if (passenger != null && passenger.Password == password)
+            // Validações básicas
+            if (string.IsNullOrEmpty(email))
             {
-                await SecureStorage.SetAsync("user_type", "passenger");
-                await SecureStorage.SetAsync("user_id", passenger.Id.ToString());
-
-                await Navigation.PushAsync(new Index()); // Redirecting to the main page after successful login
-
-                await DisplayAlert("Sucesso", "Login realizado com sucesso!", "OK");
-
+                await DisplayAlert("Erro", "Por favor, digite seu email.", "OK");
                 return;
             }
-        }
-        else if (userType == "Motorista")
-        {
-            Driver driver = await _databaseService.GetDriverByEmail(email);
 
-            if (driver != null && driver.Password == password)
+            if (string.IsNullOrEmpty(password))
             {
-                await SecureStorage.SetAsync("user_type", "driver");
-                await SecureStorage.SetAsync("user_id", driver.Id.ToString());
-
-                await Navigation.PushAsync(new Index()); // Redirecting to the main page after successful login
-
-                await DisplayAlert("Sucesso", "Login realizado com sucesso!", "OK");
-
+                await DisplayAlert("Erro", "Por favor, digite sua senha.", "OK");
                 return;
             }
+
+            if (string.IsNullOrEmpty(userType))
+            {
+                await DisplayAlert("Erro", "Por favor, selecione o tipo de usuário.", "OK");
+                return;
+            }
+
+            // Verificar credenciais baseado no tipo de usuário
+            if (userType == "Motorista")
+            {
+                var driver = await _databaseService.GetDriverByEmail(email);
+                if (driver != null && driver.Password == password)
+                {
+                    // Login bem-sucedido para motorista
+                    await Navigation.PushAsync(new Index(driver));
+                    await DisplayAlert("Sucesso", $"Bem-vindo, {driver.Name}!", "OK");
+                }
+                else
+                {
+                    await DisplayAlert("Erro", "Email ou senha incorretos para motorista.", "OK");
+                }
+            }
+            else if (userType == "Passageiro")
+            {
+                var passenger = await _databaseService.GetPassengerByEmail(email);
+                if (passenger != null && passenger.Password == password)
+                {
+                    // Login bem-sucedido para passageiro
+                    await Navigation.PushAsync(new Index(passenger));
+                    await DisplayAlert("Sucesso", $"Bem-vindo, {passenger.Name}!", "OK");
+                }
+                else
+                {
+                    await DisplayAlert("Erro", "Email ou senha incorretos para passageiro.", "OK");
+                }
+            }
         }
-
-        await DisplayAlert("Erro", "Usuário ou senha inválidos.", "OK");
-    }
-
-    protected override async void OnAppearing() // Verifies if we already have a user logged in (so we can skip the login page)
-    {
-        base.OnAppearing();
-
-        var userType = await SecureStorage.GetAsync("user_type");
-        var userId = await SecureStorage.GetAsync("user_id");
-
-        if (!string.IsNullOrEmpty(userType) && !string.IsNullOrEmpty(userId))
+        catch (Exception ex)
         {
-            await Navigation.PushAsync(new Index());
+            await DisplayAlert("Erro", $"Erro durante o login: {ex.Message}", "OK");
         }
     }
 
+    // Método para efeito visual do botão
     private void OnPointerEntered(object sender, PointerEventArgs e)
     {
-        // Ação quando o mouse entra no botão
-        ((Button)sender).BackgroundColor = Colors.DarkRed; // Muda a cor do botão
+        if (sender is Button button)
+        {
+            button.BackgroundColor = Color.FromArgb("#CC0000");
+        }
     }
 
     private void OnPointerExited(object sender, PointerEventArgs e)
     {
-        // Ação quando o mouse sai do botão
-        ((Button)sender).BackgroundColor = Colors.Red; // Volta à cor original
+        if (sender is Button button)
+        {
+            button.BackgroundColor = Color.FromArgb("#FF0000");
+        }
     }
-
 }
