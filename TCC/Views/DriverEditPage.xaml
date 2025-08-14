@@ -205,7 +205,7 @@
                             Clicked="OnSave_Clicked">
 
                         <Button.GestureRecognizers>
-                            <PointerGestureRecognizer PointerEntered="OnPointer2Entered" PointerExited="OnPointer2Exited"/>
+                            <PointerGestureRecognizer PointerEntered="OnPointerEntered" PointerExited="OnPointerExited"/>
                         </Button.GestureRecognizers>
 
                     </Button>

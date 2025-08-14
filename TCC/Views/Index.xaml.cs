@@ -142,15 +142,11 @@ public partial class Index : ContentPage
             // Você pode implementar as páginas de listagem posteriormente
             if (_userType == "driver")
             {
-                await DisplayAlert("Informação", "Lista de motoristas será implementada em breve.", "OK");
-                // Quando implementar a página de lista, descomente a linha abaixo:
-                // await Navigation.PushAsync(new DriverListPage());
+                await Navigation.PushAsync(new GroupViewPage());
             }
             else
             {
-                await DisplayAlert("Informação", "Lista de passageiros será implementada em breve.", "OK");
-                // Quando implementar a página de lista, descomente a linha abaixo:
-                // await Navigation.PushAsync(new PassengerListPage());
+                await Navigation.PushAsync(new GroupViewPage());
             }
         }
         catch (Exception ex)

@@ -143,19 +143,24 @@
                 <Button Text="🏁 FINALIZAR VIAGEM"
                         BackgroundColor="#4CAF50"
                         TextColor="White"
-                        CornerRadius="25"
                         HeightRequest="50"
                         FontSize="14"
                         FontAttributes="Bold"
-                        Clicked="OnFinalizarViagemClicked" />
+                        Clicked="OnFinalizarViagemClicked">
+
+                    <Button.GestureRecognizers>
+                    <PointerGestureRecognizer PointerEntered="OnPointerEntered" PointerExited="OnPointerExited"/>
+                    </Button.GestureRecognizers>
+                </Button>
 
                 <!-- Botão Voltar -->
                 <Button Text="← Voltar"
-                        BackgroundColor="Transparent"
-                        TextColor="#FF0000"
+                        BackgroundColor="Red"
+                        TextColor="White"
                         FontSize="14"
                         BorderWidth="0"
                         HeightRequest="40"
+                        FontAttributes="Bold"
                         Clicked="OnVoltarClicked" />
             </VerticalStackLayout>
 
