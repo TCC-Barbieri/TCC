@@ -212,11 +212,16 @@
             <!-- Refresh Button -->
             <Button x:Name="RefreshButton" 
                     Text="Atualizar Dados" 
-                    BackgroundColor="#3498DB" 
+                    BackgroundColor="DeepSkyBlue" 
                     TextColor="White" 
                     CornerRadius="25" 
                     FontAttributes="Bold"
-                    Clicked="OnRefreshClicked" />
+                    Clicked="OnRefreshClicked" >
+
+                <Button.GestureRecognizers>
+                    <PointerGestureRecognizer PointerEntered="OnPointerEntered" PointerExited="OnPointerExited"/>
+                </Button.GestureRecognizers>
+            </Button>
 
             <Button x:Name="BackButton"
                     Text="Back"
@@ -224,8 +229,13 @@
                     TextColor="White"
                     CornerRadius="25"
                     FontAttributes="Bold"
-                    Clicked="BackButton_Clicked" />
+                    Clicked="BackButton_Clicked">
 
+                <Button.GestureRecognizers>
+                    <PointerGestureRecognizer PointerEntered="OnPointer2Entered" PointerExited="OnPointer2Exited"/>
+                </Button.GestureRecognizers>
+            </Button>
+            
         </StackLayout>
     </ScrollView>
 </ContentPage>
