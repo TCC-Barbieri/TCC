@@ -41,11 +41,9 @@ namespace TCC.Views
 
                 if (confirm)
                 {
-                    // Limpar dados de sessão/autenticação aqui se necessário
-                    // UserSession.Clear(); ou similar
 
                     // Navegar de volta para a página inicial
-                    await Navigation.PopAsync();
+                    await Navigation.PushAsync(new Home());
                 }
             }
             catch (Exception ex)
