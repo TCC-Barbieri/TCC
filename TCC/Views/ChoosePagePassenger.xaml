@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="TCC.Views.ChoosePagePassenger"
+             Title="Menu do Passageiro"
+             BackgroundColor="#e86464">
+
+    <Grid>
+        <!-- Ondas decorativas no fundo -->
+        <Path Fill="#e04141"
+              Opacity="1"
+              Data="M0,40 
+                    C200,0 600,100 1000,40 
+                    L1000,0 L0,0 Z"
+              HorizontalOptions="FillAndExpand"
+              VerticalOptions="Start"
+              Aspect="Fill" />
+
+        <Path Fill="#5c0e0e"
+              Opacity="0.25"
+              Data="M0,800 L1000,800 
+                    L1000,760 
+                    Q700,720 500,740 
+                    Q300,760 0,730 
+                    Z"
+              HorizontalOptions="FillAndExpand"
+              VerticalOptions="End"
+              Aspect="Fill" />
+
+        <!-- Conteúdo principal -->
+        <VerticalStackLayout Spacing="40"
+                             Padding="0"
+                             VerticalOptions="Center"
+                             HorizontalOptions="Center">
+
+            <!-- Texto de Boas-vindas -->
+            <Label Text="Menu do Passageiro"
+                   FontSize="36"
+                   FontAttributes="Bold"
+                   TextColor="White"
+                   HorizontalOptions="Center"
+                   VerticalOptions="Center">
+                <Label.Shadow>
+                    <Shadow Brush="Black" Offset="2,2" Radius="5" Opacity="0.3"/>
+                </Label.Shadow>
+            </Label>
+
+            <!-- Botões -->
+            <VerticalStackLayout Spacing="20" WidthRequest="250">
+
+                <!-- Botão Perfil -->
+                <Button x:Name="perfilButton"
+                        Text="👤 Perfil"
+                        TextColor="#2C3E50"
+                        FontAttributes="Bold"
+                        BackgroundColor="White"
+                        CornerRadius="25"
+                        HeightRequest="55"
+                        SemanticProperties.Hint="Ver meu perfil"
+                        Clicked="PerfilButton_Clicked">
+                    <Button.Shadow>
+                        <Shadow Brush="Black" Offset="0,4" Radius="8" Opacity="0.2"/>
+                    </Button.Shadow>
+                    <Button.GestureRecognizers>
+                        <PointerGestureRecognizer PointerEntered="OnPointerEntered" PointerExited="OnPointerExited"/>
+                    </Button.GestureRecognizers>
+                </Button>
+
+                <!-- Botão Grupos -->
+                <Button x:Name="gruposButton"
+                        Text="👥 Grupos"
+                        TextColor="#2C3E50"
+                        FontAttributes="Bold"
+                        BackgroundColor="White"
+                        CornerRadius="25"
+                        HeightRequest="55"
+                        SemanticProperties.Hint="Ver grupos"
+                        Clicked="GruposButton_Clicked">
+                    <Button.Shadow>
+                        <Shadow Brush="Black" Offset="0,4" Radius="8" Opacity="0.2"/>
+                    </Button.Shadow>
+                    <Button.GestureRecognizers>
+                        <PointerGestureRecognizer PointerEntered="OnPointerEntered" PointerExited="OnPointerExited"/>
+                    </Button.GestureRecognizers>
+                </Button>
+
+                <!-- Botão Desconectar -->
+                <Button x:Name="desconectarButton"
+                        Text="❌ Desconectar"
+                        TextColor="White"
+                        FontAttributes="Bold"
+                        BackgroundColor="Transparent"
+                        BorderColor="White"
+                        BorderWidth="2"
+                        CornerRadius="25"
+                        HeightRequest="55"
+                        SemanticProperties.Hint="Sair da conta"
+                        Clicked="DesconectarButton_Clicked">
+                    <Button.Shadow>
+                        <Shadow Brush="Black" Offset="0,4" Radius="8" Opacity="0.2"/>
+                    </Button.Shadow>
+                    <Button.GestureRecognizers>
+                        <PointerGestureRecognizer PointerEntered="OnPointer2Entered" PointerExited="OnPointer2Exited"/>
+                    </Button.GestureRecognizers>
+                </Button>
+
+            </VerticalStackLayout>
+
+        </VerticalStackLayout>
+
+    </Grid>
+</ContentPage>

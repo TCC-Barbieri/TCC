@@ -1,15 +1,14 @@
-using Microsoft.Maui.Controls;
-using TCC.Models;
 using TCC.Services;
+using TCC.Models;
+using Microsoft.Maui.Storage;
 
 namespace TCC.Views;
 
 public partial class Index : ContentPage
 {
     private readonly DatabaseService _databaseService;
-    private Driver _currentDriver;
-    private Passenger _currentPassenger;
-    private string _userType;
+    private string _currentUserType;
+    private int _currentUserId;
 
     public Index()
     {
@@ -17,156 +16,115 @@ public partial class Index : ContentPage
         _databaseService = new DatabaseService();
     }
 
-    public Index(Driver driver) : this()
+    protected override async void OnAppearing()
     {
-        _currentDriver = driver;
-        _userType = "driver";
-        LoadUserData();
-    }
+        base.OnAppearing();
 
-    public Index(Passenger passenger) : this()
-    {
-        _currentPassenger = passenger;
-        _userType = "passenger";
-        LoadUserData();
-    }
+        string? userType = await SecureStorage.GetAsync("user_type");
+        string? userIdString = await SecureStorage.GetAsync("user_id");
 
-    private void LoadUserData()
-    {
-        if (_userType == "driver" && _currentDriver != null)
+        if (!int.TryParse(userIdString, out int userId))
         {
-            LoadDriverData();
-            // Mostrar botão iniciar viagem para motoristas
-            IniciarViagemButton.IsVisible = true;
-        }
-        else if (_userType == "passenger" && _currentPassenger != null)
-        {
-            LoadPassengerData();
-            // Ocultar botão iniciar viagem para passageiros
-            IniciarViagemButton.IsVisible = false;
-        }
-    }
-
-    private void LoadDriverData()
-    {
-        WelcomeLabel.Text = _currentDriver.Name;
-        RGLabel.Text = _currentDriver.RG;
-        CPFLabel.Text = _currentDriver.CPF;
-        EmailLabel.Text = _currentDriver.Email;
-        AddressLabel.Text = _currentDriver.Address;
-        PhoneLabel.Text = _currentDriver.PhoneNumber;
-        EmergencyContactLabel.Text = _currentDriver.EmergencyPhoneNumber;
-        GenderLabel.Text = _currentDriver.Genre;
-
-        // Campos específicos para motorista
-        SpecificField1Label.Text = "CNH";
-        SpecificField1Value.Text = _currentDriver.CNH;
-        SpecificField2Label.Text = "Data de Nascimento";
-        SpecificField2Value.Text = _currentDriver.BirthDate.ToString("dd/MM/yyyy");
-
-        // Ocultar campo de atendimento especial (específico de passageiro)
-        SpecialTreatmentLayout.IsVisible = false;
-    }
-
-    private void LoadPassengerData()
-    {
-        WelcomeLabel.Text = _currentPassenger.Name;
-        RGLabel.Text = _currentPassenger.RG;
-        CPFLabel.Text = _currentPassenger.CPF;
-        EmailLabel.Text = _currentPassenger.Email;
-        AddressLabel.Text = _currentPassenger.Address;
-        PhoneLabel.Text = _currentPassenger.PhoneNumber;
-        EmergencyContactLabel.Text = _currentPassenger.EmergencyPhoneNumber;
-        GenderLabel.Text = _currentPassenger.Genre;
-
-        // Campos específicos para passageiro
-        SpecificField1Label.Text = "Escola";
-        SpecificField1Value.Text = _currentPassenger.School;
-        SpecificField2Label.Text = "Responsável";
-        SpecificField2Value.Text = _currentPassenger.ResponsableName;
-
-        // Mostrar campo de atendimento especial
-        SpecialTreatmentLayout.IsVisible = true;
-        SpecialTreatmentLabel.Text = _currentPassenger.SpecialTreatment ? "Sim" : "Não";
-    }
-
-    private async void OnIniciarViagemClicked(object sender, EventArgs e)
-    {
-        // Verificar se é motorista antes de permitir iniciar viagem
-        if (_userType != "driver")
-        {
-            await DisplayAlert("Acesso Negado", "Apenas motoristas podem iniciar viagens.", "OK");
+            await DisplayAlert("Erro", "Usu?rio inv?lido.", "OK");
             return;
         }
 
-        try
-        {
-            await Navigation.PushAsync(new ViagemPage());
-        }
-        catch (Exception ex)
-        {
-            await DisplayAlert("Erro", $"Erro ao iniciar viagem: {ex.Message}", "OK");
-        }
+        _currentUserType = userType;
+        _currentUserId = userId;
+
+        await LoadUserData();
     }
 
-    private async void OnEditClicked(object sender, EventArgs e)
+    private async Task LoadUserData()
     {
         try
         {
-            // Por enquanto, vamos mostrar uma mensagem informativa
-            // Você pode implementar as páginas de edição posteriormente
-            if (_userType == "driver")
+            if (_currentUserType == "passenger")
             {
-                await DisplayAlert("Informação", "Funcionalidade de edição de motorista será implementada em breve.", "OK");
-                // Quando implementar a página de edição, descomente a linha abaixo:
-                // await Navigation.PushAsync(new DriverEditPage(_currentDriver));
+                await LoadPassengerData();
             }
-            else
+            else if (_currentUserType == "driver")
             {
-                await DisplayAlert("Informação", "Funcionalidade de edição de passageiro será implementada em breve.", "OK");
-                // Quando implementar a página de edição, descomente a linha abaixo:
-                // await Navigation.PushAsync(new PassengerEditPage(_currentPassenger));
+                await LoadDriverData();
             }
         }
         catch (Exception ex)
         {
-            await DisplayAlert("Erro", $"Erro ao abrir edição: {ex.Message}", "OK");
+            await DisplayAlert("Erro", $"Erro ao carregar dados do usu?rio: {ex.Message}", "OK");
         }
     }
 
-    private async void OnGroupViewClicked(object sender, EventArgs e)
+    private async Task LoadPassengerData()
     {
-        try
+        var passengers = await _databaseService.GetPassengers();
+        var passenger = passengers.FirstOrDefault(p => p.Id == _currentUserId);
+
+        if (passenger != null)
         {
-            // Por enquanto, vamos mostrar uma mensagem informativa
-            // Você pode implementar as páginas de listagem posteriormente
-            if (_userType == "driver")
-            {
-                await Navigation.PushAsync(new GroupViewPage());
-            }
-            else
-            {
-                await Navigation.PushAsync(new GroupViewPage());
-            }
+            // Informa??es b?sicas
+            WelcomeLabel.Text = passenger.Name.ToUpper();
+            RGLabel.Text = passenger.RG ?? "N?o informado";
+            CPFLabel.Text = passenger.CPF ?? "N?o informado";
+            EmailLabel.Text = passenger.Email ?? "N?o informado";
+            AddressLabel.Text = passenger.Address ?? "N?o informado";
+            PhoneLabel.Text = passenger.PhoneNumber ?? "N?o informado";
+            EmergencyContactLabel.Text = passenger.EmergencyPhoneNumber ?? "N?o informado";
+            GenderLabel.Text = passenger.Genre ?? "N?o informado";
+
+            // Campos espec?ficos do passageiro
+            SpecificField1Label.Text = "Escola";
+            SpecificField1Value.Text = passenger.School ?? "N?o informado";
+
+            SpecificField2Label.Text = "Respons?vel";
+            SpecificField2Value.Text = passenger.ResponsableName ?? "N?o informado";
+
+            // Mostrar campo de atendimento especial
+            SpecialTreatmentLayout.IsVisible = true;
+            SpecialTreatmentLabel.Text = passenger.SpecialTreatment ? "Sim" : "N?o";
         }
-        catch (Exception ex)
+    }
+
+    private async Task LoadDriverData()
+    {
+        var drivers = await _databaseService.GetDrivers();
+        var driver = drivers.FirstOrDefault(d => d.Id == _currentUserId);
+
+        if (driver != null)
         {
-            await DisplayAlert("Erro", $"Erro ao abrir lista: {ex.Message}", "OK");
+            // Informa??es b?sicas
+            WelcomeLabel.Text = driver.Name.ToUpper();
+            RGLabel.Text = driver.RG ?? "N?o informado";
+            CPFLabel.Text = driver.CPF ?? "N?o informado";
+            EmailLabel.Text = driver.Email ?? "N?o informado";
+            AddressLabel.Text = driver.Address ?? "N?o informado";
+            PhoneLabel.Text = driver.PhoneNumber ?? "N?o informado";
+            EmergencyContactLabel.Text = driver.EmergencyPhoneNumber ?? "N?o informado";
+            GenderLabel.Text = driver.Genre ?? "N?o informado";
+
+            // Campos espec?ficos do motorista
+            SpecificField1Label.Text = "CNH";
+            SpecificField1Value.Text = driver.CNH ?? "N?o informado";
+
+            SpecificField2Label.Text = "Categoria";
+            SpecificField2Value.Text = "Profissional"; // Valor padr?o ou pode ser adicionado ao modelo
+
+            // Ocultar campo de atendimento especial para motoristas
+            SpecialTreatmentLayout.IsVisible = false;
         }
     }
 
     private async void OnLogoutClicked(object sender, EventArgs e)
     {
-        bool confirm = await DisplayAlert("Confirmar", "Deseja realmente sair?", "Sim", "Não");
+        bool confirm = await DisplayAlert("Sair", "Deseja realmente sair da sua conta?", "Sim", "N?o");
+
         if (confirm)
         {
-            // Limpar dados do usuário
-            _currentDriver = null;
-            _currentPassenger = null;
-            _userType = null;
+            // Remove dados da sess?o
+            SecureStorage.Remove("user_id");
+            SecureStorage.Remove("user_type");
 
-            // Voltar para a página inicial
-            await Navigation.PopToRootAsync();
+            // Redireciona para tela inicial (limpando a pilha de navega??o)
+            Application.Current.MainPage = new NavigationPage(new Home());
         }
     }
 
@@ -175,36 +133,18 @@ public partial class Index : ContentPage
         await Navigation.PopAsync();
     }
 
-    // Métodos para efeitos visuais dos botões
-    private void OnPointerEntered(object sender, PointerEventArgs e)
+    private async void OnEditClicked(object sender, EventArgs e)
     {
-        if (sender is Button button)
-        {
-            button.BackgroundColor = Color.FromArgb("#CC0000");
-        }
-    }
+        await DisplayAlert("Editar", "Funcionalidade de edi??o em desenvolvimento", "OK");
 
-    private void OnPointerExited(object sender, PointerEventArgs e)
-    {
-        if (sender is Button button)
-        {
-            button.BackgroundColor = Color.FromArgb("#FF0000");
-        }
-    }
-
-    private void OnPointer2Entered(object sender, PointerEventArgs e)
-    {
-        if (sender is Frame frame)
-        {
-            frame.BackgroundColor = Color.FromArgb("#CC0000");
-        }
-    }
-
-    private void OnPointer2Exited(object sender, PointerEventArgs e)
-    {
-        if (sender is Frame frame)
-        {
-            frame.BackgroundColor = Color.FromArgb("#FF0000");
-        }
+        // Aqui voc? pode implementar a navega??o para uma p?gina de edi??o
+        // if (_currentUserType == "passenger")
+        // {
+        //     await Navigation.PushAsync(new PassengerEditPage(_currentUserId));
+        // }
+        // else if (_currentUserType == "driver")
+        // {
+        //     await Navigation.PushAsync(new DriverEditPage(_currentUserId));
+        // }
     }
 }

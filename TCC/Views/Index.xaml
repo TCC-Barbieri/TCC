@@ -39,32 +39,6 @@
                 </VerticalStackLayout>
             </Grid>
 
-            <!-- Botão Iniciar Viagem - Destacado -->
-            <Frame BackgroundColor="#FF0000"
-                   Margin="20,20,20,10"
-                   CornerRadius="15"
-                   HasShadow="True"
-                   Padding="0">
-                <Button Text="🚗 INICIAR VIAGEM"
-                        x:Name="IniciarViagemButton"
-                        BackgroundColor="Transparent"
-                        TextColor="White"
-                        FontSize="20"
-                        FontAttributes="Bold"
-                        HeightRequest="60"
-                        CornerRadius="15"
-                        Clicked="OnIniciarViagemClicked">
-
-                    <Button.GestureRecognizers>
-                        <PointerGestureRecognizer PointerEntered="OnPointerEntered" PointerExited="OnPointerExited"/>
-                    </Button.GestureRecognizers>
-
-                    <Button.Shadow>
-                        <Shadow Brush="Black" Opacity="0.3" Radius="10" Offset="0,3" />
-                    </Button.Shadow>
-                </Button>
-            </Frame>
-
             <!-- Card principal com informações -->
             <Frame BackgroundColor="White"
                    Margin="20,10,20,20"
@@ -171,7 +145,6 @@
                                 <Label Text="VOLTAR" FontSize="12" TextColor="White" FontAttributes="Bold" />
                             </HorizontalStackLayout>
                             <Frame.GestureRecognizers>
-                                <PointerGestureRecognizer PointerEntered="OnPointer2Entered" PointerExited="OnPointer2Exited"/>
                                 <TapGestureRecognizer Tapped="OnBackClicked" />
                             </Frame.GestureRecognizers>
                         </Frame>
@@ -186,25 +159,9 @@
                                    HasShadow="False"
                                    HeightRequest="40"
                                    WidthRequest="40">
-
                                 <Label Text="✏️" FontSize="16" HorizontalOptions="Center" VerticalOptions="Center" />
                                 <Frame.GestureRecognizers>
-                                    <PointerGestureRecognizer PointerEntered="OnPointer2Entered" PointerExited="OnPointer2Exited"/>
                                     <TapGestureRecognizer Tapped="OnEditClicked" />
-                                </Frame.GestureRecognizers>
-                            </Frame>
-
-                            <!-- Botão Grupo -->
-                            <Frame BackgroundColor="#FF0000" 
-                                   CornerRadius="20" 
-                                   Padding="10" 
-                                   HasShadow="False"
-                                   HeightRequest="40"
-                                   WidthRequest="40">
-                                <Label Text="👥" FontSize="16" HorizontalOptions="Center" VerticalOptions="Center" />
-                                <Frame.GestureRecognizers>
-                                    <PointerGestureRecognizer PointerEntered="OnPointer2Entered" PointerExited="OnPointer2Exited"/>
-                                    <TapGestureRecognizer Tapped="OnGroupViewClicked" />
                                 </Frame.GestureRecognizers>
                             </Frame>
 
@@ -217,7 +174,6 @@
                                    WidthRequest="40">
                                 <Label Text="❌" HorizontalTextAlignment="Center" FontSize="16" HorizontalOptions="Center" VerticalOptions="Center" />
                                 <Frame.GestureRecognizers>
-                                    <PointerGestureRecognizer PointerEntered="OnPointer2Entered" PointerExited="OnPointer2Exited"/>
                                     <TapGestureRecognizer Tapped="OnLogoutClicked" />
                                 </Frame.GestureRecognizers>
                             </Frame>
