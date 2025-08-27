@@ -113,7 +113,7 @@ public partial class GroupViewPage : ContentPage
 
     private void BackButton_Clicked(object sender, EventArgs e)
     {
-        Navigation.PushAsync(new Index());
+        Navigation.PopAsync();
     }
 
     private void OnPointerEntered(object sender, PointerEventArgs e)
