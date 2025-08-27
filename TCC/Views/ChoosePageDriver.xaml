@@ -41,12 +41,16 @@
                    HorizontalOptions="Center"
                    VerticalOptions="Center">
                 <Label.Shadow>
-                    <Shadow Brush="Black" Offset="2,2" Radius="5" Opacity="0.3"/>
+                    <Shadow Brush="Black" 
+                            Offset="2,2" 
+                            Radius="5" 
+                            Opacity="0.3"/>
                 </Label.Shadow>
             </Label>
 
             <!-- Botões -->
-            <VerticalStackLayout Spacing="20" WidthRequest="250">
+            <VerticalStackLayout Spacing="20" 
+                                 WidthRequest="250">
 
                 <!-- Botão Iniciar Viagem -->
                 <Button x:Name="iniciarViagemButton"
@@ -59,10 +63,14 @@
                         SemanticProperties.Hint="Iniciar nova viagem"
                         Clicked="IniciarViagemButton_Clicked">
                     <Button.Shadow>
-                        <Shadow Brush="Black" Offset="0,4" Radius="8" Opacity="0.2"/>
+                        <Shadow Brush="Black" 
+                                Offset="0,4" 
+                                Radius="8" 
+                                Opacity="0.2"/>
                     </Button.Shadow>
                     <Button.GestureRecognizers>
-                        <PointerGestureRecognizer PointerEntered="OnPointerEntered" PointerExited="OnPointerExited"/>
+                        <PointerGestureRecognizer PointerEntered="OnPointerEntered" 
+                                                  PointerExited="OnPointerExited"/>
                     </Button.GestureRecognizers>
                 </Button>
 
@@ -77,10 +85,14 @@
                         SemanticProperties.Hint="Ver meu perfil"
                         Clicked="PerfilButton_Clicked">
                     <Button.Shadow>
-                        <Shadow Brush="Black" Offset="0,4" Radius="8" Opacity="0.2"/>
+                        <Shadow Brush="Black" 
+                                Offset="0,4" 
+                                Radius="8" 
+                                Opacity="0.2"/>
                     </Button.Shadow>
                     <Button.GestureRecognizers>
-                        <PointerGestureRecognizer PointerEntered="OnPointerEntered" PointerExited="OnPointerExited"/>
+                        <PointerGestureRecognizer PointerEntered="OnPointerEntered" 
+                                                  PointerExited="OnPointerExited"/>
                     </Button.GestureRecognizers>
                 </Button>
 
@@ -95,10 +107,14 @@
                         SemanticProperties.Hint="Ver grupos"
                         Clicked="GruposButton_Clicked">
                     <Button.Shadow>
-                        <Shadow Brush="Black" Offset="0,4" Radius="8" Opacity="0.2"/>
+                        <Shadow Brush="Black" 
+                                Offset="0,4" 
+                                Radius="8" 
+                                Opacity="0.2"/>
                     </Button.Shadow>
                     <Button.GestureRecognizers>
-                        <PointerGestureRecognizer PointerEntered="OnPointerEntered" PointerExited="OnPointerExited"/>
+                        <PointerGestureRecognizer PointerEntered="OnPointerEntered" 
+                                                  PointerExited="OnPointerExited"/>
                     </Button.GestureRecognizers>
                 </Button>
 
@@ -115,10 +131,14 @@
                         SemanticProperties.Hint="Sair da conta"
                         Clicked="DesconectarButton_Clicked">
                     <Button.Shadow>
-                        <Shadow Brush="Black" Offset="0,4" Radius="8" Opacity="0.2"/>
+                        <Shadow Brush="Black" 
+                                Offset="0,4" 
+                                Radius="8" 
+                                Opacity="0.2"/>
                     </Button.Shadow>
                     <Button.GestureRecognizers>
-                        <PointerGestureRecognizer PointerEntered="OnPointer2Entered" PointerExited="OnPointer2Exited"/>
+                        <PointerGestureRecognizer PointerEntered="OnPointer2Entered" 
+                                                  PointerExited="OnPointer2Exited"/>
                     </Button.GestureRecognizers>
                 </Button>
 

@@ -10,14 +10,15 @@
         <VerticalStackLayout Spacing="0">
 
             <!-- Cabeçalho - Full Width -->
-            <Grid HeightRequest="120" Margin="0">
+            <Grid HeightRequest="120" 
+                  Margin="0">
                 <Image Source="fundovermelho.jpg" 
                        Aspect="AspectFill" />
                 <!-- Overlay semitransparente opcional para melhorar legibilidade -->
                 <BoxView BackgroundColor="#80000000" />
                 <VerticalStackLayout HorizontalOptions="Center" 
-                                   VerticalOptions="Center" 
-                                   Spacing="5">
+                                     VerticalOptions="Center" 
+                                     Spacing="5">
                     <Label Text="Criar Conta" 
                            FontSize="24" 
                            HorizontalOptions="Center" 
@@ -35,12 +36,16 @@
             </Grid>
 
             <!-- Conteúdo do formulário com padding -->
-            <VerticalStackLayout Padding="20" Spacing="15">
+            <VerticalStackLayout Padding="20" 
+                                 Spacing="15">
 
                 <!-- Nome -->
                 <VerticalStackLayout Spacing="5">
-                    <Label Text="Nome Completo" FontSize="14" TextColor="#333" />
-                    <Entry x:Name="NameEntry" Placeholder="Digite seu nome completo" 
+                    <Label Text="Nome Completo" 
+                           FontSize="14" 
+                           TextColor="#333" />
+                    <Entry x:Name="NameEntry" 
+                           Placeholder="Digite seu nome completo" 
                            FontSize="16" 
                            BackgroundColor="White" 
                            TextColor="#333" 
@@ -49,8 +54,11 @@
 
                 <!-- RG -->
                 <VerticalStackLayout Spacing="5">
-                    <Label Text="RG" FontSize="14" TextColor="#333" />
-                    <Entry x:Name="RGEntry" Placeholder="00.000.000-0" 
+                    <Label Text="RG" 
+                           FontSize="14" 
+                           TextColor="#333" />
+                    <Entry x:Name="RGEntry" 
+                           Placeholder="00.000.000-0" 
                            FontSize="16" 
                            BackgroundColor="White" 
                            TextColor="#333" 
@@ -64,8 +72,11 @@
 
                 <!-- CPF -->
                 <VerticalStackLayout Spacing="5">
-                    <Label Text="CPF" FontSize="14" TextColor="#333" />
-                    <Entry x:Name="CPFEntry" Placeholder="000.000.000-00" 
+                    <Label Text="CPF" 
+                           FontSize="14" 
+                           TextColor="#333" />
+                    <Entry x:Name="CPFEntry" 
+                           Placeholder="000.000.000-00" 
                            FontSize="16" 
                            BackgroundColor="White" 
                            TextColor="#333" 
@@ -79,8 +90,11 @@
 
                 <!-- Email -->
                 <VerticalStackLayout Spacing="5">
-                    <Label Text="Email" FontSize="14" TextColor="#333" />
-                    <Entry x:Name="EmailEntry" Placeholder="seu@email.com" 
+                    <Label Text="Email" 
+                           FontSize="14" 
+                           TextColor="#333" />
+                    <Entry x:Name="EmailEntry" 
+                           Placeholder="seu@email.com" 
                            FontSize="16" 
                            BackgroundColor="White" 
                            TextColor="#333" 
@@ -90,7 +104,9 @@
 
                 <!-- Data de Nascimento -->
                 <VerticalStackLayout Spacing="5">
-                    <Label Text="Data de Nascimento" FontSize="14" TextColor="#333" />
+                    <Label Text="Data de Nascimento" 
+                           FontSize="14" 
+                           TextColor="#333" />
                     <DatePicker x:Name="BirthDatePicker"
                                 BackgroundColor="White" 
                                 TextColor="#333" 
@@ -100,8 +116,11 @@
 
                 <!-- Telefone -->
                 <VerticalStackLayout Spacing="5">
-                    <Label Text="Telefone" FontSize="14" TextColor="#333" />
-                    <Entry x:Name="PhoneEntry" Placeholder="(11) 99999-9999" 
+                    <Label Text="Telefone" 
+                           FontSize="14" 
+                           TextColor="#333" />
+                    <Entry x:Name="PhoneEntry" 
+                           Placeholder="(11) 99999-9999" 
                            FontSize="16" 
                            BackgroundColor="White" 
                            TextColor="#333" 
@@ -115,7 +134,9 @@
 
                 <!-- Contato de Emergência -->
                 <VerticalStackLayout Spacing="5">
-                    <Label Text="Contato de Emergência" FontSize="14" TextColor="#333" />
+                    <Label Text="Contato de Emergência" 
+                           FontSize="14" 
+                           TextColor="#333" />
                     <Entry x:Name="ContatoEmergenciaEntry"
                            Placeholder="(11) 99999-9999" 
                            FontSize="16" 
@@ -131,7 +152,9 @@
 
                 <!-- CNH -->
                 <VerticalStackLayout Spacing="5">
-                    <Label Text="CNH" FontSize="14" TextColor="#333" />
+                    <Label Text="CNH" 
+                           FontSize="14" 
+                           TextColor="#333" />
                     <Entry x:Name="CNHEntry"
                            Placeholder="Número da CNH" 
                            FontSize="16" 
@@ -143,9 +166,15 @@
 
                 <!-- Gênero -->
                 <VerticalStackLayout Spacing="5">
-                    <Label Text="Gênero" FontSize="14" TextColor="#333" />
-                    <Border Stroke="#DDDDDD" StrokeThickness="1" StrokeShape="RoundRectangle 5,5,5,5" HeightRequest="45">
-                        <Picker x:Name="GenderPicker" SelectedIndex="0">
+                    <Label Text="Gênero" 
+                           FontSize="14" 
+                           TextColor="#333" />
+                    <Border Stroke="#DDDDDD" 
+                            StrokeThickness="1" 
+                            StrokeShape="RoundRectangle 5,5,5,5" 
+                            HeightRequest="45">
+                        <Picker x:Name="GenderPicker" 
+                                SelectedIndex="0">
                             <Picker.Items>
                                 <x:String>Masculino</x:String>
                                 <x:String>Feminino</x:String>
@@ -158,8 +187,11 @@
 
                 <!-- Endereço -->
                 <VerticalStackLayout Spacing="5">
-                    <Label Text="Endereço" FontSize="14" TextColor="#333" />
-                    <Entry x:Name="AddressEntry" Placeholder="Rua, número, bairro, cidade" 
+                    <Label Text="Endereço" 
+                           FontSize="14" 
+                           TextColor="#333" />
+                    <Entry x:Name="AddressEntry" 
+                           Placeholder="Rua, número, bairro, cidade" 
                            FontSize="16" 
                            BackgroundColor="White" 
                            TextColor="#333" 
@@ -168,8 +200,11 @@
 
                 <!-- Senha -->
                 <VerticalStackLayout Spacing="5">
-                    <Label Text="Senha" FontSize="14" TextColor="#333" />
-                    <Entry x:Name="PasswordEntry" Placeholder="Mínimo 6 caracteres" 
+                    <Label Text="Senha" 
+                           FontSize="14" 
+                           TextColor="#333" />
+                    <Entry x:Name="PasswordEntry" 
+                           Placeholder="Mínimo 6 caracteres" 
                            FontSize="16" 
                            BackgroundColor="White" 
                            TextColor="#333" 
@@ -179,8 +214,11 @@
 
                 <!-- Confirmar Senha -->
                 <VerticalStackLayout Spacing="5">
-                    <Label Text="Confirmar Senha" FontSize="14" TextColor="#333" />
-                    <Entry x:Name="ConfirmPasswordEntry" Placeholder="Digite a senha novamente" 
+                    <Label Text="Confirmar Senha" 
+                           FontSize="14" 
+                           TextColor="#333" />
+                    <Entry x:Name="ConfirmPasswordEntry" 
+                           Placeholder="Digite a senha novamente" 
                            FontSize="16" 
                            BackgroundColor="White" 
                            TextColor="#333" 
@@ -199,9 +237,9 @@
                         FontAttributes="Bold"
                         Margin="0,20,0,10"
                         Clicked="OnRegister_Clicked">
-                        
-                        <Button.GestureRecognizers>
-                    <PointerGestureRecognizer PointerEntered="OnPointerEntered" PointerExited="OnPointerExited"/>
+                    <Button.GestureRecognizers>
+                        <PointerGestureRecognizer PointerEntered="OnPointerEntered" 
+                                                  PointerExited="OnPointerExited"/>
                     </Button.GestureRecognizers>
                 </Button>
 
@@ -213,11 +251,10 @@
                         BorderWidth="0"
                         HeightRequest="40" 
                         Clicked="OnAlreadyHaveAccount_Clicked">
-                    
                     <Button.GestureRecognizers>
-                        <PointerGestureRecognizer PointerEntered="OnPointer2Entered" PointerExited="OnPointer2Exited"/>
+                        <PointerGestureRecognizer PointerEntered="OnPointer2Entered" 
+                                                  PointerExited="OnPointer2Exited"/>
                     </Button.GestureRecognizers>
-
                 </Button>
 
             </VerticalStackLayout>

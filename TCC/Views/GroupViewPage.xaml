@@ -5,7 +5,8 @@
              Title="Visualizar Grupos">
 
     <ScrollView>
-        <StackLayout Padding="20" Spacing="20">
+        <StackLayout Padding="20" 
+                     Spacing="20">
 
             <!-- Header -->
             <Label Text="Grupos por Escola" 
@@ -38,7 +39,8 @@
                                     BackgroundColor="Transparent">
                         <CollectionView.ItemTemplate>
                             <DataTemplate>
-                                <Grid Padding="10,5" ColumnDefinitions="*,Auto">
+                                <Grid Padding="10,5" 
+                                      ColumnDefinitions="*,Auto">
                                     <StackLayout Grid.Column="0">
                                         <Label Text="{Binding Name}" 
                                                FontSize="16" 
@@ -86,7 +88,8 @@
                                     BackgroundColor="Transparent">
                         <CollectionView.ItemTemplate>
                             <DataTemplate>
-                                <Grid Padding="10,5" ColumnDefinitions="*,Auto">
+                                <Grid Padding="10,5" 
+                                      ColumnDefinitions="*,Auto">
                                     <StackLayout Grid.Column="0">
                                         <Label Text="{Binding Name}" 
                                                FontSize="16" 
@@ -134,7 +137,8 @@
                                     BackgroundColor="Transparent">
                         <CollectionView.ItemTemplate>
                             <DataTemplate>
-                                <Grid Padding="10,5" ColumnDefinitions="*,Auto">
+                                <Grid Padding="10,5" 
+                                      ColumnDefinitions="*,Auto">
                                     <StackLayout Grid.Column="0">
                                         <Label Text="{Binding Name}" 
                                                FontSize="16" 
@@ -182,7 +186,8 @@
                                     BackgroundColor="Transparent">
                         <CollectionView.ItemTemplate>
                             <DataTemplate>
-                                <Grid Padding="10,5" ColumnDefinitions="*,Auto">
+                                <Grid Padding="10,5" 
+                                      ColumnDefinitions="*,Auto">
                                     <StackLayout Grid.Column="0">
                                         <Label Text="{Binding Name}" 
                                                FontSize="16" 
@@ -216,12 +221,12 @@
                     CornerRadius="25"
                     FontAttributes="Bold"
                     Clicked="BackButton_Clicked">
-
                 <Button.GestureRecognizers>
-                    <PointerGestureRecognizer PointerEntered="OnPointer2Entered" PointerExited="OnPointer2Exited"/>
+                    <PointerGestureRecognizer PointerEntered="OnPointer2Entered" 
+                                              PointerExited="OnPointer2Exited"/>
                 </Button.GestureRecognizers>
             </Button>
-            
+
         </StackLayout>
     </ScrollView>
 </ContentPage>

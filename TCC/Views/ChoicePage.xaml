@@ -1,14 +1,13 @@
 <?xml version="1.0" encoding="utf-8" ?>
-    <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="TCC.Views.ChoicePage"
              Title="ChoicePage"
              BackgroundColor="#e86464">
 
-        <Grid>
-
-            <!-- Ondas decorativas no fundo -->
-            <Path Fill="#e04141"
+    <Grid>
+        <!-- Ondas decorativas no fundo -->
+        <Path Fill="#e04141"
               Opacity="1"
               Data="M0,40 
                     C200,0 600,100 1000,40 
@@ -17,7 +16,7 @@
               VerticalOptions="Start"
               Aspect="Fill" />
 
-            <Path Fill="#5c0e0e"
+        <Path Fill="#5c0e0e"
               Opacity="0.25"
               Data="M0,800 L1000,800 
                     L1000,760 
@@ -28,28 +27,32 @@
               VerticalOptions="End"
               Aspect="Fill" />
 
-            <!-- Conteúdo principal -->
-            <VerticalStackLayout Spacing="40"
+        <!-- Conteúdo principal -->
+        <VerticalStackLayout Spacing="40"
                              Padding="0"
                              VerticalOptions="Center"
                              HorizontalOptions="Center">
 
-                <!-- Texto de Boas-vindas -->
-                <Label Text="Escolha seu perfil"
+            <!-- Texto de Boas-vindas -->
+            <Label Text="Escolha seu perfil"
                    FontSize="36"
                    FontAttributes="Bold"
                    TextColor="White"
                    HorizontalOptions="Center"
                    VerticalOptions="Center">
-                    <Label.Shadow>
-                        <Shadow Brush="Black" Offset="2,2" Radius="5" Opacity="0.3"/>
-                    </Label.Shadow>
-                </Label>
+                <Label.Shadow>
+                    <Shadow Brush="Black" 
+                            Offset="2,2" 
+                            Radius="5" 
+                            Opacity="0.3"/>
+                </Label.Shadow>
+            </Label>
 
-                <!-- Botões -->
-                <VerticalStackLayout Spacing="20" WidthRequest="250">
+            <!-- Botões -->
+            <VerticalStackLayout Spacing="20" 
+                                 WidthRequest="250">
 
-                    <Button x:Name="driverButton"
+                <Button x:Name="driverButton"
                         Text="Sou motorista"
                         TextColor="#2C3E50"
                         FontAttributes="Bold"
@@ -58,15 +61,19 @@
                         HeightRequest="55"
                         SemanticProperties.Hint="Entrar como motorista"
                         Clicked="driverButton_Clicked">
-                        <Button.Shadow>
-                            <Shadow Brush="Black" Offset="0,4" Radius="8" Opacity="0.2"/>
-                        </Button.Shadow>
-                        <Button.GestureRecognizers>
-                            <PointerGestureRecognizer PointerEntered="OnPointerEntered" PointerExited="OnPointerExited"/>
-                        </Button.GestureRecognizers>
-                    </Button>
+                    <Button.Shadow>
+                        <Shadow Brush="Black" 
+                                Offset="0,4" 
+                                Radius="8" 
+                                Opacity="0.2"/>
+                    </Button.Shadow>
+                    <Button.GestureRecognizers>
+                        <PointerGestureRecognizer PointerEntered="OnPointerEntered" 
+                                                  PointerExited="OnPointerExited"/>
+                    </Button.GestureRecognizers>
+                </Button>
 
-                    <Button x:Name="passengerButton"
+                <Button x:Name="passengerButton"
                         Text="Sou passageiro"
                         TextColor="#2C3E50"
                         FontAttributes="Bold"
@@ -75,17 +82,21 @@
                         HeightRequest="55"
                         SemanticProperties.Hint="Entrar como passageiro"
                         Clicked="passengerButton_Clicked">
-                        <Button.Shadow>
-                            <Shadow Brush="Black" Offset="0,4" Radius="8" Opacity="0.2"/>
-                        </Button.Shadow>
-                        <Button.GestureRecognizers>
-                            <PointerGestureRecognizer PointerEntered="OnPointerEntered" PointerExited="OnPointerExited"/>
-                        </Button.GestureRecognizers>
-                    </Button>
-
-                </VerticalStackLayout>
+                    <Button.Shadow>
+                        <Shadow Brush="Black" 
+                                Offset="0,4" 
+                                Radius="8" 
+                                Opacity="0.2"/>
+                    </Button.Shadow>
+                    <Button.GestureRecognizers>
+                        <PointerGestureRecognizer PointerEntered="OnPointerEntered" 
+                                                  PointerExited="OnPointerExited"/>
+                    </Button.GestureRecognizers>
+                </Button>
 
             </VerticalStackLayout>
 
-        </Grid>
-    </ContentPage>
+        </VerticalStackLayout>
+
+    </Grid>
+</ContentPage>
