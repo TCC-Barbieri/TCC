@@ -97,20 +97,6 @@ public partial class GroupViewPage : ContentPage
         DriversCountLabel.Text = $"{Drivers.Count} motorista{(Drivers.Count != 1 ? "s" : "")}";
     }
 
-    private async void OnRefreshClicked(object sender, EventArgs e)
-    {
-        var button = sender as Button;
-        button.IsEnabled = false;
-        button.Text = "Carregando...";
-
-        await LoadUserGroups();
-
-        button.IsEnabled = true;
-        button.Text = "Atualizar Dados";
-
-        await DisplayAlert("Sucesso", "Dados atualizados com sucesso!", "OK");
-    }
-
     private void BackButton_Clicked(object sender, EventArgs e)
     {
         Navigation.PopAsync();

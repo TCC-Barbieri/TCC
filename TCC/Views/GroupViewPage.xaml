@@ -209,20 +209,6 @@
                 </StackLayout>
             </Frame>
 
-            <!-- Refresh Button -->
-            <Button x:Name="RefreshButton" 
-                    Text="Atualizar Dados" 
-                    BackgroundColor="DeepSkyBlue" 
-                    TextColor="White" 
-                    CornerRadius="25" 
-                    FontAttributes="Bold"
-                    Clicked="OnRefreshClicked" >
-
-                <Button.GestureRecognizers>
-                    <PointerGestureRecognizer PointerEntered="OnPointerEntered" PointerExited="OnPointerExited"/>
-                </Button.GestureRecognizers>
-            </Button>
-
             <Button x:Name="BackButton"
                     Text="Back"
                     BackgroundColor="Red"
