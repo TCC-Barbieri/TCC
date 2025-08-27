@@ -112,8 +112,7 @@ public partial class PassengerRegisterPage : ContentPage
             // Limpa os campos após registro bem-sucedido
             ClearFields();
 
-            // Opcional: Navegar para página de login
-            // await Navigation.PushAsync(new Views.LoginPage());
+            await Navigation.PushAsync(new Views.LoginPage());
         }
         catch (Exception ex)
         {
