@@ -1,4 +1,4 @@
-using TCC.Services;
+﻿using TCC.Services;
 using TCC.Models;
 using Microsoft.Maui.Storage;
 
@@ -25,7 +25,7 @@ public partial class Index : ContentPage
 
         if (!int.TryParse(userIdString, out int userId))
         {
-            await DisplayAlert("Erro", "Usu?rio inv?lido.", "OK");
+            await DisplayAlert("Erro", "Usuário inválido.", "OK");
             return;
         }
 
@@ -42,15 +42,17 @@ public partial class Index : ContentPage
             if (_currentUserType == "passenger")
             {
                 await LoadPassengerData();
+                SpecificSectionTitle.Text = "📚 Informações Acadêmicas";
             }
             else if (_currentUserType == "driver")
             {
                 await LoadDriverData();
+                SpecificSectionTitle.Text = "🚗 Informações Profissionais";
             }
         }
         catch (Exception ex)
         {
-            await DisplayAlert("Erro", $"Erro ao carregar dados do usu?rio: {ex.Message}", "OK");
+            await DisplayAlert("Erro", $"Erro ao carregar dados do usuário: {ex.Message}", "OK");
         }
     }
 
@@ -61,26 +63,26 @@ public partial class Index : ContentPage
 
         if (passenger != null)
         {
-            // Informa??es b?sicas
-            WelcomeLabel.Text = passenger.Name.ToUpper();
-            RGLabel.Text = passenger.RG ?? "N?o informado";
-            CPFLabel.Text = passenger.CPF ?? "N?o informado";
-            EmailLabel.Text = passenger.Email ?? "N?o informado";
-            AddressLabel.Text = passenger.Address ?? "N?o informado";
-            PhoneLabel.Text = passenger.PhoneNumber ?? "N?o informado";
-            EmergencyContactLabel.Text = passenger.EmergencyPhoneNumber ?? "N?o informado";
-            GenderLabel.Text = passenger.Genre ?? "N?o informado";
+            // Informações básicas
+            WelcomeLabel.Text = passenger.Name?.ToUpper() ?? "USUÁRIO";
+            RGLabel.Text = FormatRG(passenger.RG) ?? "Não informado";
+            CPFLabel.Text = FormatCPF(passenger.CPF) ?? "Não informado";
+            EmailLabel.Text = passenger.Email ?? "Não informado";
+            AddressLabel.Text = passenger.Address ?? "Não informado";
+            PhoneLabel.Text = FormatPhone(passenger.PhoneNumber) ?? "Não informado";
+            EmergencyContactLabel.Text = FormatPhone(passenger.EmergencyPhoneNumber) ?? "Não informado";
+            GenderLabel.Text = passenger.Genre ?? "Não informado";
 
-            // Campos espec?ficos do passageiro
-            SpecificField1Label.Text = "Escola";
-            SpecificField1Value.Text = passenger.School ?? "N?o informado";
+            // Campos específicos do passageiro
+            SpecificField1Label.Text = "🏫 Escola";
+            SpecificField1Value.Text = passenger.School ?? "Não informado";
 
-            SpecificField2Label.Text = "Respons?vel";
-            SpecificField2Value.Text = passenger.ResponsableName ?? "N?o informado";
+            SpecificField2Label.Text = "👨‍👩‍👧‍👦 Responsável";
+            SpecificField2Value.Text = passenger.ResponsableName ?? "Não informado";
 
             // Mostrar campo de atendimento especial
             SpecialTreatmentLayout.IsVisible = true;
-            SpecialTreatmentLabel.Text = passenger.SpecialTreatment ? "Sim" : "N?o";
+            SpecialTreatmentLabel.Text = passenger.SpecialTreatment ? "Sim" : "Não";
         }
     }
 
@@ -91,58 +93,126 @@ public partial class Index : ContentPage
 
         if (driver != null)
         {
-            // Informa??es b?sicas
-            WelcomeLabel.Text = driver.Name.ToUpper();
-            RGLabel.Text = driver.RG ?? "N?o informado";
-            CPFLabel.Text = driver.CPF ?? "N?o informado";
-            EmailLabel.Text = driver.Email ?? "N?o informado";
-            AddressLabel.Text = driver.Address ?? "N?o informado";
-            PhoneLabel.Text = driver.PhoneNumber ?? "N?o informado";
-            EmergencyContactLabel.Text = driver.EmergencyPhoneNumber ?? "N?o informado";
-            GenderLabel.Text = driver.Genre ?? "N?o informado";
+            // Informações básicas
+            WelcomeLabel.Text = driver.Name?.ToUpper() ?? "USUÁRIO";
+            RGLabel.Text = FormatRG(driver.RG) ?? "Não informado";
+            CPFLabel.Text = FormatCPF(driver.CPF) ?? "Não informado";
+            EmailLabel.Text = driver.Email ?? "Não informado";
+            AddressLabel.Text = driver.Address ?? "Não informado";
+            PhoneLabel.Text = FormatPhone(driver.PhoneNumber) ?? "Não informado";
+            EmergencyContactLabel.Text = FormatPhone(driver.EmergencyPhoneNumber) ?? "Não informado";
+            GenderLabel.Text = driver.Genre ?? "Não informado";
 
-            // Campos espec?ficos do motorista
-            SpecificField1Label.Text = "CNH";
-            SpecificField1Value.Text = driver.CNH ?? "N?o informado";
+            // Campos específicos do motorista
+            SpecificField1Label.Text = "🚗 CNH";
+            SpecificField1Value.Text = driver.CNH ?? "Não informado";
 
-            SpecificField2Label.Text = "Categoria";
-            SpecificField2Value.Text = "Profissional"; // Valor padr?o ou pode ser adicionado ao modelo
+            SpecificField2Label.Text = "👔 Categoria";
+            SpecificField2Value.Text = "Profissional";
 
             // Ocultar campo de atendimento especial para motoristas
             SpecialTreatmentLayout.IsVisible = false;
         }
     }
 
+    // Métodos auxiliares para formatação
+    private string FormatCPF(string? cpf)
+    {
+        if (string.IsNullOrEmpty(cpf) || cpf.Length != 11)
+            return cpf;
+
+        return $"{cpf.Substring(0, 3)}.{cpf.Substring(3, 3)}.{cpf.Substring(6, 3)}-{cpf.Substring(9, 2)}";
+    }
+
+    private string FormatRG(string? rg)
+    {
+        if (string.IsNullOrEmpty(rg))
+            return rg;
+
+        // Remove caracteres não numéricos
+        string numbers = new string(rg.Where(char.IsDigit).ToArray());
+
+        if (numbers.Length >= 9)
+        {
+            return $"{numbers.Substring(0, 2)}.{numbers.Substring(2, 3)}.{numbers.Substring(5, 3)}-{numbers.Substring(8, 1)}";
+        }
+
+        return rg;
+    }
+
+    private string FormatPhone(string? phone)
+    {
+        if (string.IsNullOrEmpty(phone))
+            return phone;
+
+        // Remove caracteres não numéricos
+        string numbers = new string(phone.Where(char.IsDigit).ToArray());
+
+        if (numbers.Length == 11)
+        {
+            return $"({numbers.Substring(0, 2)}) {numbers.Substring(2, 5)}-{numbers.Substring(7, 4)}";
+        }
+        else if (numbers.Length == 10)
+        {
+            return $"({numbers.Substring(0, 2)}) {numbers.Substring(2, 4)}-{numbers.Substring(6, 4)}";
+        }
+
+        return phone;
+    }
+
     private async void OnLogoutClicked(object sender, EventArgs e)
     {
-        bool confirm = await DisplayAlert("Sair", "Deseja realmente sair da sua conta?", "Sim", "N?o");
+        bool confirm = await DisplayAlert("Sair", "Deseja realmente sair da sua conta?", "Sim", "Não");
 
         if (confirm)
         {
-            // Remove dados da sess?o
-            SecureStorage.Remove("user_id");
-            SecureStorage.Remove("user_type");
+            try
+            {
+                // Remove dados da sessão
+                SecureStorage.Remove("user_id");
+                SecureStorage.Remove("user_type");
 
-            // Redireciona para tela inicial (limpando a pilha de navega??o)
-            Application.Current.MainPage = new NavigationPage(new Home());
+                // Animação de saída suave
+                await this.FadeTo(0, 300);
+
+                // Redireciona para tela inicial (limpando a pilha de navegação)
+                Application.Current.MainPage = new NavigationPage(new Home());
+            }
+            catch (Exception ex)
+            {
+                await DisplayAlert("Erro", $"Erro ao sair: {ex.Message}", "OK");
+            }
         }
     }
 
     private async void OnBackClicked(object sender, EventArgs e)
     {
-        await Navigation.PopAsync();
+        try
+        {
+            await Navigation.PopAsync();
+        }
+        catch (Exception ex)
+        {
+            await DisplayAlert("Erro", $"Erro ao voltar: {ex.Message}", "OK");
+        }
     }
 
     private async void OnEditClicked(object sender, EventArgs e)
     {
-
-         if (_currentUserType == "passenger")
-         {
-             await Navigation.PushAsync(new PassengerEditPage(_currentUserId));
-         }
-         else if (_currentUserType == "driver")
-         {
-             await Navigation.PushAsync(new DriverEditPage(_currentUserId));
-         }
+        try
+        {
+            if (_currentUserType == "passenger")
+            {
+                await Navigation.PushAsync(new PassengerEditPage(_currentUserId));
+            }
+            else if (_currentUserType == "driver")
+            {
+                await Navigation.PushAsync(new DriverEditPage(_currentUserId));
+            }
+        }
+        catch (Exception ex)
+        {
+            await DisplayAlert("Erro", $"Erro ao editar: {ex.Message}", "OK");
+        }
     }
 }
