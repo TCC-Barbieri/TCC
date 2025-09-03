@@ -1,0 +1,404 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="TCC.Views.ConfigurarViagemPage"
+             Title="Configurar Viagem"
+             BackgroundColor="#F5F5F5">
+
+    <ScrollView>
+        <VerticalStackLayout Spacing="0">
+
+            <!-- Header com gradiente vermelho -->
+            <Border BackgroundColor="#e86464" 
+                    Padding="20,30" 
+                    StrokeThickness="0"
+                    StrokeShape="RoundRectangle,0,0,15,15">
+
+                <!-- Ondas decorativas no header -->
+                <Grid>
+                    <Path Fill="#e04141"
+                          Opacity="0.3"
+                          Data="M0,20 
+                                C100,0 200,40 400,20 
+                                L400,0 L0,0 Z"
+                          HorizontalOptions="FillAndExpand"
+                          VerticalOptions="Start"
+                          Aspect="Fill" />
+
+                    <VerticalStackLayout HorizontalOptions="Center" Spacing="5">
+                        <Label Text="🚗 Configurar Viagem" 
+                               FontSize="24" 
+                               HorizontalOptions="Center" 
+                               FontAttributes="Bold"
+                               TextColor="White">
+                            <Label.Shadow>
+                                <Shadow Brush="Black" 
+                                        Offset="2,2" 
+                                        Radius="5" 
+                                        Opacity="0.3"/>
+                            </Label.Shadow>
+                        </Label>
+                        <Label Text="Defina os detalhes da sua viagem" 
+                               FontSize="14" 
+                               HorizontalOptions="Center" 
+                               TextColor="White" />
+                    </VerticalStackLayout>
+                </Grid>
+            </Border>
+
+            <!-- Container do Mapa (Placeholder) -->
+            <Frame BackgroundColor="White"
+                   Margin="20,20,20,10"
+                   CornerRadius="15"
+                   HasShadow="True"
+                   Padding="0">
+                <VerticalStackLayout Spacing="0">
+                    <!-- Header do Mapa -->
+                    <Border BackgroundColor="#FF6B35" 
+                            Padding="15,10" 
+                            StrokeThickness="0"
+                            StrokeShape="RoundRectangle,15,15,0,0">
+                        <HorizontalStackLayout Spacing="10" HorizontalOptions="Center">
+                            <Label Text="🗺️" FontSize="16" TextColor="White" />
+                            <Label Text="Mapa da Rota" 
+                                   FontSize="16" 
+                                   FontAttributes="Bold" 
+                                   TextColor="White" />
+                        </HorizontalStackLayout>
+                    </Border>
+
+                    <!-- Placeholder do Mapa -->
+                    <Border BackgroundColor="#F0F0F0" 
+                            HeightRequest="200" 
+                            Padding="20"
+                            StrokeThickness="2"
+                            Stroke="#E0E0E0"
+                            StrokeShape="RoundRectangle,0,0,15,15">
+                        <VerticalStackLayout HorizontalOptions="Center" 
+                                           VerticalOptions="Center" 
+                                           Spacing="10">
+                            <Label Text="🗺️" FontSize="48" TextColor="#999" />
+                            <Label Text="Mapa será exibido aqui" 
+                                   FontSize="14" 
+                                   TextColor="#666" 
+                                   HorizontalOptions="Center" />
+                            <Label Text="Visualização da rota selecionada" 
+                                   FontSize="12" 
+                                   TextColor="#999" 
+                                   HorizontalOptions="Center" />
+                        </VerticalStackLayout>
+                    </Border>
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- Configurações da Viagem -->
+            <Frame BackgroundColor="White"
+                   Margin="20,10,20,10"
+                   CornerRadius="15"
+                   HasShadow="True"
+                   Padding="20">
+                <VerticalStackLayout Spacing="20">
+                    <Label Text="Detalhes da Viagem" 
+                           FontSize="18" 
+                           FontAttributes="Bold" 
+                           TextColor="#333" 
+                           HorizontalOptions="Center" />
+
+                    <!-- Local de Partida -->
+                    <VerticalStackLayout Spacing="8">
+                        <HorizontalStackLayout Spacing="8">
+                            <Frame BackgroundColor="#4CAF50" 
+                                   CornerRadius="12" 
+                                   Padding="8" 
+                                   HasShadow="False">
+                                <Label Text="📍" FontSize="12" TextColor="White" />
+                            </Frame>
+                            <Label Text="Local de Partida" 
+                                   FontSize="14" 
+                                   FontAttributes="Bold" 
+                                   TextColor="#333" 
+                                   VerticalOptions="Center" />
+                        </HorizontalStackLayout>
+                        <Border Stroke="#DDDDDD" 
+                                StrokeThickness="1" 
+                                StrokeShape="RoundRectangle 8,8,8,8" 
+                                BackgroundColor="White">
+                            <Picker x:Name="LocalPartidaPicker" 
+                                    FontSize="14"
+                                    HeightRequest="45">
+                                <Picker.Items>
+                                    <x:String>ETEC Joaquim Ferreira do Amaral</x:String>
+                                    <x:String>FATEC de Jaú</x:String>
+                                    <x:String>UNESP de Jaú</x:String>
+                                    <x:String>Terminal Rodoviário</x:String>
+                                    <x:String>Centro da Cidade</x:String>
+                                    <x:String>Outro local...</x:String>
+                                </Picker.Items>
+                            </Picker>
+                        </Border>
+                    </VerticalStackLayout>
+
+                    <!-- Local de Destino -->
+                    <VerticalStackLayout Spacing="8">
+                        <HorizontalStackLayout Spacing="8">
+                            <Frame BackgroundColor="#FF5722" 
+                                   CornerRadius="12" 
+                                   Padding="8" 
+                                   HasShadow="False">
+                                <Label Text="🎯" FontSize="12" TextColor="White" />
+                            </Frame>
+                            <Label Text="Local de Destino" 
+                                   FontSize="14" 
+                                   FontAttributes="Bold" 
+                                   TextColor="#333" 
+                                   VerticalOptions="Center" />
+                        </HorizontalStackLayout>
+                        <Border Stroke="#DDDDDD" 
+                                StrokeThickness="1" 
+                                StrokeShape="RoundRectangle 8,8,8,8" 
+                                BackgroundColor="White">
+                            <Picker x:Name="LocalDestinoPicker" 
+                                    FontSize="14"
+                                    HeightRequest="45">
+                                <Picker.Items>
+                                    <x:String>ETEC Joaquim Ferreira do Amaral</x:String>
+                                    <x:String>FATEC de Jaú</x:String>
+                                    <x:String>UNESP de Jaú</x:String>
+                                    <x:String>Terminal Rodoviário</x:String>
+                                    <x:String>Centro da Cidade</x:String>
+                                    <x:String>Outro local...</x:String>
+                                </Picker.Items>
+                            </Picker>
+                        </Border>
+                    </VerticalStackLayout>
+
+                    <!-- Horário de Partida -->
+                    <VerticalStackLayout Spacing="8">
+                        <HorizontalStackLayout Spacing="8">
+                            <Frame BackgroundColor="#2196F3" 
+                                   CornerRadius="12" 
+                                   Padding="8" 
+                                   HasShadow="False">
+                                <Label Text="⏰" FontSize="12" TextColor="White" />
+                            </Frame>
+                            <Label Text="Horário de Partida" 
+                                   FontSize="14" 
+                                   FontAttributes="Bold" 
+                                   TextColor="#333" 
+                                   VerticalOptions="Center" />
+                        </HorizontalStackLayout>
+                        <Border Stroke="#DDDDDD" 
+                                StrokeThickness="1" 
+                                StrokeShape="RoundRectangle 8,8,8,8" 
+                                BackgroundColor="White">
+                            <TimePicker x:Name="HorarioPartidaPicker" 
+                                        FontSize="14"
+                                        HeightRequest="45"
+                                        Format="HH:mm" />
+                        </Border>
+                    </VerticalStackLayout>
+
+                    <!-- Data da Viagem -->
+                    <VerticalStackLayout Spacing="8">
+                        <HorizontalStackLayout Spacing="8">
+                            <Frame BackgroundColor="#9C27B0" 
+                                   CornerRadius="12" 
+                                   Padding="8" 
+                                   HasShadow="False">
+                                <Label Text="📅" FontSize="12" TextColor="White" />
+                            </Frame>
+                            <Label Text="Data da Viagem" 
+                                   FontSize="14" 
+                                   FontAttributes="Bold" 
+                                   TextColor="#333" 
+                                   VerticalOptions="Center" />
+                        </HorizontalStackLayout>
+                        <Border Stroke="#DDDDDD" 
+                                StrokeThickness="1" 
+                                StrokeShape="RoundRectangle 8,8,8,8" 
+                                BackgroundColor="White">
+                            <DatePicker x:Name="DataViagemPicker" 
+                                        FontSize="14"
+                                        HeightRequest="45"
+                                        Format="dd/MM/yyyy" />
+                        </Border>
+                    </VerticalStackLayout>
+
+                    <!-- Capacidade do Veículo -->
+                    <VerticalStackLayout Spacing="8">
+                        <HorizontalStackLayout Spacing="8">
+                            <Frame BackgroundColor="#FF9800" 
+                                   CornerRadius="12" 
+                                   Padding="8" 
+                                   HasShadow="False">
+                                <Label Text="👥" FontSize="12" TextColor="White" />
+                            </Frame>
+                            <Label Text="Capacidade de Passageiros" 
+                                   FontSize="14" 
+                                   FontAttributes="Bold" 
+                                   TextColor="#333" 
+                                   VerticalOptions="Center" />
+                        </HorizontalStackLayout>
+                        <Border Stroke="#DDDDDD" 
+                                StrokeThickness="1" 
+                                StrokeShape="RoundRectangle 8,8,8,8" 
+                                BackgroundColor="White">
+                            <Entry x:Name="CapacidadeEntry" 
+                                   Placeholder="Ex: 40" 
+                                   Keyboard="Numeric"
+                                   FontSize="14"
+                                   HeightRequest="45" />
+                        </Border>
+                    </VerticalStackLayout>
+
+                    <!-- Observações -->
+                    <VerticalStackLayout Spacing="8">
+                        <HorizontalStackLayout Spacing="8">
+                            <Frame BackgroundColor="#607D8B" 
+                                   CornerRadius="12" 
+                                   Padding="8" 
+                                   HasShadow="False">
+                                <Label Text="📝" FontSize="12" TextColor="White" />
+                            </Frame>
+                            <Label Text="Observações (Opcional)" 
+                                   FontSize="14" 
+                                   FontAttributes="Bold" 
+                                   TextColor="#333" 
+                                   VerticalOptions="Center" />
+                        </HorizontalStackLayout>
+                        <Border Stroke="#DDDDDD" 
+                                StrokeThickness="1" 
+                                StrokeShape="RoundRectangle 8,8,8,8" 
+                                BackgroundColor="White">
+                            <Editor x:Name="ObservacoesEditor" 
+                                    Placeholder="Informações adicionais sobre a viagem..."
+                                    FontSize="14"
+                                    HeightRequest="80"
+                                    AutoSize="TextChanges" />
+                        </Border>
+                    </VerticalStackLayout>
+
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- Resumo da Viagem -->
+            <Frame BackgroundColor="#E8F5E8"
+                   BorderColor="#4CAF50"
+                   Margin="20,10,20,10"
+                   CornerRadius="15"
+                   HasShadow="True"
+                   Padding="20">
+                <VerticalStackLayout Spacing="10">
+                    <Label Text="📋 Resumo da Viagem" 
+                           FontSize="16" 
+                           FontAttributes="Bold" 
+                           TextColor="#2E7D32" 
+                           HorizontalOptions="Center" />
+
+                    <VerticalStackLayout Spacing="5">
+                        <HorizontalStackLayout Spacing="5">
+                            <Label Text="Rota:" FontSize="12" FontAttributes="Bold" TextColor="#333" />
+                            <Label x:Name="ResumoRotaLabel" 
+                                   Text="Selecione os locais" 
+                                   FontSize="12" 
+                                   TextColor="#666" />
+                        </HorizontalStackLayout>
+
+                        <HorizontalStackLayout Spacing="5">
+                            <Label Text="Data/Hora:" FontSize="12" FontAttributes="Bold" TextColor="#333" />
+                            <Label x:Name="ResumoDataHoraLabel" 
+                                   Text="--/--/---- --:--" 
+                                   FontSize="12" 
+                                   TextColor="#666" />
+                        </HorizontalStackLayout>
+
+                        <HorizontalStackLayout Spacing="5">
+                            <Label Text="Capacidade:" FontSize="12" FontAttributes="Bold" TextColor="#333" />
+                            <Label x:Name="ResumoCapacidadeLabel" 
+                                   Text="-- passageiros" 
+                                   FontSize="12" 
+                                   TextColor="#666" />
+                        </HorizontalStackLayout>
+                    </VerticalStackLayout>
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- Botões de Ação -->
+            <VerticalStackLayout Spacing="15" Margin="20,10,20,30">
+
+                <!-- Botão Iniciar Viagem -->
+                <Button x:Name="IniciarViagemButton"
+                        Text="🚀 INICIAR VIAGEM"
+                        BackgroundColor="#4CAF50"
+                        TextColor="White"
+                        FontAttributes="Bold"
+                        CornerRadius="25"
+                        HeightRequest="55"
+                        FontSize="16"
+                        SemanticProperties.Hint="Iniciar a viagem configurada"
+                        Clicked="OnIniciarViagemClicked">
+                    <Button.Shadow>
+                        <Shadow Brush="Black" 
+                                Offset="0,4" 
+                                Radius="8" 
+                                Opacity="0.2"/>
+                    </Button.Shadow>
+                    <Button.GestureRecognizers>
+                        <PointerGestureRecognizer PointerEntered="OnPointerEntered" 
+                                                  PointerExited="OnPointerExited"/>
+                    </Button.GestureRecognizers>
+                </Button>
+
+                <!-- Botão Salvar Configurações -->
+                <Button x:Name="SalvarConfigButton"
+                        Text="💾 Salvar Configurações"
+                        BackgroundColor="#2196F3"
+                        TextColor="White"
+                        FontAttributes="Bold"
+                        CornerRadius="25"
+                        HeightRequest="50"
+                        FontSize="14"
+                        SemanticProperties.Hint="Salvar configurações para usar depois"
+                        Clicked="OnSalvarConfigClicked">
+                    <Button.Shadow>
+                        <Shadow Brush="Black" 
+                                Offset="0,4" 
+                                Radius="8" 
+                                Opacity="0.2"/>
+                    </Button.Shadow>
+                    <Button.GestureRecognizers>
+                        <PointerGestureRecognizer PointerEntered="OnPointerEntered" 
+                                                  PointerExited="OnPointerExited"/>
+                    </Button.GestureRecognizers>
+                </Button>
+
+                <!-- Botão Voltar -->
+                <Button x:Name="VoltarButton"
+                        Text="← Voltar ao Menu"
+                        BackgroundColor="Transparent"
+                        BorderColor="#e86464"
+                        BorderWidth="2"
+                        TextColor="#e86464"
+                        FontAttributes="Bold"
+                        CornerRadius="25"
+                        HeightRequest="50"
+                        FontSize="14"
+                        SemanticProperties.Hint="Voltar ao menu do motorista"
+                        Clicked="OnVoltarClicked">
+                    <Button.Shadow>
+                        <Shadow Brush="Black" 
+                                Offset="0,4" 
+                                Radius="8" 
+                                Opacity="0.2"/>
+                    </Button.Shadow>
+                    <Button.GestureRecognizers>
+                        <PointerGestureRecognizer PointerEntered="OnPointer2Entered" 
+                                                  PointerExited="OnPointer2Exited"/>
+                    </Button.GestureRecognizers>
+                </Button>
+
+            </VerticalStackLayout>
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

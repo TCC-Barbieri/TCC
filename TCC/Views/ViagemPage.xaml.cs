@@ -40,7 +40,7 @@ public partial class ViagemPage : ContentPage
                     "OK");
 
                 // Voltar para a página anterior (Index)
-                await Navigation.PopAsync();
+                await Navigation.PushAsync(new ChoosePageDriver());
             }
         }
         catch (Exception ex)

@@ -14,7 +14,7 @@ namespace TCC.Views
         {
             try
             {
-                await Navigation.PushAsync(new ViagemPage());
+                await Navigation.PushAsync(new ConfigurarViagemPage());
             }
             catch (Exception ex)
             {
