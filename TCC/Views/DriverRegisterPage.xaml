@@ -28,7 +28,7 @@
                            FontSize="16" 
                            HorizontalOptions="Center" 
                            TextColor="White" />
-                    <Label Text="Cadastre-se para utilizar o transporte Barbieri!" 
+                    <Label Text="Cadastre-se dirigir os transportes do Barbieri!" 
                            FontSize="12" 
                            HorizontalOptions="Center" 
                            TextColor="White" />
