@@ -11,7 +11,7 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using Map = Esri.ArcGISRuntime.Mapping.Map;
 
-namespace TCC.ViewModel
+namespace TCC.ViewModels
 {
     internal class MapViewModel : INotifyPropertyChanged
     {
