@@ -46,51 +46,6 @@
                 </Grid>
             </Border>
 
-            <!-- Container do Mapa (Placeholder) -->
-            <Frame BackgroundColor="White"
-                   Margin="20,20,20,10"
-                   CornerRadius="15"
-                   HasShadow="True"
-                   Padding="0">
-                <VerticalStackLayout Spacing="0">
-                    <!-- Header do Mapa -->
-                    <Border BackgroundColor="#FF6B35" 
-                            Padding="15,10" 
-                            StrokeThickness="0"
-                            StrokeShape="RoundRectangle,15,15,0,0">
-                        <HorizontalStackLayout Spacing="10" HorizontalOptions="Center">
-                            <Label Text="🗺️" FontSize="16" TextColor="White" />
-                            <Label Text="Mapa da Rota" 
-                                   FontSize="16" 
-                                   FontAttributes="Bold" 
-                                   TextColor="White" />
-                        </HorizontalStackLayout>
-                    </Border>
-
-                    <!-- Placeholder do Mapa -->
-                    <Border BackgroundColor="#F0F0F0" 
-                            HeightRequest="200" 
-                            Padding="20"
-                            StrokeThickness="2"
-                            Stroke="#E0E0E0"
-                            StrokeShape="RoundRectangle,0,0,15,15">
-                        <VerticalStackLayout HorizontalOptions="Center" 
-                                           VerticalOptions="Center" 
-                                           Spacing="10">
-                            <Label Text="🗺️" FontSize="48" TextColor="#999" />
-                            <Label Text="Mapa será exibido aqui" 
-                                   FontSize="14" 
-                                   TextColor="#666" 
-                                   HorizontalOptions="Center" />
-                            <Label Text="Visualização da rota selecionada" 
-                                   FontSize="12" 
-                                   TextColor="#999" 
-                                   HorizontalOptions="Center" />
-                        </VerticalStackLayout>
-                    </Border>
-                </VerticalStackLayout>
-            </Frame>
-
             <!-- Configurações da Viagem -->
             <Frame BackgroundColor="White"
                    Margin="20,10,20,10"
@@ -172,85 +127,6 @@
                         </Border>
                     </VerticalStackLayout>
 
-                    <!-- Horário de Partida -->
-                    <VerticalStackLayout Spacing="8">
-                        <HorizontalStackLayout Spacing="8">
-                            <Frame BackgroundColor="#2196F3" 
-                                   CornerRadius="12" 
-                                   Padding="8" 
-                                   HasShadow="False">
-                                <Label Text="⏰" FontSize="12" TextColor="White" />
-                            </Frame>
-                            <Label Text="Horário de Partida" 
-                                   FontSize="14" 
-                                   FontAttributes="Bold" 
-                                   TextColor="#333" 
-                                   VerticalOptions="Center" />
-                        </HorizontalStackLayout>
-                        <Border Stroke="#DDDDDD" 
-                                StrokeThickness="1" 
-                                StrokeShape="RoundRectangle 8,8,8,8" 
-                                BackgroundColor="White">
-                            <TimePicker x:Name="HorarioPartidaPicker" 
-                                        FontSize="14"
-                                        HeightRequest="45"
-                                        Format="HH:mm" />
-                        </Border>
-                    </VerticalStackLayout>
-
-                    <!-- Data da Viagem -->
-                    <VerticalStackLayout Spacing="8">
-                        <HorizontalStackLayout Spacing="8">
-                            <Frame BackgroundColor="#9C27B0" 
-                                   CornerRadius="12" 
-                                   Padding="8" 
-                                   HasShadow="False">
-                                <Label Text="📅" FontSize="12" TextColor="White" />
-                            </Frame>
-                            <Label Text="Data da Viagem" 
-                                   FontSize="14" 
-                                   FontAttributes="Bold" 
-                                   TextColor="#333" 
-                                   VerticalOptions="Center" />
-                        </HorizontalStackLayout>
-                        <Border Stroke="#DDDDDD" 
-                                StrokeThickness="1" 
-                                StrokeShape="RoundRectangle 8,8,8,8" 
-                                BackgroundColor="White">
-                            <DatePicker x:Name="DataViagemPicker" 
-                                        FontSize="14"
-                                        HeightRequest="45"
-                                        Format="dd/MM/yyyy" />
-                        </Border>
-                    </VerticalStackLayout>
-
-                    <!-- Capacidade do Veículo -->
-                    <VerticalStackLayout Spacing="8">
-                        <HorizontalStackLayout Spacing="8">
-                            <Frame BackgroundColor="#FF9800" 
-                                   CornerRadius="12" 
-                                   Padding="8" 
-                                   HasShadow="False">
-                                <Label Text="👥" FontSize="12" TextColor="White" />
-                            </Frame>
-                            <Label Text="Capacidade de Passageiros" 
-                                   FontSize="14" 
-                                   FontAttributes="Bold" 
-                                   TextColor="#333" 
-                                   VerticalOptions="Center" />
-                        </HorizontalStackLayout>
-                        <Border Stroke="#DDDDDD" 
-                                StrokeThickness="1" 
-                                StrokeShape="RoundRectangle 8,8,8,8" 
-                                BackgroundColor="White">
-                            <Entry x:Name="CapacidadeEntry" 
-                                   Placeholder="Ex: 40" 
-                                   Keyboard="Numeric"
-                                   FontSize="14"
-                                   HeightRequest="45" />
-                        </Border>
-                    </VerticalStackLayout>
-
                     <!-- Observações -->
                     <VerticalStackLayout Spacing="8">
                         <HorizontalStackLayout Spacing="8">
@@ -281,48 +157,6 @@
                 </VerticalStackLayout>
             </Frame>
 
-            <!-- Resumo da Viagem -->
-            <Frame BackgroundColor="#E8F5E8"
-                   BorderColor="#4CAF50"
-                   Margin="20,10,20,10"
-                   CornerRadius="15"
-                   HasShadow="True"
-                   Padding="20">
-                <VerticalStackLayout Spacing="10">
-                    <Label Text="📋 Resumo da Viagem" 
-                           FontSize="16" 
-                           FontAttributes="Bold" 
-                           TextColor="#2E7D32" 
-                           HorizontalOptions="Center" />
-
-                    <VerticalStackLayout Spacing="5">
-                        <HorizontalStackLayout Spacing="5">
-                            <Label Text="Rota:" FontSize="12" FontAttributes="Bold" TextColor="#333" />
-                            <Label x:Name="ResumoRotaLabel" 
-                                   Text="Selecione os locais" 
-                                   FontSize="12" 
-                                   TextColor="#666" />
-                        </HorizontalStackLayout>
-
-                        <HorizontalStackLayout Spacing="5">
-                            <Label Text="Data/Hora:" FontSize="12" FontAttributes="Bold" TextColor="#333" />
-                            <Label x:Name="ResumoDataHoraLabel" 
-                                   Text="--/--/---- --:--" 
-                                   FontSize="12" 
-                                   TextColor="#666" />
-                        </HorizontalStackLayout>
-
-                        <HorizontalStackLayout Spacing="5">
-                            <Label Text="Capacidade:" FontSize="12" FontAttributes="Bold" TextColor="#333" />
-                            <Label x:Name="ResumoCapacidadeLabel" 
-                                   Text="-- passageiros" 
-                                   FontSize="12" 
-                                   TextColor="#666" />
-                        </HorizontalStackLayout>
-                    </VerticalStackLayout>
-                </VerticalStackLayout>
-            </Frame>
-
             <!-- Botões de Ação -->
             <VerticalStackLayout Spacing="15" Margin="20,10,20,30">
 
@@ -337,29 +171,6 @@
                         FontSize="16"
                         SemanticProperties.Hint="Iniciar a viagem configurada"
                         Clicked="OnIniciarViagemClicked">
-                    <Button.Shadow>
-                        <Shadow Brush="Black" 
-                                Offset="0,4" 
-                                Radius="8" 
-                                Opacity="0.2"/>
-                    </Button.Shadow>
-                    <Button.GestureRecognizers>
-                        <PointerGestureRecognizer PointerEntered="OnPointerEntered" 
-                                                  PointerExited="OnPointerExited"/>
-                    </Button.GestureRecognizers>
-                </Button>
-
-                <!-- Botão Salvar Configurações -->
-                <Button x:Name="SalvarConfigButton"
-                        Text="💾 Salvar Configurações"
-                        BackgroundColor="#2196F3"
-                        TextColor="White"
-                        FontAttributes="Bold"
-                        CornerRadius="25"
-                        HeightRequest="50"
-                        FontSize="14"
-                        SemanticProperties.Hint="Salvar configurações para usar depois"
-                        Clicked="OnSalvarConfigClicked">
                     <Button.Shadow>
                         <Shadow Brush="Black" 
                                 Offset="0,4" 
