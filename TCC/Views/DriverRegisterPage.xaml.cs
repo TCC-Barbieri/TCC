@@ -1,13 +1,13 @@
 using TCC.Models;
 using TCC.Services;
 using System;
+using TCC.Helpers;
 
 namespace TCC.Views;
 
 public partial class DriverRegisterPage : ContentPage
 {
     private readonly DatabaseService _databaseService = new();
-
     public DriverRegisterPage()
     {
         InitializeComponent();
@@ -15,106 +15,129 @@ public partial class DriverRegisterPage : ContentPage
 
     private async void OnRegister_Clicked(object sender, EventArgs e)
     {
+        System.Diagnostics.Debug.WriteLine("Register button clicked");
+
         try
         {
-            // Verificação de campos obrigatórios
-            if (string.IsNullOrWhiteSpace(NameEntry.Text) ||
-                string.IsNullOrWhiteSpace(RGEntry.Text) ||
-                string.IsNullOrWhiteSpace(CPFEntry.Text) ||
-                string.IsNullOrWhiteSpace(EmailEntry.Text) ||
-                string.IsNullOrWhiteSpace(PhoneEntry.Text) ||
-                string.IsNullOrWhiteSpace(ContatoEmergenciaEntry.Text) ||
-                string.IsNullOrWhiteSpace(CNHEntry.Text) ||
-                string.IsNullOrWhiteSpace(AddressEntry.Text) ||
-                string.IsNullOrWhiteSpace(PasswordEntry.Text) ||
-                string.IsNullOrWhiteSpace(ConfirmPasswordEntry.Text))
+            // IMPORTANTE: Validar ANTES de qualquer coisa
+            if (!await ValidateAllFieldsAsync())
             {
-                await DisplayAlert("Campos obrigatórios", "Por favor, preencha todos os campos.", "OK");
+                System.Diagnostics.Debug.WriteLine("Validation failed - aborting registration");
                 return;
             }
 
+            System.Diagnostics.Debug.WriteLine("All validations passed - proceeding with registration");
 
-            // Verificação de senhas
-            if (PasswordEntry.Text != ConfirmPasswordEntry.Text)
-            {
-                await DisplayAlert("Erro", "As senhas não coincidem.", "OK");
-                return;
-            }
-
-            if (PasswordEntry.Text.Length < 6)
-            {
-                await DisplayAlert("Erro", "A senha deve ter pelo menos 6 caracteres.", "OK");
-                return;
-            }
-
-            if (GenderPicker.SelectedIndex == -1)
-            {
-                await DisplayAlert("Campos Obrigatórios", "Por favor preencha todos os campos.", "OK");
-                return;
-            }
-
-            // Validação de dados únicos (RG, CPF, Email, Telefone, CNH)
-            var validationResult = await _databaseService.ValidateUniqueUserData(
-                rg: RGEntry.Text.Trim(),
-                cpf: CPFEntry.Text.Trim(),
-                email: EmailEntry.Text.Trim(),
-                phone: PhoneEntry.Text.Trim(),
-                cnh: CNHEntry.Text.Trim()
-            );
-
-            if (!validationResult.IsValid)
-            {
-                await DisplayAlert("Dados já cadastrados", validationResult.Message, "OK");
-                return;
-            }
-
-            // Cria o objeto motorista
+            // Criar o objeto Driver apenas após validação
             var driver = new Driver
             {
-                Name = NameEntry.Text.Trim(),
-                RG = RGEntry.Text.Trim(),
-                CPF = CPFEntry.Text.Trim(),
-                Email = EmailEntry.Text.Trim(),
-                PhoneNumber = PhoneEntry.Text.Trim(),
-                EmergencyPhoneNumber = ContatoEmergenciaEntry.Text.Trim(),
-                CNH = CNHEntry.Text.Trim(),
-                Address = AddressEntry.Text.Trim(),
-                Password = PasswordEntry.Text,
+                Name = NameEntry.Text?.Trim(),
+                CPF = CPFValidator.RemoveFormat(CPFEntry.Text?.Trim()),
+                RG = RGEntry.Text?.Trim(),
+                Email = EmailEntry.Text?.Trim(),
+                PhoneNumber = PhoneEntry.Text?.Trim(),
+                EmergencyPhoneNumber = ContatoEmergenciaEntry.Text?.Trim(),
+                CNH = CNHEntry.Text?.Trim(),
+                Genre = GenderPicker.SelectedItem?.ToString(),
+                Address = AddressEntry.Text?.Trim(),
                 BirthDate = BirthDatePicker.Date,
-                Genre = GenderPicker.SelectedItem?.ToString() ?? "Não especificado"
+                Password = PasswordEntry.Text
             };
 
-            // Registra o motorista
+            // Salvar no banco de dados aqui
             await _databaseService.CreateDriver(driver);
 
-            await DisplayAlert("Sucesso", "Motorista registrado com sucesso!", "OK");
-
-            // Limpa os campos após registro bem-sucedido
-            ClearFields();
-
-            await Navigation.PushAsync(new Views.LoginPage());
+            await DisplayAlert("Sucesso", "Conta criada com sucesso!", "OK");
+            await Navigation.PopAsync();
         }
         catch (Exception ex)
         {
-            await DisplayAlert("Erro", $"Erro ao registrar motorista: {ex.Message}", "OK");
+            System.Diagnostics.Debug.WriteLine($"Error in registration: {ex.Message}");
+            await DisplayAlert("Erro", $"Erro ao criar conta: {ex.Message}", "OK");
         }
     }
 
-    private void ClearFields()
+    private async Task<bool> ValidateAllFieldsAsync()
     {
-        NameEntry.Text = string.Empty;
-        RGEntry.Text = string.Empty;
-        CPFEntry.Text = string.Empty;
-        EmailEntry.Text = string.Empty;
-        PhoneEntry.Text = string.Empty;
-        ContatoEmergenciaEntry.Text = string.Empty;
-        CNHEntry.Text = string.Empty;
-        AddressEntry.Text = string.Empty;
-        PasswordEntry.Text = string.Empty;
-        ConfirmPasswordEntry.Text = string.Empty;
-        GenderPicker.SelectedIndex = -1;
-        BirthDatePicker.Date = DateTime.Today;
+        System.Diagnostics.Debug.WriteLine("Starting field validation");
+
+        // 1. Validar campos obrigatórios primeiro
+        if (string.IsNullOrWhiteSpace(NameEntry.Text))
+        {
+            await DisplayAlert("Atenção", "Nome é obrigatório", "OK");
+            NameEntry.Focus();
+            return false;
+        }
+
+        if (string.IsNullOrWhiteSpace(CPFEntry.Text))
+        {
+            await DisplayAlert("Atenção", "CPF é obrigatório", "OK");
+            CPFEntry.Focus();
+            return false;
+        }
+
+        // 2. Validar CPF usando DIRETAMENTE o CPFValidator
+        string cpfText = CPFEntry.Text?.Trim();
+        System.Diagnostics.Debug.WriteLine($"Validating CPF directly: '{cpfText}'");
+
+        if (!CPFValidator.IsValid(cpfText))
+        {
+            System.Diagnostics.Debug.WriteLine("CPF validation FAILED");
+            await DisplayAlert("Atenção", "CPF inválido. Verifique os números digitados.", "OK");
+            CPFEntry.Focus();
+
+            // Mostrar erro visual também
+            if (CPFValidation != null)
+            {
+                CPFValidation.ValidateCPF();
+            }
+
+            return false;
+        }
+
+        System.Diagnostics.Debug.WriteLine("CPF validation PASSED");
+
+        // 3. Validar outros campos
+        if (string.IsNullOrWhiteSpace(EmailEntry.Text))
+        {
+            await DisplayAlert("Atenção", "Email é obrigatório", "OK");
+            EmailEntry.Focus();
+            return false;
+        }
+
+        if (string.IsNullOrWhiteSpace(PasswordEntry.Text))
+        {
+            await DisplayAlert("Atenção", "Senha é obrigatória", "OK");
+            PasswordEntry.Focus();
+            return false;
+        }
+
+        if (PasswordEntry.Text != ConfirmPasswordEntry.Text)
+        {
+            await DisplayAlert("Atenção", "Senhas não coincidem", "OK");
+            ConfirmPasswordEntry.Focus();
+            return false;
+        }
+
+        if (PasswordEntry.Text.Length < 6)
+        {
+            await DisplayAlert("Atenção", "Senha deve ter no mínimo 6 caracteres", "OK");
+            PasswordEntry.Focus();
+            return false;
+        }
+
+        System.Diagnostics.Debug.WriteLine("All validations PASSED");
+        return true;
     }
+
+    // Método para testar CPF manualmente
+    private async void TestCPF_Clicked(object sender, EventArgs e)
+    {
+        string cpf = CPFEntry.Text;
+        bool isValid = CPFValidator.IsValid(cpf);
+        await DisplayAlert("Teste CPF", $"CPF: {cpf}\nVálido: {isValid}", "OK");
+    }
+
 
     private void OnAlreadyHaveAccount_Clicked(object sender, EventArgs e)
     {

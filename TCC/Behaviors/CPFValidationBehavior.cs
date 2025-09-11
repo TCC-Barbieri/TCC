@@ -7,7 +7,6 @@ namespace TCC.Behaviors
     public class CPFValidationBehavior : Behavior<Entry>
     {
         private Entry _entry;
-        private Label _errorLabel;
 
         public static readonly BindableProperty ErrorLabelProperty =
             BindableProperty.Create(nameof(ErrorLabel), typeof(Label), typeof(CPFValidationBehavior));
@@ -24,13 +23,18 @@ namespace TCC.Behaviors
             _entry.TextChanged += OnTextChanged;
             _entry.Unfocused += OnUnfocused;
             base.OnAttachedTo(bindable);
+
+            System.Diagnostics.Debug.WriteLine("CPFValidationBehavior attached to Entry");
         }
 
         protected override void OnDetachingFrom(Entry bindable)
         {
-            _entry.TextChanged -= OnTextChanged;
-            _entry.Unfocused -= OnUnfocused;
-            _entry = null;
+            if (_entry != null)
+            {
+                _entry.TextChanged -= OnTextChanged;
+                _entry.Unfocused -= OnUnfocused;
+                _entry = null;
+            }
             base.OnDetachingFrom(bindable);
         }
 
@@ -44,22 +48,30 @@ namespace TCC.Behaviors
 
         private void OnUnfocused(object sender, FocusEventArgs e)
         {
+            System.Diagnostics.Debug.WriteLine("CPF Entry unfocused - validating...");
             ValidateCPF();
         }
 
         public bool ValidateCPF()
         {
-            if (_entry == null) return true;
+            if (_entry == null)
+            {
+                System.Diagnostics.Debug.WriteLine("Entry is null in ValidateCPF");
+                return true;
+            }
 
             string cpf = _entry.Text;
+            System.Diagnostics.Debug.WriteLine($"Validating CPF: '{cpf}'");
 
             if (string.IsNullOrWhiteSpace(cpf))
             {
                 ClearError();
+                System.Diagnostics.Debug.WriteLine("CPF is empty - considering valid");
                 return true; // Campo vazio é válido se não for obrigatório
             }
 
             bool isValid = CPFValidator.IsValid(cpf);
+            System.Diagnostics.Debug.WriteLine($"CPF '{cpf}' validation result: {isValid}");
 
             if (!isValid)
             {
@@ -77,11 +89,17 @@ namespace TCC.Behaviors
 
         private void ShowError(string message)
         {
+            System.Diagnostics.Debug.WriteLine($"Showing CPF error: {message}");
+
             if (ErrorLabel != null)
             {
                 ErrorLabel.Text = message;
                 ErrorLabel.TextColor = Colors.Red;
                 ErrorLabel.IsVisible = true;
+            }
+            else
+            {
+                System.Diagnostics.Debug.WriteLine("ErrorLabel is null - cannot show error");
             }
         }
 
