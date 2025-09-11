@@ -2,6 +2,7 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             xmlns:behaviors="clr-namespace:TCC.Behaviors"
              x:Class="TCC.Views.PassengerRegisterPage"
              Title="Criar Conta"
              BackgroundColor="White">
@@ -66,11 +67,21 @@
 
                 <VerticalStackLayout Spacing="5">
                     <Label Text="CPF" />
-                    <Entry x:Name="CPFEntry" Placeholder="000.000.000-00" HeightRequest="45" Keyboard="Numeric">
+                    <Entry x:Name="CPFEntry" 
+           Placeholder="000.000.000-00" 
+           HeightRequest="45" 
+           Keyboard="Numeric">
                         <Entry.Behaviors>
                             <toolkit:MaskedBehavior Mask="XXX.XXX.XXX-XX" />
+                            <behaviors:CPFValidationBehavior x:Name="CPFValidation" ErrorLabel="{x:Reference CPFErrorLabel}" />
                         </Entry.Behaviors>
                     </Entry>
+                    <!-- Label de erro para CPF -->
+                    <Label x:Name="CPFErrorLabel" 
+           FontSize="12" 
+           TextColor="Red" 
+           IsVisible="False" 
+           Margin="0,2,0,0" />
                 </VerticalStackLayout>
 
                 <VerticalStackLayout Spacing="5">
