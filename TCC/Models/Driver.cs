@@ -45,5 +45,10 @@ namespace TCC.Models
 
         [NotNull, MaxLength(200)]
         public DateTime BirthDate { get; set; }
+
+        [NotNull]
+        public double? Latitude { get; set; }
+        [NotNull]   
+        public double? Longitude { get; set; }
     }
 }

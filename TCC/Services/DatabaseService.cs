@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using SQLite;
 using TCC.Models;
+using Microsoft.Maui.Storage;
 
 namespace TCC.Services
 {
@@ -22,6 +23,10 @@ namespace TCC.Services
 
         private async void InitializeTables()
         {
+            // Para desenvolvimento: deleta o banco antigo para criar com novas colunas
+            await _connection.DropTableAsync<Passenger>();
+            await _connection.DropTableAsync<Driver>();
+
             await _connection.CreateTableAsync<Passenger>();
             await _connection.CreateTableAsync<Driver>();
         }
@@ -36,12 +41,10 @@ namespace TCC.Services
         {
             return await _connection.Table<Passenger>().ToListAsync();
         }
-
         #endregion
 
         #region Functions responsible for registering/editing/deleting users
 
-        // CORRIGIDO: Métodos estavam trocados
         public async Task<int> CreatePassenger(Passenger passenger)
         {
             return await _connection.InsertAsync(passenger);
@@ -139,14 +142,15 @@ namespace TCC.Services
 
         #endregion
 
-        public async Task<(bool IsValid, string Message)> ValidateUniqueUserData(string rg, string cpf, string email, string phone, string cnh = null, int? excludeUserId = null, string userType = null)
+        public async Task<(bool IsValid, string Message)> ValidateUniqueUserData(
+            string rg, string cpf, string email, string phone, string cnh = null, int? excludeUserId = null, string userType = null)
         {
             try
             {
                 var drivers = await GetDrivers();
                 var passengers = await GetPassengers();
 
-                // Removes actual user to edit 
+                // Remove atual usuário se estiver editando
                 if (excludeUserId.HasValue && !string.IsNullOrEmpty(userType))
                 {
                     if (userType == "driver")
@@ -155,50 +159,20 @@ namespace TCC.Services
                         passengers = passengers.Where(p => p.Id != excludeUserId.Value).ToList();
                 }
 
-                // Verifiy RG
-                if (!string.IsNullOrEmpty(rg))
-                {
-                    if (drivers.Any(d => d.RG == rg) || passengers.Any(p => p.RG == rg))
-                    {
-                        return (false, "Este RG já está cadastrado no sistema.");
-                    }
-                }
+                if (!string.IsNullOrEmpty(rg) && (drivers.Any(d => d.RG == rg) || passengers.Any(p => p.RG == rg)))
+                    return (false, "Este RG já está cadastrado no sistema.");
 
-                // Verifiy CPF
-                if (!string.IsNullOrEmpty(cpf))
-                {
-                    if (drivers.Any(d => d.CPF == cpf) || passengers.Any(p => p.CPF == cpf))
-                    {
-                        return (false, "Este CPF já está cadastrado no sistema.");
-                    }
-                }
+                if (!string.IsNullOrEmpty(cpf) && (drivers.Any(d => d.CPF == cpf) || passengers.Any(p => p.CPF == cpf)))
+                    return (false, "Este CPF já está cadastrado no sistema.");
 
-                // Verifiy Email
-                if (!string.IsNullOrEmpty(email))
-                {
-                    if (drivers.Any(d => d.Email == email) || passengers.Any(p => p.Email == email))
-                    {
-                        return (false, "Este e-mail já está cadastrado no sistema.");
-                    }
-                }
+                if (!string.IsNullOrEmpty(email) && (drivers.Any(d => d.Email == email) || passengers.Any(p => p.Email == email)))
+                    return (false, "Este e-mail já está cadastrado no sistema.");
 
-                // Verifiy phone number
-                if (!string.IsNullOrEmpty(phone))
-                {
-                    if (drivers.Any(d => d.PhoneNumber == phone) || passengers.Any(p => p.PhoneNumber == phone))
-                    {
-                        return (false, "Este número de telefone já está cadastrado no sistema.");
-                    }
-                }
+                if (!string.IsNullOrEmpty(phone) && (drivers.Any(d => d.PhoneNumber == phone) || passengers.Any(p => p.PhoneNumber == phone)))
+                    return (false, "Este número de telefone já está cadastrado no sistema.");
 
-                // Verify CNH (Drivers only)
-                if (!string.IsNullOrEmpty(cnh))
-                {
-                    if (drivers.Any(d => d.CNH == cnh))
-                    {
-                        return (false, "Esta CNH já está cadastrada no sistema.");
-                    }
-                }
+                if (!string.IsNullOrEmpty(cnh) && drivers.Any(d => d.CNH == cnh))
+                    return (false, "Esta CNH já está cadastrada no sistema.");
 
                 return (true, string.Empty);
             }
@@ -208,14 +182,40 @@ namespace TCC.Services
             }
         }
 
-        // Simplified method to check email (only)
         public async Task<bool> IsEmailTaken(string email, int? excludeUserId = null, string userType = null)
         {
             var result = await ValidateUniqueUserData(null, null, email, null, null, excludeUserId, userType);
             return !result.IsValid;
         }
 
-        // Método para fechar a conexão quando necessário
+        #region Methods to update location in real time
+
+        public async Task UpdatePassengerLocationAsync(int passengerId, double latitude, double longitude)
+        {
+            var passenger = await _connection.Table<Passenger>()
+                .Where(p => p.Id == passengerId).FirstOrDefaultAsync();
+            if (passenger != null)
+            {
+                passenger.Latitude = latitude;
+                passenger.Longitude = longitude;
+                await _connection.UpdateAsync(passenger);
+            }
+        }
+
+        public async Task UpdateDriverLocationAsync(int driverId, double latitude, double longitude)
+        {
+            var driver = await _connection.Table<Driver>()
+                .Where(d => d.Id == driverId).FirstOrDefaultAsync();
+            if (driver != null)
+            {
+                driver.Latitude = latitude;
+                driver.Longitude = longitude;
+                await _connection.UpdateAsync(driver);
+            }
+        }
+
+        #endregion
+
         public async Task CloseConnection()
         {
             await _connection.CloseAsync();

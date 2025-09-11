@@ -1,15 +1,11 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:esri="http://schemas.esri.com/arcgis/runtime/2013"
-             xmlns:local="clr-namespace:TCC.ViewModels"
+             xmlns:esri="clr-namespace:Esri.ArcGISRuntime.Maui;assembly=Esri.ArcGISRuntime.Maui"
              x:Class="TCC.Views.ViagemPage"
-             Title="Viagem"
-             BackgroundColor="#F5F5F5">
+             Title="Viagem">
 
-    <ContentPage.Resources>
-        <local:MapViewModel x:Key="MapViewModel" />
-    </ContentPage.Resources>
-
-    <esri:MapView x:Name="MainMapView" Map="{Binding Map, Source={StaticResource MapViewModel}}" />
+    <Grid>
+        <esri:MapView x:Name="MyMapView" />
+    </Grid>
 </ContentPage>
