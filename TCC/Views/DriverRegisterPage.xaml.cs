@@ -19,6 +19,9 @@ public partial class DriverRegisterPage : ContentPage
 
         try
         {
+            var request = new GeolocationRequest(GeolocationAccuracy.High, TimeSpan.FromSeconds(5));
+            var location = await Geolocation.Default.GetLocationAsync(request);
+
             // IMPORTANTE: Validar ANTES de qualquer coisa
             if (!await ValidateAllFieldsAsync())
             {
@@ -41,7 +44,9 @@ public partial class DriverRegisterPage : ContentPage
                 Genre = GenderPicker.SelectedItem?.ToString(),
                 Address = AddressEntry.Text?.Trim(),
                 BirthDate = BirthDatePicker.Date,
-                Password = PasswordEntry.Text
+                Password = PasswordEntry.Text,
+                Longitude = location.Longitude,
+                Latitude = location.Latitude
             };
 
             // Salvar no banco de dados aqui

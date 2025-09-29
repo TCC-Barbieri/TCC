@@ -23,10 +23,6 @@ namespace TCC.Services
 
         private async void InitializeTables()
         {
-            // Para desenvolvimento: deleta o banco antigo para criar com novas colunas
-            await _connection.DropTableAsync<Passenger>();
-            await _connection.DropTableAsync<Driver>();
-
             await _connection.CreateTableAsync<Passenger>();
             await _connection.CreateTableAsync<Driver>();
         }
