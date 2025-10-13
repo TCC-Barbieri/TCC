@@ -1,71 +1,91 @@
+using Esri.ArcGISRuntime.Geometry;
+using Esri.ArcGISRuntime.Mapping;
+using Esri.ArcGISRuntime.Maui;
 using Microsoft.Maui.Controls;
 using Microsoft.Maui.Devices.Sensors;
-using Esri.ArcGISRuntime.Mapping;
-using Esri.ArcGISRuntime.Geometry;
-using Esri.ArcGISRuntime.UI;
-using System.Timers;
-using Esri.ArcGISRuntime.Symbology;
 
-namespace TCC.Views;
-
-public partial class ViagemPage : ContentPage
+namespace TCC.Views
 {
-    private GraphicsOverlay _overlay;
-    private Graphic _driverGraphic;
-    private System.Timers.Timer _locationTimer;
-
-    public ViagemPage()
+    public partial class ViagemPage : ContentPage
     {
-        InitializeComponent();
-        InitializeMap();
-        StartLocationUpdates();
-    }
-
-    private void InitializeMap()
-    {
-        MyMapView.Map = new Esri.ArcGISRuntime.Mapping.Map(BasemapStyle.ArcGISStreets);
-
-        _overlay = new GraphicsOverlay();
-        MyMapView.GraphicsOverlays.Add(_overlay);
-    }
-
-    private void StartLocationUpdates()
-    {
-        _locationTimer = new System.Timers.Timer(5000); // a cada 5 segundos
-        _locationTimer.Elapsed += async (s, e) => await UpdateDriverLocation();
-        _locationTimer.Start();
-    }
-
-    private async Task UpdateDriverLocation()
-    {
-        try
+        public ViagemPage()
         {
-            var request = new GeolocationRequest(GeolocationAccuracy.High, TimeSpan.FromSeconds(10));
-            var location = await Geolocation.Default.GetLocationAsync(request);
+            InitializeComponent();
+            InitializeMapAsync();
+        }
 
-            if (location != null)
+        private async Task InitializeMapAsync()
+        {
+            try
             {
-                var mapPoint = new MapPoint(location.Longitude, location.Latitude, SpatialReferences.Wgs84);
-
-                MainThread.BeginInvokeOnMainThread(() =>
+                // Solicitar permissão de localização
+                var status = await Permissions.CheckStatusAsync<Permissions.LocationWhenInUse>();
+                if (status != PermissionStatus.Granted)
                 {
-                    if (_driverGraphic == null)
+                    status = await Permissions.RequestAsync<Permissions.LocationWhenInUse>();
+                }
+
+                if (status == PermissionStatus.Granted)
+                {
+                    // Obter localização atual do usuário
+                    var location = await GetUserLocationAsync();
+
+                    if (location != null)
                     {
-                        _driverGraphic = new Graphic(mapPoint, new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Circle, System.Drawing.Color.Red, 15));
-                        _overlay.Graphics.Add(_driverGraphic);
+                        // Criar mapa com Esri OpenStreetMap Basemap
+                        var map = new Esri.ArcGISRuntime.Mapping.Map(BasemapStyle.ArcGISStreets);
+
+                        // Atribuir o mapa ao MapView
+                        MyMapView.Map = map;
+
+                        // Criar ponto com as coordenadas do usuário
+                        var userLocation = new MapPoint(
+                            location.Longitude,
+                            location.Latitude,
+                            SpatialReferences.Wgs84);
+
+                        // Navegar para a localização do usuário
+                        await MyMapView.SetViewpointCenterAsync(userLocation, 50000); // 50000 é o zoom level
                     }
                     else
                     {
-                        _driverGraphic.Geometry = mapPoint;
+                        await DisplayAlert("Erro", "Não foi possível obter a localização", "OK");
                     }
-
-                    MyMapView.SetViewpointCenterAsync(mapPoint, 10000);
-                });
+                }
+                else
+                {
+                    await DisplayAlert("Permissão Negada", "É necessária permissão de localização para usar o mapa", "OK");
+                }
+            }
+            catch (Exception ex)
+            {
+                await DisplayAlert("Erro", $"Erro ao inicializar o mapa: {ex.Message}", "OK");
             }
         }
-        catch (Exception ex)
+
+        private async Task<Location> GetUserLocationAsync()
         {
-            Console.WriteLine($"Erro ao obter localização: {ex.Message}");
+            try
+            {
+                var request = new GeolocationRequest(
+                    GeolocationAccuracy.Best,
+                    TimeSpan.FromSeconds(10));
+
+                var location = await Geolocation.GetLocationAsync(request);
+
+                if (location == null)
+                {
+                    // Se não conseguir em tempo real, tentar com a última localização conhecida
+                    location = await Geolocation.GetLastKnownLocationAsync();
+                }
+
+                return location;
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Erro ao obter localização: {ex.Message}");
+                return null;
+            }
         }
     }
 }
