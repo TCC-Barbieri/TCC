@@ -50,7 +50,8 @@
 
             <!-- Botões -->
             <VerticalStackLayout Spacing="20" 
-                                 WidthRequest="250">
+                                 WidthRequest="250"
+                                 >
 
                 <!-- Botão Iniciar Viagem -->
                 <Button x:Name="iniciarViagemButton"

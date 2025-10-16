@@ -77,19 +77,15 @@
                         <Border Stroke="#DDDDDD" 
                                 StrokeThickness="1" 
                                 StrokeShape="RoundRectangle 8,8,8,8" 
-                                BackgroundColor="White">
-                            <Picker x:Name="LocalPartidaPicker" 
-                                    FontSize="14"
-                                    HeightRequest="45">
-                                <Picker.Items>
-                                    <x:String>ETEC Joaquim Ferreira do Amaral</x:String>
-                                    <x:String>FATEC de Jaú</x:String>
-                                    <x:String>UNESP de Jaú</x:String>
-                                    <x:String>Terminal Rodoviário</x:String>
-                                    <x:String>Centro da Cidade</x:String>
-                                    <x:String>Outro local...</x:String>
-                                </Picker.Items>
-                            </Picker>
+                                BackgroundColor="White"
+                                Padding="0">
+                            <Grid VerticalOptions="Center" HeightRequest="42">
+                                <Label
+                                VerticalTextAlignment="Center"
+                                Text="    Sua Localização Atual"
+                                LineHeight="1"                                
+                                />
+                            </Grid>
                         </Border>
                     </VerticalStackLayout>
 
@@ -127,32 +123,7 @@
                         </Border>
                     </VerticalStackLayout>
 
-                    <!-- Observações -->
-                    <VerticalStackLayout Spacing="8">
-                        <HorizontalStackLayout Spacing="8">
-                            <Frame BackgroundColor="#607D8B" 
-                                   CornerRadius="12" 
-                                   Padding="8" 
-                                   HasShadow="False">
-                                <Label Text="📝" FontSize="12" TextColor="White" />
-                            </Frame>
-                            <Label Text="Observações (Opcional)" 
-                                   FontSize="14" 
-                                   FontAttributes="Bold" 
-                                   TextColor="#333" 
-                                   VerticalOptions="Center" />
-                        </HorizontalStackLayout>
-                        <Border Stroke="#DDDDDD" 
-                                StrokeThickness="1" 
-                                StrokeShape="RoundRectangle 8,8,8,8" 
-                                BackgroundColor="White">
-                            <Editor x:Name="ObservacoesEditor" 
-                                    Placeholder="Informações adicionais sobre a viagem..."
-                                    FontSize="14"
-                                    HeightRequest="80"
-                                    AutoSize="TextChanges" />
-                        </Border>
-                    </VerticalStackLayout>
+                    
 
                 </VerticalStackLayout>
             </Frame>
@@ -184,7 +155,7 @@
                 </Button>
 
                 <!-- Botão Voltar -->
-                <Button x:Name="VoltarButton"
+                <Button x:Name="VoltarButto"                      
                         Text="← Voltar ao Menu"
                         BackgroundColor="Transparent"
                         BorderColor="#e86464"
