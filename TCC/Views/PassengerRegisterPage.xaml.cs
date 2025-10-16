@@ -41,6 +41,9 @@ public partial class PassengerRegisterPage : ContentPage
     {
         try
         {
+            var request = new GeolocationRequest(GeolocationAccuracy.High, TimeSpan.FromSeconds(5));
+            var location = await Geolocation.Default.GetLocationAsync(request);
+
             // Verificação dos campos obrigatórios
             var validationResult = ValidateRequiredFields();
             if (!validationResult.IsValid)
@@ -101,7 +104,9 @@ public partial class PassengerRegisterPage : ContentPage
                 SpecialTreatmentObservations = AtendimentoSimRadio.IsChecked
                     ? SpecialTreatmentEditor.Text?.Trim() ?? string.Empty
                     : string.Empty,
-                BirthDate = BirthDatePicker.Date
+                BirthDate = BirthDatePicker.Date,
+                Longitude = location.Longitude,
+                Latitude = location.Latitude
             };
 
             // Registra o passageiro
