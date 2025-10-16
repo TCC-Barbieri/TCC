@@ -8,7 +8,6 @@ namespace TCC.Views;
 public partial class LoginPage : ContentPage
 {
     private readonly DatabaseService _databaseService;
-    private CancellationTokenSource _cts;
 
     public LoginPage()
     {
@@ -39,9 +38,6 @@ public partial class LoginPage : ContentPage
                     await SecureStorage.SetAsync("user_type", "passenger");
                     await SecureStorage.SetAsync("user_id", passenger.Id.ToString());
 
-                    // Inicia rastreamento de localização em tempo real
-                    _ = StartTrackingLocationAsync(passenger.Id, "passenger");
-
                     await DisplayAlert("Sucesso", "Login realizado com sucesso!", "OK");
 
                     await Navigation.PushAsync(new ChoosePagePassenger());
@@ -57,9 +53,6 @@ public partial class LoginPage : ContentPage
                     await SecureStorage.SetAsync("user_type", "driver");
                     await SecureStorage.SetAsync("user_id", driver.Id.ToString());
 
-                    // Inicia rastreamento de localização em tempo real
-                    _ = StartTrackingLocationAsync(driver.Id, "driver");
-
                     await DisplayAlert("Sucesso", "Login realizado com sucesso!", "OK");
 
                     await Navigation.PushAsync(new ChoosePageDriver());
@@ -74,47 +67,6 @@ public partial class LoginPage : ContentPage
             await DisplayAlert("Erro", $"Falha no login: {ex.Message}", "OK");
         }
     }
-
-    #region Real-time location tracking
-
-    private async Task StartTrackingLocationAsync(int userId, string userType)
-    {
-        try
-        {
-            _cts = new CancellationTokenSource();
-
-            while (!_cts.Token.IsCancellationRequested)
-            {
-                var location = await Geolocation.Default.GetLocationAsync(new GeolocationRequest
-                {
-                    DesiredAccuracy = GeolocationAccuracy.Best,
-                    Timeout = TimeSpan.FromSeconds(10)
-                }, _cts.Token);
-
-                if (location != null)
-                {
-                    if (userType == "passenger")
-                        await _databaseService.UpdatePassengerLocationAsync(userId, location.Latitude, location.Longitude);
-                    else if (userType == "driver")
-                        await _databaseService.UpdateDriverLocationAsync(userId, location.Latitude, location.Longitude);
-                }
-
-                await Task.Delay(5000); // Atualiza a cada 5 segundos
-            }
-        }
-        catch (Exception ex)
-        {
-            await DisplayAlert("Erro", $"Falha ao obter localização: {ex.Message}", "OK");
-        }
-    }
-
-    private void StopTrackingLocation()
-    {
-        if (_cts != null && !_cts.Token.IsCancellationRequested)
-            _cts.Cancel();
-    }
-
-    #endregion
 
     #region Pointer hover events
 
