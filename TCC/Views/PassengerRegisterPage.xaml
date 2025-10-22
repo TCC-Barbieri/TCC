@@ -153,8 +153,8 @@
                             <Picker x:Name="SchoolPicker">
                                 <Picker.Items>
                                     <x:String>ETEC</x:String>
-                                    <x:String>FATEC</x:String>
                                     <x:String>UNESP</x:String>
+                                    <x:String>UNISAGRADO</x:String>
                                 </Picker.Items>
                             </Picker>
                         </Border>

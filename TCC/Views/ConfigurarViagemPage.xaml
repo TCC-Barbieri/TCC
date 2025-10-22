@@ -83,11 +83,8 @@
                                     HeightRequest="45">
                                 <Picker.Items>
                                     <x:String>ETEC Joaquim Ferreira do Amaral</x:String>
-                                    <x:String>FATEC de Jaú</x:String>
-                                    <x:String>UNESP de Jaú</x:String>
-                                    <x:String>Terminal Rodoviário</x:String>
-                                    <x:String>Centro da Cidade</x:String>
-                                    <x:String>Outro local...</x:String>
+                                    <x:String>UNESP</x:String>
+                                    <x:String>Unisagrado</x:String>
                                 </Picker.Items>
                             </Picker>
                         </Border>
