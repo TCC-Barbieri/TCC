@@ -59,6 +59,37 @@
                            TextColor="#333" 
                            HorizontalOptions="Center" />
 
+                    <!-- Turmas -->
+                    <VerticalStackLayout Spacing="8">
+                        <HorizontalStackLayout Spacing="8">
+                            <Frame BackgroundColor="#FF5722" 
+                                   CornerRadius="12" 
+                                   Padding="8" 
+                                   HasShadow="False">
+                                <Label Text="🎒" FontSize="12" TextColor="White" />
+                            </Frame>
+                            <Label Text="Turma" 
+                                   FontSize="14" 
+                                   FontAttributes="Bold" 
+                                   TextColor="#333" 
+                                   VerticalOptions="Center" />
+                        </HorizontalStackLayout>
+                        <Border Stroke="#DDDDDD" 
+                                StrokeThickness="1" 
+                                StrokeShape="RoundRectangle 8,8,8,8" 
+                                BackgroundColor="White">
+                                <Picker x:Name="TurmaPicker" 
+                                    FontSize="14"
+                                    HeightRequest="45">
+                                <Picker.Items>
+                                    <x:String>Turma da ETEC</x:String>
+                                    <x:String>Turma da UNESP</x:String>
+                                    <x:String>Turma da Unisagrado</x:String>
+                                </Picker.Items>
+                            </Picker>
+                        </Border>
+                    </VerticalStackLayout>
+
                     <!-- Local de Destino -->
                     <VerticalStackLayout Spacing="8">
                         <HorizontalStackLayout Spacing="8">
@@ -85,6 +116,7 @@
                                     <x:String>ETEC Joaquim Ferreira do Amaral</x:String>
                                     <x:String>UNESP</x:String>
                                     <x:String>Unisagrado</x:String>
+                                    <x:String>UNOESTE</x:String>
                                 </Picker.Items>
                             </Picker>
                         </Border>
