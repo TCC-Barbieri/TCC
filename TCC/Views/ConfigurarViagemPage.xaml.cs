@@ -16,7 +16,6 @@ namespace TCC.Views
         private void SetupEventHandlers()
         {
             // Eventos para funcionalidades futuras se necessário
-            LocalPartidaPicker.SelectedIndexChanged += OnConfigurationChanged;
             LocalDestinoPicker.SelectedIndexChanged += OnConfigurationChanged;
         }
 
@@ -84,24 +83,10 @@ namespace TCC.Views
 
         private bool ValidarConfiguracao()
         {
-            // Validar local de partida
-            if (LocalPartidaPicker.SelectedItem == null)
-            {
-                DisplayAlert("Atenção", "Por favor, selecione o local de partida.", "OK");
-                return false;
-            }
-
             // Validar local de destino
             if (LocalDestinoPicker.SelectedItem == null)
             {
                 DisplayAlert("Atenção", "Por favor, selecione o local de destino.", "OK");
-                return false;
-            }
-
-            // Verificar se partida e destino são diferentes
-            if (LocalPartidaPicker.SelectedItem.ToString() == LocalDestinoPicker.SelectedItem.ToString())
-            {
-                DisplayAlert("Atenção", "O local de partida deve ser diferente do local de destino.", "OK");
                 return false;
             }
 
@@ -111,9 +96,7 @@ namespace TCC.Views
         private bool HasUnsavedChanges()
         {
             // Verificar se há configurações diferentes dos valores padrão
-            return LocalPartidaPicker.SelectedItem != null ||
-                   LocalDestinoPicker.SelectedItem != null ||
-                   !string.IsNullOrEmpty(ObservacoesEditor.Text);
+            return LocalDestinoPicker.SelectedItem != null;
         }
 
         // Event handlers para efeitos visuais dos botões

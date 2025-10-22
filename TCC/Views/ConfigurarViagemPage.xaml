@@ -59,36 +59,6 @@
                            TextColor="#333" 
                            HorizontalOptions="Center" />
 
-                    <!-- Local de Partida -->
-                    <VerticalStackLayout Spacing="8">
-                        <HorizontalStackLayout Spacing="8">
-                            <Frame BackgroundColor="#4CAF50" 
-                                   CornerRadius="12" 
-                                   Padding="8" 
-                                   HasShadow="False">
-                                <Label Text="📍" FontSize="12" TextColor="White" />
-                            </Frame>
-                            <Label Text="Local de Partida" 
-                                   FontSize="14" 
-                                   FontAttributes="Bold" 
-                                   TextColor="#333" 
-                                   VerticalOptions="Center" />
-                        </HorizontalStackLayout>
-                        <Border Stroke="#DDDDDD" 
-                                StrokeThickness="1" 
-                                StrokeShape="RoundRectangle 8,8,8,8" 
-                                BackgroundColor="White"
-                                Padding="0">
-                            <Grid VerticalOptions="Center" HeightRequest="42">
-                                <Label
-                                VerticalTextAlignment="Center"
-                                Text="    Sua Localização Atual"
-                                LineHeight="1"                                
-                                />
-                            </Grid>
-                        </Border>
-                    </VerticalStackLayout>
-
                     <!-- Local de Destino -->
                     <VerticalStackLayout Spacing="8">
                         <HorizontalStackLayout Spacing="8">
