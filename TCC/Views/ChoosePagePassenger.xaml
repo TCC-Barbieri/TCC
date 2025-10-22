@@ -52,6 +52,28 @@
             <VerticalStackLayout Spacing="20" 
                                  WidthRequest="250">
 
+                <!-- Botão Vou Hoje / Não Vou Hoje -->
+                <Button x:Name="EVH"
+                        Text="✓ Vou hoje"
+                        TextColor="White"
+                        FontAttributes="Bold"
+                        BackgroundColor="#28a745"
+                        CornerRadius="25"
+                        HeightRequest="55"
+                        SemanticProperties.Hint="Confirmar presença hoje"
+                        Clicked="EVH_Clicked">
+                    <Button.Shadow>
+                        <Shadow Brush="Black" 
+                                Offset="0,4" 
+                                Radius="8" 
+                                Opacity="0.2"/>
+                    </Button.Shadow>
+                    <Button.GestureRecognizers>
+                        <PointerGestureRecognizer PointerEntered="OnPointerEntered" 
+                                                  PointerExited="OnPointerExited"/>
+                    </Button.GestureRecognizers>
+                </Button>
+
                 <!-- Botão Perfil -->
                 <Button x:Name="perfilButton"
                         Text="👤 Perfil"

@@ -1,9 +1,17 @@
-using Microsoft.Maui.Controls;
+Ôªøusing Microsoft.Maui.Controls;
+using TCC.Models;
+using TCC.Services;
 
 namespace TCC.Views
 {
     public partial class ChoosePagePassenger : ContentPage
     {
+        private bool _EVH = true;
+
+        private readonly DatabaseService _databaseService = new();
+        private readonly int _passengerId;
+        private Passenger _currentPassenger;
+
         public ChoosePagePassenger()
         {
             InitializeComponent();
@@ -37,12 +45,12 @@ namespace TCC.Views
         {
             try
             {
-                bool confirm = await DisplayAlert("Desconectar", "Tem certeza que deseja sair da sua conta?", "Sim", "N„o");
+                bool confirm = await DisplayAlert("Desconectar", "Tem certeza que deseja sair da sua conta?", "Sim", "N√£o");
 
                 if (confirm)
                 {
 
-                    // Navegar de volta para a p·gina inicial
+                    // Navegar de volta para a p√°gina inicial
                     await Navigation.PushAsync(new Home());
                 }
             }
@@ -52,7 +60,7 @@ namespace TCC.Views
             }
         }
 
-        // Efeitos visuais para os botıes
+        // Efeitos visuais para os bot√µes
         private void OnPointerEntered(object sender, PointerEventArgs e)
         {
             if (sender is Button button)
@@ -86,6 +94,24 @@ namespace TCC.Views
             {
                 button.Scale = 1.0;
                 button.BackgroundColor = Colors.Transparent;
+            }
+        }
+
+        private void EVH_Clicked(object sender, EventArgs e)
+        {
+            _EVH = !_EVH;
+
+            if(_EVH)
+            {
+                EVH.Text = "Vou hoje";
+                EVH.BackgroundColor = Color.FromArgb("#28a745"); // Verde
+                EVH.TextColor = Colors.White;
+            }
+            else
+            {
+                EVH.Text = "N√£o vou hoje";
+                EVH.BackgroundColor = Color.FromArgb("#dc3545"); // Vermelho
+                EVH.TextColor = Colors.White;
             }
         }
     }

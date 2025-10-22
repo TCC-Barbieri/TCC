@@ -63,5 +63,7 @@ namespace TCC.Models
 
         [NotNull]
         public double Longitude { get; set; } = 0;
+
+        public bool EVH { get; set; } = true; // EVH -> "Eu vou hoje"
     }
 }
