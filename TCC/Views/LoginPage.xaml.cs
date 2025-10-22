@@ -38,9 +38,11 @@ public partial class LoginPage : ContentPage
                     await SecureStorage.SetAsync("user_type", "passenger");
                     await SecureStorage.SetAsync("user_id", passenger.Id.ToString());
 
+                    var userId = await SecureStorage.GetAsync("user_id");
+
                     await DisplayAlert("Sucesso", "Login realizado com sucesso!", "OK");
 
-                    await Navigation.PushAsync(new ChoosePagePassenger());
+                    await Navigation.PushAsync(new ChoosePagePassenger(int.Parse(userId)));
                     return;
                 }
             }

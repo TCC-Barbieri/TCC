@@ -12,10 +12,14 @@ namespace TCC.Views
         private readonly int _passengerId;
         private Passenger _currentPassenger;
 
-        public ChoosePagePassenger()
+
+        public ChoosePagePassenger(int passengerId)
         {
             InitializeComponent();
+            _passengerId = passengerId;
         }
+
+
 
         private async void PerfilButton_Clicked(object sender, EventArgs e)
         {
@@ -97,8 +101,11 @@ namespace TCC.Views
             }
         }
 
-        private void EVH_Clicked(object sender, EventArgs e)
+        private async void EVH_Clicked(object sender, EventArgs e)
         {
+            var passengers = await _databaseService.GetPassengers();
+            _currentPassenger = passengers.FirstOrDefault(p => p.Id == _passengerId);
+
             _EVH = !_EVH;
 
             if(_EVH)
@@ -106,12 +113,20 @@ namespace TCC.Views
                 EVH.Text = "Vou hoje";
                 EVH.BackgroundColor = Color.FromArgb("#28a745"); // Verde
                 EVH.TextColor = Colors.White;
+
+                _currentPassenger.EVH = true;
+
+                await _databaseService.UpdatePassenger(_currentPassenger);
             }
             else
             {
                 EVH.Text = "Não vou hoje";
                 EVH.BackgroundColor = Color.FromArgb("#dc3545"); // Vermelho
                 EVH.TextColor = Colors.White;
+
+                _currentPassenger.EVH = false;
+
+                await _databaseService.UpdatePassenger(_currentPassenger);
             }
         }
     }
