@@ -7,7 +7,7 @@
              Title="Editar Perfil"
              BackgroundColor="#F5F5F5">
 
-    <ScrollView>
+    <ScrollView BackgroundColor="Lime">
         <VerticalStackLayout Spacing="0">
 
             <!-- Cabeçalho - Full Width -->

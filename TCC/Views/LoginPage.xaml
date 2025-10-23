@@ -1,77 +1,35 @@
-<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="TCC.Views.LoginPage"
-             Title="LoginPage"
              BackgroundColor="White">
 
     <ScrollView>
         <VerticalStackLayout>
 
-            <!-- Header occupying the entire top part -->
             <Grid HeightRequest="300">
-                <Image Source="fundovermelho.jpg" 
-           Aspect="AspectFill" />
-                <!-- Overlay semitransparente opcional para melhorar legibilidade -->
-                <BoxView BackgroundColor="#80000000" />
-                <VerticalStackLayout HorizontalOptions="Center"
-                         VerticalOptions="Center"
-                         Spacing="8">
-                    <Label Text="Seja Bem-Vindo!" 
-               FontSize="26" 
-               HorizontalOptions="Center" 
-               FontAttributes="Bold"
-               TextColor="White" />
-                    <!-- Logo Container -->
-
-                        <Image Source="logo_sem_fundo.png"
-                               HeightRequest="150" 
-                               WidthRequest="150"
-                               HorizontalOptions="Center" 
-                               VerticalOptions="Center"/>
-
+                <Image InputTransparent="True" Source="fundovermelho.jpg" Aspect="AspectFill" />
+                <BoxView BackgroundColor="#80000000" InputTransparent="True" />
+                <VerticalStackLayout HorizontalOptions="Center" VerticalOptions="Center" Spacing="8">
+                    <Label Text="Seja Bem-Vindo!" FontSize="26" FontAttributes="Bold" TextColor="White" HorizontalOptions="Center"/>
+                    <Image Source="logo_sem_fundo.png" HeightRequest="150" WidthRequest="150"/>
                 </VerticalStackLayout>
             </Grid>
 
-            <ScrollView>
-                <VerticalStackLayout Padding="20" 
-                                     Spacing="15">
+            <VerticalStackLayout Padding="20" Spacing="15">
+                <Label Text="Login" FontSize="32" HorizontalOptions="Center" />
+                <Entry x:Name="EmailEntry" Placeholder="E-mail" Keyboard="Email" />
+                <Entry x:Name="PasswordEntry" Placeholder="Senha" IsPassword="True" />
+                <Picker x:Name="UserTypePicker" Title="Tipo de usuário">
+                    <Picker.ItemsSource>
+                        <x:Array Type="{x:Type x:String}">
+                            <x:String>Passageiro</x:String>
+                            <x:String>Motorista</x:String>
+                        </x:Array>
+                    </Picker.ItemsSource>
+                </Picker>
+                <Button Text="Entrar" BackgroundColor="Red" TextColor="White" Clicked="OnLoginClicked" IsEnabled="True"/>
+            </VerticalStackLayout>
 
-                    <Label Text="Login" 
-                           FontSize="32" 
-                           HorizontalOptions="Center" />
-
-                    <Entry x:Name="EmailEntry" 
-                           Placeholder="E-mail" 
-                           Keyboard="Email" />
-                    <Entry x:Name="PasswordEntry" 
-                           Placeholder="Senha" 
-                           IsPassword="True" />
-
-                    <Picker x:Name="UserTypePicker" 
-                            Title="Tipo de usuário">
-                        <Picker.ItemsSource>
-                            <x:Array Type="{x:Type x:String}">
-                                <x:String>Passageiro</x:String>
-                                <x:String>Motorista</x:String>
-                            </x:Array>
-                        </Picker.ItemsSource>
-                    </Picker>
-
-                    <Button Text="Entrar"
-                            BackgroundColor="Red"
-                            TextColor="White"
-                            Clicked="OnLoginClicked">
-
-                        <Button.GestureRecognizers>
-                            <PointerGestureRecognizer PointerEntered="OnPointerEntered" PointerExited="OnPointerExited"/>
-                        </Button.GestureRecognizers>
-
-                    </Button>
-                    
-
-                </VerticalStackLayout>
-            </ScrollView>
         </VerticalStackLayout>
     </ScrollView>
 </ContentPage>
