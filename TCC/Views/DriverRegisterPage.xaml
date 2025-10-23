@@ -239,16 +239,12 @@
                         x:Name="OnRegister"
                         BackgroundColor="#FF0000" 
                         TextColor="White" 
-                        CornerRadius="8" 
+                        CornerRadius="25" 
                         HeightRequest="50" 
                         FontSize="16"
                         FontAttributes="Bold"
                         Margin="0,20,0,10"
                         Clicked="OnRegister_Clicked">
-                    <Button.GestureRecognizers>
-                        <PointerGestureRecognizer PointerEntered="OnPointerEntered" 
-                                                  PointerExited="OnPointerExited"/>
-                    </Button.GestureRecognizers>
                 </Button>
 
                 <!-- Botão Já tenho conta -->
@@ -259,10 +255,6 @@
                         BorderWidth="0"
                         HeightRequest="40" 
                         Clicked="OnAlreadyHaveAccount_Clicked">
-                    <Button.GestureRecognizers>
-                        <PointerGestureRecognizer PointerEntered="OnPointer2Entered" 
-                                                  PointerExited="OnPointer2Exited"/>
-                    </Button.GestureRecognizers>
                 </Button>
 
             </VerticalStackLayout>

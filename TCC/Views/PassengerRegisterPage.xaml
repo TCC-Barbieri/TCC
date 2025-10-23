@@ -206,11 +206,7 @@
                         HeightRequest="50"
                         FontAttributes="Bold"
                         Clicked="OnRegisterClicked">
-                    
-                    <Button.GestureRecognizers>
-                        <PointerGestureRecognizer PointerEntered="OnPointerEntered" PointerExited="OnPointerExited"/>
-                    </Button.GestureRecognizers>
-
+                   
                 </Button>
 
                 <Button Text="Já tenho uma conta"
@@ -218,10 +214,6 @@
                         TextColor="Red"
                         FontSize="14"
                         Clicked="OnAlreadyHaveAccount_Clicked">
-
-                    <Button.GestureRecognizers>
-                        <PointerGestureRecognizer PointerEntered="OnPointer2Entered" PointerExited="OnPointer2Exited"/>
-                    </Button.GestureRecognizers>
 
                 </Button>
 

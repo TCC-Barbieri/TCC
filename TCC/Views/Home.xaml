@@ -8,9 +8,10 @@
     <Grid>
         <!-- Imagem de fundo -->
         <Image Source="fundo_tcc.jpg"
-               Aspect="AspectFill"
-               HorizontalOptions="FillAndExpand"
-               VerticalOptions="FillAndExpand" />
+             Aspect="AspectFill"
+             HorizontalOptions="FillAndExpand"
+             VerticalOptions="FillAndExpand" />
+
 
         <!-- Conteúdo principal -->
         <VerticalStackLayout Spacing="40"
@@ -19,7 +20,7 @@
                              HorizontalOptions="Center">
 
             <!-- Texto de Boas-vindas -->
-            <Label Text="Bem-vindo!"
+            <Label Text="Bem-Vindo!"
                    FontSize="36"
                    FontAttributes="Bold"
                    TextColor="White"

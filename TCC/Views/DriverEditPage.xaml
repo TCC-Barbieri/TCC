@@ -248,15 +248,11 @@
                             x:Name="SaveButton"
                             BackgroundColor="Red" 
                             TextColor="White" 
-                            CornerRadius="8" 
+                            CornerRadius="25" 
                             HeightRequest="50" 
                             FontSize="16"
                             FontAttributes="Bold"
                             Clicked="OnSave_Clicked">
-                        <Button.GestureRecognizers>
-                            <PointerGestureRecognizer PointerEntered="OnPointerEntered" 
-                                                      PointerExited="OnPointerExited"/>
-                        </Button.GestureRecognizers>
                     </Button>
 
                     <!-- Botão Cancelar -->
@@ -267,10 +263,6 @@
                             BorderWidth="0"
                             HeightRequest="40" 
                             Clicked="OnCancel_Clicked">
-                        <Button.GestureRecognizers>
-                            <PointerGestureRecognizer PointerEntered="OnPointer2Entered" 
-                                                      PointerExited="OnPointer2Exited"/>
-                        </Button.GestureRecognizers>
                     </Button>
                 </VerticalStackLayout>
 
