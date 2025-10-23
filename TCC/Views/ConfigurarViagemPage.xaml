@@ -147,10 +147,6 @@
                                 Radius="8" 
                                 Opacity="0.2"/>
                     </Button.Shadow>
-                    <Button.GestureRecognizers>
-                        <PointerGestureRecognizer PointerEntered="OnPointerEntered" 
-                                                  PointerExited="OnPointerExited"/>
-                    </Button.GestureRecognizers>
                 </Button>
 
                 <!-- Botão Voltar -->
@@ -172,10 +168,6 @@
                                 Radius="8" 
                                 Opacity="0.2"/>
                     </Button.Shadow>
-                    <Button.GestureRecognizers>
-                        <PointerGestureRecognizer PointerEntered="OnPointer2Entered" 
-                                                  PointerExited="OnPointer2Exited"/>
-                    </Button.GestureRecognizers>
                 </Button>
 
             </VerticalStackLayout>

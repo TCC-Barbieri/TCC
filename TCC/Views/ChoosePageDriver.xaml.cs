@@ -64,42 +64,5 @@ namespace TCC.Views
                 await DisplayAlert("Erro", $"Erro ao desconectar: {ex.Message}", "OK");
             }
         }
-
-        // Efeitos visuais para os botões
-        private void OnPointerEntered(object sender, PointerEventArgs e)
-        {
-            if (sender is Button button)
-            {
-                button.Scale = 1.05;
-                button.Opacity = 0.8;
-            }
-        }
-
-        private void OnPointerExited(object sender, PointerEventArgs e)
-        {
-            if (sender is Button button)
-            {
-                button.Scale = 1.0;
-                button.Opacity = 1.0;
-            }
-        }
-
-        private void OnPointer2Entered(object sender, PointerEventArgs e)
-        {
-            if (sender is Button button)
-            {
-                button.Scale = 1.05;
-                button.BackgroundColor = Color.FromArgb("#CC0000");
-            }
-        }
-
-        private void OnPointer2Exited(object sender, PointerEventArgs e)
-        {
-            if (sender is Button button)
-            {
-                button.Scale = 1.0;
-                button.BackgroundColor = Colors.Transparent;
-            }
-        }
     }
 }

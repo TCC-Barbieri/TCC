@@ -2,30 +2,14 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="TCC.Views.ChoosePagePassenger"
-             Title="Menu do Passageiro"
-             BackgroundColor="#e86464">
+             Title="Menu do Passageiro">
 
     <Grid>
-        <!-- Ondas decorativas no fundo -->
-        <Path Fill="#e04141"
-              Opacity="1"
-              Data="M0,40 
-                    C200,0 600,100 1000,40 
-                    L1000,0 L0,0 Z"
-              HorizontalOptions="FillAndExpand"
-              VerticalOptions="Start"
-              Aspect="Fill" />
-
-        <Path Fill="#5c0e0e"
-              Opacity="0.25"
-              Data="M0,800 L1000,800 
-                    L1000,760 
-                    Q700,720 500,740 
-                    Q300,760 0,730 
-                    Z"
-              HorizontalOptions="FillAndExpand"
-              VerticalOptions="End"
-              Aspect="Fill" />
+        <!-- Imagem de fundo -->
+        <Image Source="fundo_tcc.jpg"
+           Aspect="AspectFill"
+           HorizontalOptions="FillAndExpand"
+           VerticalOptions="FillAndExpand" />
 
         <!-- Conteúdo principal -->
         <VerticalStackLayout Spacing="40"
@@ -68,10 +52,6 @@
                                 Radius="8" 
                                 Opacity="0.2"/>
                     </Button.Shadow>
-                    <Button.GestureRecognizers>
-                        <PointerGestureRecognizer PointerEntered="OnPointerEntered" 
-                                                  PointerExited="OnPointerExited"/>
-                    </Button.GestureRecognizers>
                 </Button>
 
                 <!-- Botão Perfil -->
@@ -90,10 +70,6 @@
                                 Radius="8" 
                                 Opacity="0.2"/>
                     </Button.Shadow>
-                    <Button.GestureRecognizers>
-                        <PointerGestureRecognizer PointerEntered="OnPointerEntered" 
-                                                  PointerExited="OnPointerExited"/>
-                    </Button.GestureRecognizers>
                 </Button>
 
                 <!-- Botão Grupos -->
@@ -112,10 +88,6 @@
                                 Radius="8" 
                                 Opacity="0.2"/>
                     </Button.Shadow>
-                    <Button.GestureRecognizers>
-                        <PointerGestureRecognizer PointerEntered="OnPointerEntered" 
-                                                  PointerExited="OnPointerExited"/>
-                    </Button.GestureRecognizers>
                 </Button>
 
                 <!-- Botão Desconectar -->
@@ -136,10 +108,6 @@
                                 Radius="8" 
                                 Opacity="0.2"/>
                     </Button.Shadow>
-                    <Button.GestureRecognizers>
-                        <PointerGestureRecognizer PointerEntered="OnPointer2Entered" 
-                                                  PointerExited="OnPointer2Exited"/>
-                    </Button.GestureRecognizers>
                 </Button>
 
             </VerticalStackLayout>

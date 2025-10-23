@@ -54,10 +54,6 @@
                                 Radius="8" 
                                 Opacity="0.2"/>
                     </Button.Shadow>
-                    <Button.GestureRecognizers>
-                        <PointerGestureRecognizer PointerEntered="OnPointerEntered" 
-                                                  PointerExited="OnPointerExited"/>
-                    </Button.GestureRecognizers>
                 </Button>
 
                 <Button x:Name="passengerButton"
@@ -75,10 +71,6 @@
                                 Radius="8" 
                                 Opacity="0.2"/>
                     </Button.Shadow>
-                    <Button.GestureRecognizers>
-                        <PointerGestureRecognizer PointerEntered="OnPointerEntered" 
-                                                  PointerExited="OnPointerExited"/>
-                    </Button.GestureRecognizers>
                 </Button>
 
             </VerticalStackLayout>

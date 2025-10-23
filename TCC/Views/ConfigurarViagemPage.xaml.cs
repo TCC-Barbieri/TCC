@@ -99,49 +99,6 @@ namespace TCC.Views
             return LocalDestinoPicker.SelectedItem != null;
         }
 
-        // Event handlers para efeitos visuais dos botões
-        private void OnPointerEntered(object sender, PointerEventArgs e)
-        {
-            if (sender is Button button)
-            {
-                button.Scale = 1.05;
-                button.Opacity = 0.8;
-            }
-        }
-
-        private void OnPointerExited(object sender, PointerEventArgs e)
-        {
-            if (sender is Button button)
-            {
-                button.Scale = 1.0;
-                button.Opacity = 1.0;
-            }
-        }
-
-        private void OnPointer2Entered(object sender, PointerEventArgs e)
-        {
-            if (sender is Button button)
-            {
-                button.Scale = 1.02;
-                if (button.BackgroundColor.Equals(Colors.Transparent))
-                {
-                    button.BackgroundColor = Color.FromRgba("#20e86464"); // Cor de fundo sutil
-                }
-            }
-        }
-
-        private void OnPointer2Exited(object sender, PointerEventArgs e)
-        {
-            if (sender is Button button)
-            {
-                button.Scale = 1.0;
-                if (button.BorderColor != null)
-                {
-                    button.BackgroundColor = Colors.Transparent;
-                }
-            }
-        }
-
         protected override void OnAppearing()
         {
             base.OnAppearing();
