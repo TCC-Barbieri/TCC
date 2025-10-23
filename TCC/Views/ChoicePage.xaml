@@ -7,20 +7,14 @@
 
     <Grid>
     <!-- Imagem de fundo -->
-    <Image Source="fundo_tcc.jpg"
+        <Image Source="fundo_tcc.jpg"
                Aspect="AspectFill"
                HorizontalOptions="FillAndExpand"
                VerticalOptions="FillAndExpand" />
 
-    <!-- Overlay semi-transparente (opcional para melhorar legibilidade) -->
-    <BoxView Color="Black" 
-                 Opacity="0.3"
-                 HorizontalOptions="FillAndExpand"
-                 VerticalOptions="FillAndExpand" />
 
 
-
-    <!-- Conteúdo principal -->
+        <!-- Conteúdo principal -->
         <VerticalStackLayout Spacing="40"
                              Padding="0"
                              VerticalOptions="Center"

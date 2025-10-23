@@ -12,14 +12,6 @@
                HorizontalOptions="FillAndExpand"
                VerticalOptions="FillAndExpand" />
 
-        <!-- Overlay semi-transparente (opcional para melhorar legibilidade) -->
-        <BoxView Color="Black" 
-                 Opacity="0.3"
-                 HorizontalOptions="FillAndExpand"
-                 VerticalOptions="FillAndExpand" />
-
-
-
         <!-- Conteúdo principal -->
         <VerticalStackLayout Spacing="40"
                              Padding="0"
