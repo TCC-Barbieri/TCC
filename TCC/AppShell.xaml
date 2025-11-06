@@ -5,11 +5,13 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:local="clr-namespace:TCC"
     Shell.FlyoutBehavior="Flyout"
+    Shell.NavBarIsVisible="False"
     Title="TCC">
 
     <ShellContent
         Title="Home"
         ContentTemplate="{DataTemplate local:App}"
-        Route="MainPage" />
+        Route="MainPage"
+        Shell.NavBarIsVisible="False"/>
 
 </Shell>
