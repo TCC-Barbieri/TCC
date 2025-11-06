@@ -47,8 +47,8 @@ namespace TCC.Models
         public DateTime BirthDate { get; set; }
 
         [NotNull]
-        public double? Latitude { get; set; }
+        public double Latitude { get; set; }
         [NotNull]   
-        public double? Longitude { get; set; }
+        public double Longitude { get; set; }
     }
 }

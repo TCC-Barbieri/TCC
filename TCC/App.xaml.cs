@@ -8,6 +8,8 @@ namespace TCC
         {
             InitializeComponent();
 
+            Application.Current.UserAppTheme = AppTheme.Light; // Força o tema do aplicativo como claro.
+
             Application.Current.MainPage = new NavigationPage(new Home());
         }
 

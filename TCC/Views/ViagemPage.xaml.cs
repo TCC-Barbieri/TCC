@@ -1,211 +1,487 @@
-using Esri.ArcGISRuntime.Geometry;
+Ôªøusing Esri.ArcGISRuntime.Geometry;
 using Esri.ArcGISRuntime.Mapping;
-using Esri.ArcGISRuntime.Maui;
 using Esri.ArcGISRuntime.Symbology;
+using Esri.ArcGISRuntime.Tasks.NetworkAnalysis;
 using Esri.ArcGISRuntime.UI;
-using Esri.ArcGISRuntime.UI.Controls;
 using Microsoft.Maui.Controls;
-using Microsoft.Maui.Devices.Sensors;
-using System.Diagnostics;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using TCC.Models;
+using TCC.Services;
 
 namespace TCC.Views
 {
     public partial class ViagemPage : ContentPage
     {
-        private GraphicsOverlay _userLocationOverlay;
-        private CancellationTokenSource _locationUpdateCts;
-        private const int LocationUpdateIntervalMs = 1000; // Atualizar a cada 1 segundo
+        private readonly Driver _driver;
+        private readonly List<Passenger> _passageiros;
+        private readonly string _localDestino;
+        private readonly DatabaseService _databaseService;
 
-        public ViagemPage()
+        private GraphicsOverlay _routeOverlay;
+        private GraphicsOverlay _stopsOverlay;
+        private GraphicsOverlay _driverOverlay;
+
+        private Graphic _driverGraphic;
+        private Polyline _routeLine;
+        private List<MapPoint> _routePoints;
+        private int _currentRouteIndex = 0;
+
+        private bool _isTrackingLocation = false;
+
+        public ViagemPage(Driver driver, List<Passenger> passageiros, string localDestino)
         {
             InitializeComponent();
-            InitializeMapAsync();
+
+            _driver = driver;
+            _passageiros = passageiros;
+            _localDestino = localDestino;
+            _databaseService = new DatabaseService();
+
+            InitializeMap();
         }
 
-        private async Task InitializeMapAsync()
+        private async void InitializeMap()
         {
             try
             {
-                // Solicitar permiss„o de localizaÁ„o
-                var status = await Permissions.CheckStatusAsync<Permissions.LocationWhenInUse>();
-                if (status != PermissionStatus.Granted)
-                {
-                    status = await Permissions.RequestAsync<Permissions.LocationWhenInUse>();
-                }
+                LoadingIndicator.IsVisible = true;
+                LoadingIndicator.IsRunning = true;
 
-                if (status == PermissionStatus.Granted)
-                {
-                    // Criar mapa com Esri OpenStreetMap Basemap
-                    var map = new Esri.ArcGISRuntime.Mapping.Map(BasemapStyle.ArcGISStreets);
+                // Configurar o mapa
+                MyMapView.Map = new Esri.ArcGISRuntime.Mapping.Map(BasemapStyle.ArcGISStreets);
 
-                    // Atribuir o mapa ao MapView
-                    MyMapView.Map = map;
+                // Criar overlays
+                _routeOverlay = new GraphicsOverlay();
+                _stopsOverlay = new GraphicsOverlay();
+                _driverOverlay = new GraphicsOverlay();
 
-                    // Inicializar a camada de gr·ficos para o indicador de localizaÁ„o
-                    InitializeUserLocationOverlay();
+                MyMapView.GraphicsOverlays.Add(_routeOverlay);
+                MyMapView.GraphicsOverlays.Add(_stopsOverlay);
+                MyMapView.GraphicsOverlays.Add(_driverOverlay);
 
-                    // Obter localizaÁ„o inicial e iniciar monitoramento
-                    await GetInitialLocationAndStartTrackingAsync();
-                }
-                else
-                {
-                    await DisplayAlert("Permiss„o Negada", "… necess·ria permiss„o de localizaÁ„o para usar o mapa", "OK");
-                }
+                // Inicializar localiza√ß√£o do motorista
+                await InitializeDriverLocation();
+
+                // Criar a rota
+                CreateRoute();
+
+                // Adicionar marcadores dos passageiros
+                AddPassengerMarkers();
+
+                // Centralizar o mapa
+                CenterMapOnRoute();
+
+                // Atualizar labels
+                DestinationLabel.Text = _localDestino;
+                PassengersLabel.Text = $"{_passageiros.Count} passageiros na rota";
+
+                // Iniciar rastreamento de localiza√ß√£o
+                await StartLocationTracking();
             }
             catch (Exception ex)
             {
                 await DisplayAlert("Erro", $"Erro ao inicializar o mapa: {ex.Message}", "OK");
             }
+            finally
+            {
+                LoadingIndicator.IsVisible = false;
+                LoadingIndicator.IsRunning = false;
+            }
         }
 
-        private void InitializeUserLocationOverlay()
-        {
-            // Criar overlay para exibir a localizaÁ„o do usu·rio
-            _userLocationOverlay = new GraphicsOverlay();
-            MyMapView.GraphicsOverlays.Add(_userLocationOverlay);
-        }
-
-        private async Task GetInitialLocationAndStartTrackingAsync()
+        private async Task InitializeDriverLocation()
         {
             try
             {
-                // Obter localizaÁ„o inicial
-                var location = await GetUserLocationAsync();
+                MapPoint driverLocation;
+
+                // PRIORIDADE 1: Tentar obter localiza√ß√£o atual do GPS
+                var location = await Geolocation.GetLocationAsync(new GeolocationRequest
+                {
+                    DesiredAccuracy = GeolocationAccuracy.Best,
+                    Timeout = TimeSpan.FromSeconds(10)
+                });
 
                 if (location != null)
                 {
-                    var userMapPoint = new MapPoint(
-                        location.Longitude,
-                        location.Latitude,
-                        SpatialReferences.Wgs84);
+                    driverLocation = new MapPoint(location.Longitude, location.Latitude, SpatialReferences.Wgs84);
 
-                    // Navegar para a localizaÁ„o inicial
-                    await MyMapView.SetViewpointCenterAsync(userMapPoint, 50000);
+                    // Atualizar no banco de dados
+                    await _databaseService.UpdateDriverLocationAsync(_driver.Id, location.Latitude, location.Longitude);
 
-                    // Adicionar indicador na localizaÁ„o
-                    UpdateUserLocationIndicator(userMapPoint);
+                    // Atualizar o objeto driver local tamb√©m
+                    _driver.Latitude = location.Latitude;
+                    _driver.Longitude = location.Longitude;
+                }
+                // PRIORIDADE 2: Usar localiza√ß√£o salva no banco
+                else if (_driver.Latitude != 0 && _driver.Longitude != 0)
+                {
+                    driverLocation = new MapPoint(_driver.Longitude, _driver.Latitude, SpatialReferences.Wgs84);
+                }
+                // PRIORIDADE 3: Calcular ponto m√©dio entre os passageiros
+                else if (_passageiros.Any(p => p.Latitude != 0 && p.Longitude != 0))
+                {
+                    var passengersWithLocation = _passageiros.Where(p => p.Latitude != 0 && p.Longitude != 0).ToList();
+                    double avgLat = passengersWithLocation.Average(p => p.Latitude);
+                    double avgLong = passengersWithLocation.Average(p => p.Longitude);
 
-                    // Iniciar rastreamento contÌnuo
-                    await StartLocationTrackingAsync();
+                    driverLocation = new MapPoint(avgLong, avgLat, SpatialReferences.Wgs84);
+
+                    await DisplayAlert("Aviso",
+                        "GPS n√£o dispon√≠vel. Usando localiza√ß√£o estimada baseada nos passageiros.",
+                        "OK");
+                }
+                // √öLTIMO RECURSO: Localiza√ß√£o padr√£o (Brasil)
+                else
+                {
+                    driverLocation = new MapPoint(-47.8821, -21.2162, SpatialReferences.Wgs84);
+
+                    await DisplayAlert("Aviso",
+                        "GPS n√£o dispon√≠vel e sem dados de localiza√ß√£o. Usando localiza√ß√£o padr√£o.",
+                        "OK");
+                }
+
+                // Criar s√≠mbolo do motorista (c√≠rculo azul)
+                var driverSymbol = new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Circle, System.Drawing.Color.Blue, 15);
+                driverSymbol.Outline = new SimpleLineSymbol(SimpleLineSymbolStyle.Solid, System.Drawing.Color.White, 2);
+
+                _driverGraphic = new Graphic(driverLocation, driverSymbol);
+                _driverOverlay.Graphics.Add(_driverGraphic);
+            }
+            catch (Exception ex)
+            {
+                await DisplayAlert("Erro", $"Erro ao inicializar localiza√ß√£o: {ex.Message}", "OK");
+
+                // Em caso de erro, usar localiza√ß√£o padr√£o
+                var defaultLocation = new MapPoint(-47.8821, -21.2162, SpatialReferences.Wgs84);
+                var driverSymbol = new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Circle, System.Drawing.Color.Blue, 15);
+                driverSymbol.Outline = new SimpleLineSymbol(SimpleLineSymbolStyle.Solid, System.Drawing.Color.White, 2);
+                _driverGraphic = new Graphic(defaultLocation, driverSymbol);
+                _driverOverlay.Graphics.Add(_driverGraphic);
+            }
+        }
+
+        private async void CreateRoute()
+        {
+            try
+            {
+                // Limpa rotas anteriores
+                _routeOverlay.Graphics.Clear();
+
+                // Lista de pontos de rota
+                _routePoints = new List<MapPoint>();
+
+                // Ponto inicial: motorista
+                var driverPoint = _driverGraphic.Geometry as MapPoint;
+                _routePoints.Add(driverPoint);
+
+                // Ponto final: destino
+                var destinationPoint = GetDestinationCoordinates(_localDestino);
+                if (destinationPoint == null)
+                {
+                    await DisplayAlert("Erro", "Destino inv√°lido.", "OK");
+                    return;
+                }
+
+                // Adiciona passageiros com localiza√ß√£o v√°lida como paradas intermedi√°rias
+                foreach (var passenger in _passageiros.Where(p => p.Latitude != 0 && p.Longitude != 0))
+                {
+                    _routePoints.Add(new MapPoint(passenger.Longitude, passenger.Latitude, SpatialReferences.Wgs84));
+                }
+
+                _routePoints.Add(destinationPoint);
+
+                // Servi√ßo de rota do ArcGIS Online (voc√™ pode trocar pelo seu endpoint privado se tiver)
+                var routeTask = await RouteTask.CreateAsync(
+                    new Uri("https://route.arcgis.com/arcgis/rest/services/World/Route/NAServer/Route_World")
+                );
+
+                // Obter par√¢metros padr√£o de rota
+                var routeParams = await routeTask.CreateDefaultParametersAsync();
+
+                // Adicionar paradas (waypoints)
+                var stops = new List<Stop>();
+                foreach (var point in _routePoints)
+                    stops.Add(new Stop(point));
+
+                routeParams.SetStops(stops);
+
+                // Configura√ß√µes opcionais
+                routeParams.ReturnDirections = true;
+                routeParams.ReturnRoutes = true;
+                routeParams.OutputSpatialReference = SpatialReferences.Wgs84;
+
+                // Calcular rota
+                var routeResult = await routeTask.SolveRouteAsync(routeParams);
+
+                if (routeResult?.Routes?.Any() == true)
+                {
+                    var route = routeResult.Routes.First();
+
+                    // Desenhar rota com base nas ruas
+                    var routeSymbol = new SimpleLineSymbol(SimpleLineSymbolStyle.Solid, System.Drawing.Color.Red, 4);
+                    var routeGraphic = new Graphic(route.RouteGeometry, routeSymbol);
+                    _routeOverlay.Graphics.Add(routeGraphic);
+
+                    _routeLine = route.RouteGeometry as Polyline;
+
+                    // Centralizar o mapa na rota
+                    await MyMapView.SetViewpointGeometryAsync(route.RouteGeometry, 100);
                 }
                 else
                 {
-                    await DisplayAlert("Erro", "N„o foi possÌvel obter a localizaÁ„o", "OK");
+                    await DisplayAlert("Erro", "N√£o foi poss√≠vel gerar uma rota com base nas ruas.", "OK");
                 }
             }
             catch (Exception ex)
             {
-                await DisplayAlert("Erro", $"Erro ao obter localizaÁ„o inicial: {ex.Message}", "OK");
+                await DisplayAlert("Erro", $"Falha ao criar rota: {ex.Message}", "OK");
             }
         }
 
-        private async Task StartLocationTrackingAsync()
-        {
-            _locationUpdateCts = new CancellationTokenSource();
 
+        private void AddPassengerMarkers()
+        {
             try
             {
-                while (!_locationUpdateCts.Token.IsCancellationRequested)
-                {
-                    var location = await GetUserLocationAsync();
+                var passengerSymbol = new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Circle, System.Drawing.Color.Green, 10);
+                passengerSymbol.Outline = new SimpleLineSymbol(SimpleLineSymbolStyle.Solid, System.Drawing.Color.White, 1);
 
-                    if (location != null)
+                int passengersWithLocation = 0;
+                int passengersWithoutLocation = 0;
+
+                foreach (var passenger in _passageiros)
+                {
+                    if (passenger.Latitude != 0 && passenger.Longitude != 0)
                     {
-                        var userMapPoint = new MapPoint(
-                            location.Longitude,
-                            location.Latitude,
-                            SpatialReferences.Wgs84);
+                        var passengerPoint = new MapPoint(passenger.Longitude, passenger.Latitude, SpatialReferences.Wgs84);
 
-                        // Atualizar indicador de localizaÁ„o
-                        MainThread.BeginInvokeOnMainThread(() =>
+                        // Marcador do passageiro
+                        var passengerGraphic = new Graphic(passengerPoint, passengerSymbol);
+                        passengerGraphic.Attributes["Name"] = passenger.Name;
+                        passengerGraphic.Attributes["Id"] = passenger.Id;
+                        _stopsOverlay.Graphics.Add(passengerGraphic);
+
+                        // Label acima do marcador
+                        var labelSymbol = new TextSymbol(passenger.Name, System.Drawing.Color.Black, 12,
+                                                         Esri.ArcGISRuntime.Symbology.HorizontalAlignment.Center,
+                                                         Esri.ArcGISRuntime.Symbology.VerticalAlignment.Bottom)
                         {
-                            UpdateUserLocationIndicator(userMapPoint);
-                        });
-                    }
+                            OffsetY = -15, // desloca o texto acima do marcador
+                            HaloColor = System.Drawing.Color.White,
+                            HaloWidth = 2
+                        };
 
-                    await Task.Delay(LocationUpdateIntervalMs, _locationUpdateCts.Token);
+                        var labelGraphic = new Graphic(passengerPoint, labelSymbol);
+                        _stopsOverlay.Graphics.Add(labelGraphic);
+
+                        passengersWithLocation++;
+                    }
+                    else
+                    {
+                        passengersWithoutLocation++;
+                        System.Diagnostics.Debug.WriteLine($"‚ö†Ô∏è Passageiro sem localiza√ß√£o: {passenger.Name} (ID: {passenger.Id})");
+                    }
                 }
-            }
-            catch (OperationCanceledException)
-            {
-                // Rastreamento foi cancelado
-                Debug.WriteLine("Rastreamento de localizaÁ„o foi interrompido");
+
+                // Mostrar aviso se houver passageiros sem localiza√ß√£o
+                if (passengersWithoutLocation > 0)
+                {
+                    Device.BeginInvokeOnMainThread(async () =>
+                    {
+                        await DisplayAlert("Aviso",
+                            $"{passengersWithoutLocation} passageiro(s) n√£o possui(em) localiza√ß√£o cadastrada e n√£o aparecer√°(√£o) no mapa.\n\n" +
+                            $"Passageiros no mapa: {passengersWithLocation}",
+                            "OK");
+                    });
+                }
+
+                // Marcador do destino
+                var destinationPoint = GetDestinationCoordinates(_localDestino);
+                if (destinationPoint != null)
+                {
+                    var destinationSymbol = new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Square, System.Drawing.Color.Red, 12);
+                    var destinationGraphic = new Graphic(destinationPoint, destinationSymbol);
+                    destinationGraphic.Attributes["Name"] = _localDestino;
+                    _stopsOverlay.Graphics.Add(destinationGraphic);
+
+                    // Label do destino
+                    var destinationLabel = new TextSymbol(_localDestino, System.Drawing.Color.DarkRed, 13,
+                                                          Esri.ArcGISRuntime.Symbology.HorizontalAlignment.Center,
+                                                          Esri.ArcGISRuntime.Symbology.VerticalAlignment.Bottom)
+                    {
+                        OffsetY = -18,
+                        HaloColor = System.Drawing.Color.White,
+                        HaloWidth = 2
+                    };
+
+                    _stopsOverlay.Graphics.Add(new Graphic(destinationPoint, destinationLabel));
+                }
+
+                // Atualizar label com informa√ß√£o correta
+                PassengersLabel.Text = $"{passengersWithLocation} passageiros na rota";
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"Erro durante rastreamento: {ex.Message}");
+                System.Diagnostics.Debug.WriteLine($"Erro ao adicionar marcadores: {ex.Message}");
             }
         }
 
-        private void UpdateUserLocationIndicator(MapPoint userLocation)
-        {
-            // Limpar gr·ficos anteriores
-            _userLocationOverlay.Graphics.Clear();
 
-            // Criar sÌmbolo para o cÌrculo externo (pulso/halo)
-            var haloSymbol = new SimpleMarkerSymbol(
-                SimpleMarkerSymbolStyle.Circle,
-                System.Drawing.Color.FromArgb(100, 0, 122, 255), // Azul com transparÍncia
-                12);
-
-            // Criar gr·fico para o halo
-            var haloGraphic = new Graphic(userLocation, haloSymbol);
-            _userLocationOverlay.Graphics.Add(haloGraphic);
-
-            // Criar sÌmbolo para o ponto central (azul sÛlido)
-            var centerMarkerSymbol = new SimpleMarkerSymbol(
-                SimpleMarkerSymbolStyle.Circle,
-                System.Drawing.Color.FromArgb(255, 0, 122, 255), // Azul vibrante
-                8);
-
-            // Criar gr·fico para o ponto central
-            var centerGraphic = new Graphic(userLocation, centerMarkerSymbol);
-            _userLocationOverlay.Graphics.Add(centerGraphic);
-
-            // Criar sÌmbolo para a borda branca do ponto central
-            var borderMarkerSymbol = new SimpleMarkerSymbol(
-                SimpleMarkerSymbolStyle.Circle,
-                System.Drawing.Color.FromArgb(0, 0, 0, 0), // Transparente
-                8);
-            borderMarkerSymbol.Outline = new SimpleLineSymbol(
-                SimpleLineSymbolStyle.Solid,
-                System.Drawing.Color.White,
-                2);
-
-            // Criar gr·fico para a borda
-            var borderGraphic = new Graphic(userLocation, borderMarkerSymbol);
-            _userLocationOverlay.Graphics.Add(borderGraphic);
-        }
-
-        private async Task<Location> GetUserLocationAsync()
+        [Obsolete]
+        private async Task StartLocationTracking()
         {
             try
             {
-                var request = new GeolocationRequest(
-                    GeolocationAccuracy.Best,
-                    TimeSpan.FromSeconds(10));
+                _isTrackingLocation = true;
 
-                var location = await Geolocation.GetLocationAsync(request);
-
-                if (location == null)
+                Device.StartTimer(TimeSpan.FromSeconds(1), () =>
                 {
-                    location = await Geolocation.GetLastKnownLocationAsync();
-                }
-
-                return location;
+                    if (_isTrackingLocation)
+                    {
+                        UpdateDriverLocation();
+                        return true;
+                    }
+                    return false;
+                });
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"Erro ao obter localizaÁ„o: {ex.Message}");
-                return null;
+                await DisplayAlert("Erro", $"Erro ao iniciar rastreamento: {ex.Message}", "OK");
+            }
+        }
+
+        private async void UpdateDriverLocation()
+        {
+            try
+            {
+                var location = await Geolocation.GetLocationAsync(new GeolocationRequest
+                {
+                    DesiredAccuracy = GeolocationAccuracy.Best,
+                    Timeout = TimeSpan.FromSeconds(5)
+                });
+
+                if (location != null)
+                {
+                    var newDriverLocation = new MapPoint(location.Longitude, location.Latitude, SpatialReferences.Wgs84);
+                    _driverGraphic.Geometry = newDriverLocation;
+
+                    await _databaseService.UpdateDriverLocationAsync(_driver.Id, location.Latitude, location.Longitude);
+
+                    UpdateRouteProgress(newDriverLocation);
+                    await MyMapView.SetViewpointCenterAsync(newDriverLocation, 5000);
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Erro ao atualizar localiza√ß√£o: {ex.Message}");
+            }
+        }
+
+        private void UpdateRouteProgress(MapPoint currentLocation)
+        {
+            try
+            {
+                double minDistance = double.MaxValue;
+                int closestIndex = 0;
+
+                for (int i = _currentRouteIndex; i < _routePoints.Count; i++)
+                {
+                    double distance = GeometryEngine.Distance(currentLocation, _routePoints[i]);
+                    if (distance < minDistance)
+                    {
+                        minDistance = distance;
+                        closestIndex = i;
+                    }
+                }
+
+                if (closestIndex > _currentRouteIndex)
+                {
+                    _currentRouteIndex = closestIndex;
+
+                    var remainingPoints = _routePoints.Skip(_currentRouteIndex).ToList();
+                    remainingPoints.Insert(0, currentLocation);
+
+                    var polylineBuilder = new PolylineBuilder(SpatialReferences.Wgs84);
+                    polylineBuilder.AddPoints(remainingPoints);
+                    _routeLine = polylineBuilder.ToGeometry();
+
+                    _routeOverlay.Graphics.Clear();
+                    var routeSymbol = new SimpleLineSymbol(SimpleLineSymbolStyle.Solid, System.Drawing.Color.Red, 4);
+                    var routeGraphic = new Graphic(_routeLine, routeSymbol);
+                    _routeOverlay.Graphics.Add(routeGraphic);
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Erro ao atualizar progresso: {ex.Message}");
+            }
+        }
+
+        private void CenterMapOnRoute()
+        {
+            try
+            {
+                if (_routeLine != null)
+                {
+                    var envelope = _routeLine.Extent;
+                    MyMapView.SetViewpoint(new Viewpoint(envelope));
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Erro ao centralizar mapa: {ex.Message}");
+            }
+        }
+
+        private MapPoint GetDestinationCoordinates(string localDestino)
+        {
+            // AJUSTE ESTAS COORDENADAS PARA AS REAIS!
+            switch (localDestino)
+            {
+                case "ETEC Joaquim Ferreira do Amaral":
+                    return new MapPoint(-48.5629, -22.2935, SpatialReferences.Wgs84);
+                case "UNESP":
+                    return new MapPoint(-49.0331, -22.3532, SpatialReferences.Wgs84);
+                case "Unisagrado":
+                    return new MapPoint(-49.05334, -22.3274, SpatialReferences.Wgs84);
+                case "UNOESTE":
+                    return new MapPoint(-48.6050, -22.3045, SpatialReferences.Wgs84);
+                default:
+                    return new MapPoint(-48.5548, -22.0050, SpatialReferences.Wgs84);
+            }
+        }
+
+        private async void OnFinishTripClicked(object sender, EventArgs e)
+        {
+            bool confirm = await DisplayAlert(
+                "Finalizar Viagem",
+                "Deseja finalizar a viagem?",
+                "Sim",
+                "N√£o"
+            );
+
+            if (confirm)
+            {
+                _isTrackingLocation = false;
+
+                await DisplayAlert(
+                    "Viagem Finalizada!",
+                    $"Passageiros na rota: {_passageiros.Count}",
+                    "OK"
+                );
+
+                await Navigation.PopToRootAsync();
             }
         }
 
         protected override void OnDisappearing()
         {
             base.OnDisappearing();
-            // Parar o rastreamento quando sair da p·gina
-            _locationUpdateCts?.Cancel();
+            _isTrackingLocation = false;
         }
     }
 }

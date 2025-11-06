@@ -1,20 +1,27 @@
 using CommunityToolkit.Maui.Extensions;
 using Microsoft.Maui.Controls;
+using TCC.Models;
+using TCC.Services;
 
 namespace TCC.Views
 {
     public partial class ChoosePageDriver : ContentPage
     {
-        public ChoosePageDriver()
+        private readonly DatabaseService _databaseService = new();
+        private readonly int _driverId;
+        private Driver _currentDriver;
+
+        public ChoosePageDriver(int driverId)
         {
             InitializeComponent();
+            _driverId = driverId;
         }
 
         private async void IniciarViagemButton_Clicked(object sender, EventArgs e)
         {
             try
             {
-                await Navigation.PushAsync(new ConfigurarViagemPage());
+                await Navigation.PushAsync(new ConfigurarViagemPage(_driverId));
             }
             catch (Exception ex)
             {

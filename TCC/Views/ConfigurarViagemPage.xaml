@@ -14,13 +14,10 @@
                     StrokeThickness="0"
                     StrokeShape="RoundRectangle,0,0,15,15">
 
-                <!-- Ondas decorativas no header -->
                 <Grid>
                     <Path Fill="#e04141"
                           Opacity="0.3"
-                          Data="M0,20 
-                                C100,0 200,40 400,20 
-                                L400,0 L0,0 Z"
+                          Data="M0,20 C100,0 200,40 400,20 L400,0 L0,0 Z"
                           HorizontalOptions="FillAndExpand"
                           VerticalOptions="Start"
                           Aspect="Fill" />
@@ -32,10 +29,7 @@
                                FontAttributes="Bold"
                                TextColor="White">
                             <Label.Shadow>
-                                <Shadow Brush="Black" 
-                                        Offset="2,2" 
-                                        Radius="5" 
-                                        Opacity="0.3"/>
+                                <Shadow Brush="Black" Offset="2,2" Radius="5" Opacity="0.3"/>
                             </Label.Shadow>
                         </Label>
                         <Label Text="Defina os detalhes da sua viagem" 
@@ -59,7 +53,7 @@
                            TextColor="#333" 
                            HorizontalOptions="Center" />
 
-                    <!-- Turmas -->
+                    <!-- Turmas/Escolas -->
                     <VerticalStackLayout Spacing="8">
                         <HorizontalStackLayout Spacing="8">
                             <Frame BackgroundColor="#FF5722" 
@@ -68,7 +62,7 @@
                                    HasShadow="False">
                                 <Label Text="🎒" FontSize="12" TextColor="White" />
                             </Frame>
-                            <Label Text="Turma" 
+                            <Label Text="Escola/Turma" 
                                    FontSize="14" 
                                    FontAttributes="Bold" 
                                    TextColor="#333" 
@@ -78,16 +72,27 @@
                                 StrokeThickness="1" 
                                 StrokeShape="RoundRectangle 8,8,8,8" 
                                 BackgroundColor="White">
-                                <Picker x:Name="TurmaPicker" 
+                            <Picker x:Name="TurmaPicker" 
                                     FontSize="14"
-                                    HeightRequest="45">
+                                    HeightRequest="45"
+                                    SelectedIndexChanged="OnTurmaPickerChanged">
                                 <Picker.Items>
-                                    <x:String>Turma da ETEC</x:String>
-                                    <x:String>Turma da UNESP</x:String>
-                                    <x:String>Turma da Unisagrado</x:String>
+                                    <x:String>ETEC</x:String>
+                                    <x:String>UNESP</x:String>
+                                    <x:String>Unisagrado</x:String>
+                                    <x:String>UNOESTE</x:String>
                                 </Picker.Items>
                             </Picker>
                         </Border>
+
+                        <!-- Contador de passageiros -->
+                        <HorizontalStackLayout Spacing="5" Margin="0,5,0,0">
+                            <Label Text="👥" FontSize="12" />
+                            <Label x:Name="PassengersCountLabel" 
+                                   Text="Selecione uma turma para ver os passageiros" 
+                                   FontSize="12" 
+                                   TextColor="#666" />
+                        </HorizontalStackLayout>
                     </VerticalStackLayout>
 
                     <!-- Local de Destino -->
@@ -122,8 +127,6 @@
                         </Border>
                     </VerticalStackLayout>
 
-                    
-
                 </VerticalStackLayout>
             </Frame>
 
@@ -139,18 +142,14 @@
                         CornerRadius="25"
                         HeightRequest="55"
                         FontSize="16"
-                        SemanticProperties.Hint="Iniciar a viagem configurada"
                         Clicked="OnIniciarViagemClicked">
                     <Button.Shadow>
-                        <Shadow Brush="Black" 
-                                Offset="0,4" 
-                                Radius="8" 
-                                Opacity="0.2"/>
+                        <Shadow Brush="Black" Offset="0,4" Radius="8" Opacity="0.2"/>
                     </Button.Shadow>
                 </Button>
 
                 <!-- Botão Voltar -->
-                <Button x:Name="VoltarButto"                      
+                <Button x:Name="VoltarButton"                      
                         Text="← Voltar ao Menu"
                         BackgroundColor="Transparent"
                         BorderColor="#e86464"
@@ -160,13 +159,9 @@
                         CornerRadius="25"
                         HeightRequest="50"
                         FontSize="14"
-                        SemanticProperties.Hint="Voltar ao menu do motorista"
                         Clicked="OnVoltarClicked">
                     <Button.Shadow>
-                        <Shadow Brush="Black" 
-                                Offset="0,4" 
-                                Radius="8" 
-                                Opacity="0.2"/>
+                        <Shadow Brush="Black" Offset="0,4" Radius="8" Opacity="0.2"/>
                     </Button.Shadow>
                 </Button>
 

@@ -3,9 +3,74 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:esri="clr-namespace:Esri.ArcGISRuntime.Maui;assembly=Esri.ArcGISRuntime.Maui"
              x:Class="TCC.Views.ViagemPage"
-             Title="Viagem">
+             Title="Viagem em Andamento"
+             BackgroundColor="#F5F5F5">
 
     <Grid>
-        <esri:MapView x:Name="MyMapView" />
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- Mapa -->
+        <esri:MapView x:Name="MyMapView" Grid.Row="0"/>
+
+        <!-- Painel Inferior -->
+        <Frame Grid.Row="1" 
+               Padding="20,15"
+               BackgroundColor="White"
+               HasShadow="True"
+               Margin="0">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <!-- Informações -->
+                <VerticalStackLayout Grid.Column="0" Spacing="5">
+                    <Label Text="Destino" 
+                           FontSize="12" 
+                           TextColor="#666"/>
+                    <Label x:Name="DestinationLabel" 
+                           Text="..." 
+                           FontSize="16" 
+                           FontAttributes="Bold"
+                           TextColor="#333"/>
+                    <Label x:Name="PassengersLabel" 
+                           Text="Carregando..." 
+                           FontSize="12" 
+                           TextColor="#FF5722"/>
+                </VerticalStackLayout>
+
+                <!-- Botão Finalizar -->
+                <Button Grid.Column="1"
+                        x:Name="FinishTripButton"
+                        Text="Finalizar"
+                        BackgroundColor="#e86464"
+                        TextColor="White"
+                        FontAttributes="Bold"
+                        CornerRadius="20"
+                        WidthRequest="120"
+                        HeightRequest="50"
+                        VerticalOptions="Center"
+                        Clicked="OnFinishTripClicked">
+                    <Button.Shadow>
+                        <Shadow Brush="Black" Offset="0,4" Radius="8" Opacity="0.2"/>
+                    </Button.Shadow>
+                </Button>
+            </Grid>
+        </Frame>
+
+        <!-- Loading Indicator -->
+        <ActivityIndicator x:Name="LoadingIndicator"
+                          Grid.RowSpan="2"
+                          IsRunning="False"
+                          IsVisible="False"
+                          Color="#e86464"
+                          WidthRequest="50"
+                          HeightRequest="50"
+                          HorizontalOptions="Center"
+                          VerticalOptions="Center"/>
     </Grid>
 </ContentPage>

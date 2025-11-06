@@ -38,11 +38,11 @@ public partial class LoginPage : ContentPage
                     await SecureStorage.SetAsync("user_type", "passenger");
                     await SecureStorage.SetAsync("user_id", passenger.Id.ToString());
 
-                    var userId = await SecureStorage.GetAsync("user_id");
+                    var passengerId = await SecureStorage.GetAsync("user_id");
 
                     await DisplayAlert("Sucesso", "Login realizado com sucesso!", "OK");
 
-                    await Navigation.PushAsync(new ChoosePagePassenger(int.Parse(userId)));
+                    await Navigation.PushAsync(new ChoosePagePassenger(int.Parse(passengerId)));
                     return;
                 }
             }
@@ -55,9 +55,11 @@ public partial class LoginPage : ContentPage
                     await SecureStorage.SetAsync("user_type", "driver");
                     await SecureStorage.SetAsync("user_id", driver.Id.ToString());
 
+                    var driverId = await SecureStorage.GetAsync("user_id"); 
+
                     await DisplayAlert("Sucesso", "Login realizado com sucesso!", "OK");
 
-                    await Navigation.PushAsync(new ChoosePageDriver());
+                    await Navigation.PushAsync(new ChoosePageDriver(int.Parse(driverId)));
                     return;
                 }
             }
