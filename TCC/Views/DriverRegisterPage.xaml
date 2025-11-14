@@ -73,26 +73,26 @@
                 <!-- CPF com validação -->
                 <VerticalStackLayout Spacing="5">
                     <Label Text="CPF" 
-           FontSize="14" 
-           TextColor="#333" />
-                    <Entry x:Name="CPFEntry" 
-           Placeholder="000.000.000-00" 
-           FontSize="16" 
-           BackgroundColor="White" 
-           TextColor="#333" 
-           Keyboard="Numeric"
-           HeightRequest="45">
-                        <Entry.Behaviors>
-                            <toolkit:MaskedBehavior Mask="XXX.XXX.XXX-XX" />
-                            <behaviors:CPFValidationBehavior x:Name="CPFValidation" ErrorLabel="{x:Reference CPFErrorLabel}" />
-                        </Entry.Behaviors>
-                    </Entry>
-                    <!-- Label de erro para CPF -->
-                    <Label x:Name="CPFErrorLabel" 
-           FontSize="12" 
-           TextColor="Red" 
-           IsVisible="False" 
-           Margin="0,2,0,0" />
+                           FontSize="14" 
+                           TextColor="#333" />
+                                    <Entry x:Name="CPFEntry" 
+                           Placeholder="000.000.000-00" 
+                           FontSize="16" 
+                           BackgroundColor="White" 
+                           TextColor="#333" 
+                           Keyboard="Numeric"
+                           HeightRequest="45">
+                                        <Entry.Behaviors>
+                                            <toolkit:MaskedBehavior Mask="XXX.XXX.XXX-XX" />
+                                            <behaviors:CPFValidationBehavior x:Name="CPFValidation" ErrorLabel="{x:Reference CPFErrorLabel}" />
+                                        </Entry.Behaviors>
+                                    </Entry>
+                                    <!-- Label de erro para CPF -->
+                                <Label x:Name="CPFErrorLabel" 
+                           FontSize="12" 
+                           TextColor="Red" 
+                           IsVisible="False" 
+                           Margin="0,2,0,0" /> 
                 </VerticalStackLayout>
 
                 <!-- Email -->

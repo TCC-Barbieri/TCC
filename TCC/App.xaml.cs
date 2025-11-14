@@ -8,9 +8,9 @@ namespace TCC
         {
             InitializeComponent();
 
-            Application.Current.UserAppTheme = AppTheme.Light; // Força o tema do aplicativo como claro.
+            Current.UserAppTheme = AppTheme.Light; // Força o tema do aplicativo como claro.
 
-            Application.Current.MainPage = new NavigationPage(new Home());
+            Current.MainPage = new NavigationPage(new Home());
         }
 
         protected override Window CreateWindow(IActivationState? activationState)

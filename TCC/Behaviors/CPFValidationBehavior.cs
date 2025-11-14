@@ -1,6 +1,4 @@
-﻿using Microsoft.Maui.Controls;
-using System;
-using TCC.Helpers;
+﻿using TCC.Helpers;
 
 namespace TCC.Behaviors
 {

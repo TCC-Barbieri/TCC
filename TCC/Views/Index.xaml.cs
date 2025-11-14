@@ -1,6 +1,4 @@
 ﻿using TCC.Services;
-using TCC.Models;
-using Microsoft.Maui.Storage;
 
 namespace TCC.Views;
 

@@ -1,7 +1,4 @@
-﻿using Microsoft.Maui.Controls;
-using System;
-using System.Linq;
-using TCC.Services;
+﻿using TCC.Services;
 
 namespace TCC.Views
 {

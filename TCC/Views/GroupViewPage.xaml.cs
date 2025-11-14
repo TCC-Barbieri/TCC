@@ -1,5 +1,4 @@
 using System.Collections.ObjectModel;
-using TCC.Models;
 using TCC.Services;
 
 namespace TCC.Views;

@@ -1,6 +1,4 @@
-﻿using Microsoft.Maui.Devices.Sensors;
-using Microsoft.Maui.Storage;
-using TCC.Models;
+﻿using TCC.Models;
 using TCC.Services;
 
 namespace TCC.Views;

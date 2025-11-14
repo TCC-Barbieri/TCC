@@ -3,7 +3,6 @@ using CommunityToolkit.Maui;
 using TCC.Services;
 using TCC.Views;
 using Esri.ArcGISRuntime.Maui;
-using Esri.ArcGISRuntime.Security;
 using Esri.ArcGISRuntime;
 using Esri.ArcGISRuntime.Toolkit.Maui;
 
@@ -37,6 +36,8 @@ namespace TCC
 
             // Registrar páginas
             builder.Services.AddTransient<GroupViewPage>();
+
+            
 
 #if DEBUG
             builder.Logging.AddDebug();
