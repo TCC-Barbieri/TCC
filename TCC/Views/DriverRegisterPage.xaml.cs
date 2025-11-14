@@ -7,9 +7,16 @@ namespace TCC.Views;
 public partial class DriverRegisterPage : ContentPage
 {
     private readonly DatabaseService _databaseService = new();
+
+    public DateTime MaxDriverBirthDate => DateTime.Today.AddYears(-18);
+
     public DriverRegisterPage()
     {
         InitializeComponent();
+
+        // Define a data máxima do DatePicker (18 anos atrás)
+        BirthDatePicker.MaximumDate = MaxDriverBirthDate;
+        BirthDatePicker.Date = MaxDriverBirthDate;
     }
 
     private async void OnRegister_Clicked(object sender, EventArgs e)
@@ -35,11 +42,11 @@ public partial class DriverRegisterPage : ContentPage
             {
                 Name = NameEntry.Text?.Trim(),
                 CPF = CPFValidator.RemoveFormat(CPFEntry.Text?.Trim()),
-                RG = RGEntry.Text?.Trim(),
+                RG = RGValidator.RemoveFormat(RGEntry.Text?.Trim()),
                 Email = EmailEntry.Text?.Trim(),
                 PhoneNumber = PhoneEntry.Text?.Trim(),
                 EmergencyPhoneNumber = ContatoEmergenciaEntry.Text?.Trim(),
-                CNH = CNHEntry.Text?.Trim(),
+                CNH = CNHValidator.RemoveFormat(CNHEntry.Text?.Trim()),
                 Genre = GenderPicker.SelectedItem?.ToString(),
                 Address = AddressEntry.Text?.Trim(),
                 BirthDate = BirthDatePicker.Date,
@@ -73,6 +80,29 @@ public partial class DriverRegisterPage : ContentPage
             return false;
         }
 
+        // 2. Validar RG
+        if (string.IsNullOrWhiteSpace(RGEntry.Text))
+        {
+            await DisplayAlert("Atenção", "RG é obrigatório", "OK");
+            RGEntry.Focus();
+            return false;
+        }
+
+        string rgText = RGEntry.Text?.Trim();
+        if (!RGValidator.IsValid(rgText))
+        {
+            await DisplayAlert("Atenção", "RG inválido. Verifique os números digitados.", "OK");
+            RGEntry.Focus();
+
+            if (RGValidation != null)
+            {
+                RGValidation.ValidateRG();
+            }
+
+            return false;
+        }
+
+        // 3. Validar CPF
         if (string.IsNullOrWhiteSpace(CPFEntry.Text))
         {
             await DisplayAlert("Atenção", "CPF é obrigatório", "OK");
@@ -80,7 +110,6 @@ public partial class DriverRegisterPage : ContentPage
             return false;
         }
 
-        // 2. Validar CPF usando DIRETAMENTE o CPFValidator
         string cpfText = CPFEntry.Text?.Trim();
         System.Diagnostics.Debug.WriteLine($"Validating CPF directly: '{cpfText}'");
 
@@ -90,7 +119,6 @@ public partial class DriverRegisterPage : ContentPage
             await DisplayAlert("Atenção", "CPF inválido. Verifique os números digitados.", "OK");
             CPFEntry.Focus();
 
-            // Mostrar erro visual também
             if (CPFValidation != null)
             {
                 CPFValidation.ValidateCPF();
@@ -101,7 +129,7 @@ public partial class DriverRegisterPage : ContentPage
 
         System.Diagnostics.Debug.WriteLine("CPF validation PASSED");
 
-        // 3. Validar outros campos
+        // 4. Validar Email
         if (string.IsNullOrWhiteSpace(EmailEntry.Text))
         {
             await DisplayAlert("Atenção", "Email é obrigatório", "OK");
@@ -109,6 +137,45 @@ public partial class DriverRegisterPage : ContentPage
             return false;
         }
 
+        // 5. Validar idade (mínimo 18 anos)
+        var age = DateTime.Today.Year - BirthDatePicker.Date.Year;
+        if (BirthDatePicker.Date > DateTime.Today.AddYears(-age)) age--;
+
+        if (age < 18)
+        {
+            BirthDateErrorLabel.Text = "Motorista deve ter no mínimo 18 anos";
+            BirthDateErrorLabel.IsVisible = true;
+            await DisplayAlert("Atenção", "Motorista deve ter no mínimo 18 anos para se cadastrar", "OK");
+            return false;
+        }
+        else
+        {
+            BirthDateErrorLabel.IsVisible = false;
+        }
+
+        // 6. Validar CNH
+        if (string.IsNullOrWhiteSpace(CNHEntry.Text))
+        {
+            await DisplayAlert("Atenção", "CNH é obrigatória", "OK");
+            CNHEntry.Focus();
+            return false;
+        }
+
+        string cnhText = CNHEntry.Text?.Trim();
+        if (!CNHValidator.IsValid(cnhText))
+        {
+            await DisplayAlert("Atenção", "CNH inválida. Verifique os números digitados.", "OK");
+            CNHEntry.Focus();
+
+            if (CNHValidation != null)
+            {
+                CNHValidation.ValidateCNH();
+            }
+
+            return false;
+        }
+
+        // 7. Validar Senha
         if (string.IsNullOrWhiteSpace(PasswordEntry.Text))
         {
             await DisplayAlert("Atenção", "Senha é obrigatória", "OK");
@@ -134,18 +201,8 @@ public partial class DriverRegisterPage : ContentPage
         return true;
     }
 
-    // Método para testar CPF manualmente
-    private async void TestCPF_Clicked(object sender, EventArgs e)
-    {
-        string cpf = CPFEntry.Text;
-        bool isValid = CPFValidator.IsValid(cpf);
-        await DisplayAlert("Teste CPF", $"CPF: {cpf}\nVálido: {isValid}", "OK");
-    }
-
-
     private void OnAlreadyHaveAccount_Clicked(object sender, EventArgs e)
     {
         Navigation.PushAsync(new Views.LoginPage());
     }
- 
 }

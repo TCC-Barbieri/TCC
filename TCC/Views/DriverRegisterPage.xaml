@@ -52,7 +52,7 @@
                            HeightRequest="45" />
                 </VerticalStackLayout>
 
-                <!-- RG -->
+                <!-- RG com validação -->
                 <VerticalStackLayout Spacing="5">
                     <Label Text="RG" 
                            FontSize="14" 
@@ -66,8 +66,15 @@
                            HeightRequest="45">
                         <Entry.Behaviors>
                             <toolkit:MaskedBehavior Mask="XX.XXX.XXX-X" />
+                            <behaviors:RGValidationBehavior x:Name="RGValidation" ErrorLabel="{x:Reference RGErrorLabel}" />
                         </Entry.Behaviors>
                     </Entry>
+                    <!-- Label de erro para RG -->
+                    <Label x:Name="RGErrorLabel" 
+                           FontSize="12" 
+                           TextColor="Red" 
+                           IsVisible="False" 
+                           Margin="0,2,0,0" />
                 </VerticalStackLayout>
 
                 <!-- CPF com validação -->
@@ -75,24 +82,24 @@
                     <Label Text="CPF" 
                            FontSize="14" 
                            TextColor="#333" />
-                                    <Entry x:Name="CPFEntry" 
+                    <Entry x:Name="CPFEntry" 
                            Placeholder="000.000.000-00" 
                            FontSize="16" 
                            BackgroundColor="White" 
                            TextColor="#333" 
                            Keyboard="Numeric"
                            HeightRequest="45">
-                                        <Entry.Behaviors>
-                                            <toolkit:MaskedBehavior Mask="XXX.XXX.XXX-XX" />
-                                            <behaviors:CPFValidationBehavior x:Name="CPFValidation" ErrorLabel="{x:Reference CPFErrorLabel}" />
-                                        </Entry.Behaviors>
-                                    </Entry>
-                                    <!-- Label de erro para CPF -->
-                                <Label x:Name="CPFErrorLabel" 
+                        <Entry.Behaviors>
+                            <toolkit:MaskedBehavior Mask="XXX.XXX.XXX-XX" />
+                            <behaviors:CPFValidationBehavior x:Name="CPFValidation" ErrorLabel="{x:Reference CPFErrorLabel}" />
+                        </Entry.Behaviors>
+                    </Entry>
+                    <!-- Label de erro para CPF -->
+                    <Label x:Name="CPFErrorLabel" 
                            FontSize="12" 
                            TextColor="Red" 
                            IsVisible="False" 
-                           Margin="0,2,0,0" /> 
+                           Margin="0,2,0,0" />
                 </VerticalStackLayout>
 
                 <!-- Email -->
@@ -118,7 +125,13 @@
                                 BackgroundColor="White" 
                                 TextColor="#333" 
                                 FontSize="16"
-                                HeightRequest="45" />
+                                HeightRequest="45" 
+                                MaximumDate="{Binding MaxDriverBirthDate}" />
+                    <Label x:Name="BirthDateErrorLabel" 
+                           FontSize="12" 
+                           TextColor="Red" 
+                           IsVisible="False" 
+                           Margin="0,2,0,0" />
                 </VerticalStackLayout>
 
                 <!-- Telefone -->
@@ -157,18 +170,29 @@
                     </Entry>
                 </VerticalStackLayout>
 
-                <!-- CNH -->
+                <!-- CNH com validação -->
                 <VerticalStackLayout Spacing="5">
                     <Label Text="CNH" 
                            FontSize="14" 
                            TextColor="#333" />
                     <Entry x:Name="CNHEntry"
-                           Placeholder="Número da CNH" 
+                           Placeholder="Número da CNH (11 dígitos)" 
                            FontSize="16" 
                            BackgroundColor="White" 
                            TextColor="#333" 
                            Keyboard="Numeric"
-                           HeightRequest="45" />
+                           MaxLength="11"
+                           HeightRequest="45">
+                        <Entry.Behaviors>
+                            <behaviors:CNHValidationBehavior x:Name="CNHValidation" ErrorLabel="{x:Reference CNHErrorLabel}" />
+                        </Entry.Behaviors>
+                    </Entry>
+                    <!-- Label de erro para CNH -->
+                    <Label x:Name="CNHErrorLabel" 
+                           FontSize="12" 
+                           TextColor="Red" 
+                           IsVisible="False" 
+                           Margin="0,2,0,0" />
                 </VerticalStackLayout>
 
                 <!-- Gênero -->

@@ -1,5 +1,6 @@
 using TCC.Models;
 using TCC.Services;
+using TCC.Helpers;
 
 namespace TCC.Views;
 
@@ -7,9 +8,15 @@ public partial class PassengerRegisterPage : ContentPage
 {
     private readonly DatabaseService _databaseService = new();
 
+    public DateTime MaxPassengerBirthDate => DateTime.Today.AddYears(-14);
+
     public PassengerRegisterPage()
     {
         InitializeComponent();
+
+        // Define a data máxima do DatePicker (14 anos atrás)
+        BirthDatePicker.MaximumDate = MaxPassengerBirthDate;
+        BirthDatePicker.Date = MaxPassengerBirthDate;
     }
 
     // Mostrar detalhes se "Sim" for selecionado
@@ -52,6 +59,50 @@ public partial class PassengerRegisterPage : ContentPage
                 return;
             }
 
+            // Validar RG
+            if (!RGValidator.IsValid(RGEntry.Text?.Trim()))
+            {
+                await DisplayAlert("Atenção", "RG inválido. Verifique os números digitados.", "OK");
+                RGEntry.Focus();
+
+                if (RGValidation != null)
+                {
+                    RGValidation.ValidateRG();
+                }
+
+                return;
+            }
+
+            // Validar CPF
+            if (!CPFValidator.IsValid(CPFEntry.Text?.Trim()))
+            {
+                await DisplayAlert("Atenção", "CPF inválido. Verifique os números digitados.", "OK");
+                CPFEntry.Focus();
+
+                if (CPFValidation != null)
+                {
+                    CPFValidation.ValidateCPF();
+                }
+
+                return;
+            }
+
+            // Validar idade (mínimo 14 anos)
+            var age = DateTime.Today.Year - BirthDatePicker.Date.Year;
+            if (BirthDatePicker.Date > DateTime.Today.AddYears(-age)) age--;
+
+            if (age < 14)
+            {
+                BirthDateErrorLabel.Text = "Passageiro deve ter no mínimo 14 anos";
+                BirthDateErrorLabel.IsVisible = true;
+                await DisplayAlert("Atenção", "Passageiro deve ter no mínimo 14 anos para se cadastrar", "OK");
+                return;
+            }
+            else
+            {
+                BirthDateErrorLabel.IsVisible = false;
+            }
+
             // Verificação de senhas
             if (PasswordEntry.Text != ConfirmPasswordEntry.Text)
             {
@@ -73,8 +124,8 @@ public partial class PassengerRegisterPage : ContentPage
 
             // Validação de dados únicos (RG, CPF, Email, Telefone)
             var uniqueDataValidation = await _databaseService.ValidateUniqueUserData(
-                rg: RGEntry.Text.Trim(),
-                cpf: CPFEntry.Text.Trim(),
+                rg: RGValidator.RemoveFormat(RGEntry.Text.Trim()),
+                cpf: CPFValidator.RemoveFormat(CPFEntry.Text.Trim()),
                 email: EmailEntry.Text.Trim(),
                 phone: PhoneEntry.Text.Trim()
             );
@@ -95,8 +146,8 @@ public partial class PassengerRegisterPage : ContentPage
                 EmergencyPhoneNumber = EmergencyPhoneEntry.Text.Trim(),
                 Address = AddressEntry.Text.Trim(),
                 ReservableAddress = BackupAddressEntry.Text.Trim(),
-                RG = RGEntry.Text.Trim(),
-                CPF = CPFEntry.Text.Trim(),
+                RG = RGValidator.RemoveFormat(RGEntry.Text.Trim()),
+                CPF = CPFValidator.RemoveFormat(CPFEntry.Text.Trim()),
                 Genre = GenderPicker.SelectedItem?.ToString() ?? "Não especificado",
                 School = SchoolPicker.SelectedItem?.ToString() ?? "Não especificado",
                 ResponsableName = ResponsibleEntry.Text.Trim(),
@@ -185,7 +236,7 @@ public partial class PassengerRegisterPage : ContentPage
 
         GenderPicker.SelectedIndex = -1;
         SchoolPicker.SelectedIndex = -1;
-        BirthDatePicker.Date = DateTime.Today;
+        BirthDatePicker.Date = MaxPassengerBirthDate;
 
         AtendimentoNaoRadio.IsChecked = true;
         SpecialTreatmentDetailsLayout.IsVisible = false;

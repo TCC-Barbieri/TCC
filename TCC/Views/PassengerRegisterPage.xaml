@@ -46,9 +46,7 @@
                         Clicked="Button_Clicked"
                         CornerRadius="10"
                         HeightRequest="40">
-
                 </Button>
-
 
                 <!-- Registration Fields -->
                 <VerticalStackLayout Spacing="5">
@@ -56,21 +54,30 @@
                     <Entry x:Name="NameEntry" Placeholder="Nome completo" HeightRequest="45" />
                 </VerticalStackLayout>
 
+                <!-- RG com validação -->
                 <VerticalStackLayout Spacing="5">
                     <Label Text="RG" />
                     <Entry x:Name="RGEntry" Placeholder="00.000.000-0" HeightRequest="45" Keyboard="Numeric">
                         <Entry.Behaviors>
                             <toolkit:MaskedBehavior Mask="XX.XXX.XXX-X" />
+                            <behaviors:RGValidationBehavior x:Name="RGValidation" ErrorLabel="{x:Reference RGErrorLabel}" />
                         </Entry.Behaviors>
                     </Entry>
+                    <!-- Label de erro para RG -->
+                    <Label x:Name="RGErrorLabel" 
+                           FontSize="12" 
+                           TextColor="Red" 
+                           IsVisible="False" 
+                           Margin="0,2,0,0" />
                 </VerticalStackLayout>
 
+                <!-- CPF com validação -->
                 <VerticalStackLayout Spacing="5">
                     <Label Text="CPF" />
                     <Entry x:Name="CPFEntry" 
-           Placeholder="000.000.000-00" 
-           HeightRequest="45" 
-           Keyboard="Numeric">
+                           Placeholder="000.000.000-00" 
+                           HeightRequest="45" 
+                           Keyboard="Numeric">
                         <Entry.Behaviors>
                             <toolkit:MaskedBehavior Mask="XXX.XXX.XXX-XX" />
                             <behaviors:CPFValidationBehavior x:Name="CPFValidation" ErrorLabel="{x:Reference CPFErrorLabel}" />
@@ -78,10 +85,10 @@
                     </Entry>
                     <!-- Label de erro para CPF -->
                     <Label x:Name="CPFErrorLabel" 
-           FontSize="12" 
-           TextColor="Red" 
-           IsVisible="False" 
-           Margin="0,2,0,0" />
+                           FontSize="12" 
+                           TextColor="Red" 
+                           IsVisible="False" 
+                           Margin="0,2,0,0" />
                 </VerticalStackLayout>
 
                 <VerticalStackLayout Spacing="5">
@@ -92,8 +99,15 @@
                 <VerticalStackLayout Spacing="5">
                     <Label Text="Data de Nascimento" />
                     <Border Stroke="#DDDDDD" StrokeThickness="1" StrokeShape="RoundRectangle 5,5,5,5">
-                        <DatePicker x:Name="BirthDatePicker" Format="dd/MM/yyyy" />
+                        <DatePicker x:Name="BirthDatePicker" 
+                                    Format="dd/MM/yyyy" 
+                                    MaximumDate="{Binding MaxPassengerBirthDate}" />
                     </Border>
+                    <Label x:Name="BirthDateErrorLabel" 
+                           FontSize="12" 
+                           TextColor="Red" 
+                           IsVisible="False" 
+                           Margin="0,2,0,0" />
                 </VerticalStackLayout>
 
                 <VerticalStackLayout Spacing="5">
@@ -206,7 +220,6 @@
                         HeightRequest="50"
                         FontAttributes="Bold"
                         Clicked="OnRegisterClicked">
-                   
                 </Button>
 
                 <Button Text="Já tenho uma conta"
@@ -214,7 +227,6 @@
                         TextColor="Red"
                         FontSize="14"
                         Clicked="OnAlreadyHaveAccount_Clicked">
-
                 </Button>
 
             </VerticalStackLayout>
