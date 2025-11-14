@@ -21,13 +21,14 @@ namespace TCC.Views
         private readonly DatabaseService _databaseService;
 
         private GraphicsOverlay _routeOverlay;
+        private GraphicsOverlay _completedRouteOverlay; // NOVO: para rota já percorrida
         private GraphicsOverlay _stopsOverlay;
         private GraphicsOverlay _driverOverlay;
 
         private Graphic _driverGraphic;
-        private Polyline _routeLine;
-        private List<MapPoint> _routePoints;
-        private int _currentRouteIndex = 0;
+        private Graphic _activeRouteGraphic; // NOVO: gráfico da rota ativa
+        private Polyline _fullRouteLine; // NOVO: rota completa original
+        private List<MapPoint> _allRoutePoints; // NOVO: todos os pontos da rota detalhada
 
         private bool _isTrackingLocation = false;
 
@@ -54,10 +55,12 @@ namespace TCC.Views
                 MyMapView.Map = new Esri.ArcGISRuntime.Mapping.Map(BasemapStyle.ArcGISStreets);
 
                 // Criar overlays
-                _routeOverlay = new GraphicsOverlay();
+                _completedRouteOverlay = new GraphicsOverlay(); // NOVO: rota já percorrida (cinza)
+                _routeOverlay = new GraphicsOverlay(); // Rota restante (vermelha)
                 _stopsOverlay = new GraphicsOverlay();
                 _driverOverlay = new GraphicsOverlay();
 
+                MyMapView.GraphicsOverlays.Add(_completedRouteOverlay); // Adiciona primeiro (fica embaixo)
                 MyMapView.GraphicsOverlays.Add(_routeOverlay);
                 MyMapView.GraphicsOverlays.Add(_stopsOverlay);
                 MyMapView.GraphicsOverlays.Add(_driverOverlay);
@@ -66,7 +69,7 @@ namespace TCC.Views
                 await InitializeDriverLocation();
 
                 // Criar a rota
-                CreateRoute();
+                await CreateRoute();
 
                 // Adicionar marcadores dos passageiros
                 AddPassengerMarkers();
@@ -164,19 +167,20 @@ namespace TCC.Views
             }
         }
 
-        private async void CreateRoute()
+        private async Task CreateRoute()
         {
             try
             {
                 // Limpa rotas anteriores
                 _routeOverlay.Graphics.Clear();
+                _completedRouteOverlay.Graphics.Clear();
 
-                // Lista de pontos de rota
-                _routePoints = new List<MapPoint>();
+                // Lista de pontos de rota (waypoints)
+                var routeWaypoints = new List<MapPoint>();
 
                 // Ponto inicial: motorista
                 var driverPoint = _driverGraphic.Geometry as MapPoint;
-                _routePoints.Add(driverPoint);
+                routeWaypoints.Add(driverPoint);
 
                 // Ponto final: destino
                 var destinationPoint = GetDestinationCoordinates(_localDestino);
@@ -189,12 +193,12 @@ namespace TCC.Views
                 // Adiciona passageiros com localização válida como paradas intermediárias
                 foreach (var passenger in _passageiros.Where(p => p.Latitude != 0 && p.Longitude != 0))
                 {
-                    _routePoints.Add(new MapPoint(passenger.Longitude, passenger.Latitude, SpatialReferences.Wgs84));
+                    routeWaypoints.Add(new MapPoint(passenger.Longitude, passenger.Latitude, SpatialReferences.Wgs84));
                 }
 
-                _routePoints.Add(destinationPoint);
+                routeWaypoints.Add(destinationPoint);
 
-                // Serviço de rota do ArcGIS Online (você pode trocar pelo seu endpoint privado se tiver)
+                // Serviço de rota do ArcGIS Online
                 var routeTask = await RouteTask.CreateAsync(
                     new Uri("https://route.arcgis.com/arcgis/rest/services/World/Route/NAServer/Route_World")
                 );
@@ -204,7 +208,7 @@ namespace TCC.Views
 
                 // Adicionar paradas (waypoints)
                 var stops = new List<Stop>();
-                foreach (var point in _routePoints)
+                foreach (var point in routeWaypoints)
                     stops.Add(new Stop(point));
 
                 routeParams.SetStops(stops);
@@ -220,13 +224,22 @@ namespace TCC.Views
                 if (routeResult?.Routes?.Any() == true)
                 {
                     var route = routeResult.Routes.First();
+                    _fullRouteLine = route.RouteGeometry as Polyline;
 
-                    // Desenhar rota com base nas ruas
+                    // NOVO: Extrair todos os pontos da polilinha para controle detalhado
+                    _allRoutePoints = new List<MapPoint>();
+                    foreach (var part in _fullRouteLine.Parts)
+                    {
+                        foreach (var point in part.Points)
+                        {
+                            _allRoutePoints.Add(point);
+                        }
+                    }
+
+                    // Desenhar rota completa inicialmente (vermelha)
                     var routeSymbol = new SimpleLineSymbol(SimpleLineSymbolStyle.Solid, System.Drawing.Color.Red, 4);
-                    var routeGraphic = new Graphic(route.RouteGeometry, routeSymbol);
-                    _routeOverlay.Graphics.Add(routeGraphic);
-
-                    _routeLine = route.RouteGeometry as Polyline;
+                    _activeRouteGraphic = new Graphic(_fullRouteLine, routeSymbol);
+                    _routeOverlay.Graphics.Add(_activeRouteGraphic);
 
                     // Centralizar o mapa na rota
                     await MyMapView.SetViewpointGeometryAsync(route.RouteGeometry, 100);
@@ -241,7 +254,6 @@ namespace TCC.Views
                 await DisplayAlert("Erro", $"Falha ao criar rota: {ex.Message}", "OK");
             }
         }
-
 
         private void AddPassengerMarkers()
         {
@@ -270,7 +282,7 @@ namespace TCC.Views
                                                          Esri.ArcGISRuntime.Symbology.HorizontalAlignment.Center,
                                                          Esri.ArcGISRuntime.Symbology.VerticalAlignment.Bottom)
                         {
-                            OffsetY = -15, // desloca o texto acima do marcador
+                            OffsetY = -15,
                             HaloColor = System.Drawing.Color.White,
                             HaloWidth = 2
                         };
@@ -330,7 +342,6 @@ namespace TCC.Views
             }
         }
 
-
         [Obsolete]
         private async Task StartLocationTracking()
         {
@@ -338,7 +349,7 @@ namespace TCC.Views
             {
                 _isTrackingLocation = true;
 
-                Device.StartTimer(TimeSpan.FromSeconds(1), () =>
+                Device.StartTimer(TimeSpan.FromSeconds(2), () =>
                 {
                     if (_isTrackingLocation)
                     {
@@ -371,7 +382,9 @@ namespace TCC.Views
 
                     await _databaseService.UpdateDriverLocationAsync(_driver.Id, location.Latitude, location.Longitude);
 
+                    // NOVO: Atualizar rota progressivamente
                     UpdateRouteProgress(newDriverLocation);
+
                     await MyMapView.SetViewpointCenterAsync(newDriverLocation, 5000);
                 }
             }
@@ -381,16 +394,21 @@ namespace TCC.Views
             }
         }
 
+        // MÉTODO COMPLETAMENTE REESCRITO
         private void UpdateRouteProgress(MapPoint currentLocation)
         {
             try
             {
-                double minDistance = double.MaxValue;
-                int closestIndex = 0;
+                if (_allRoutePoints == null || _allRoutePoints.Count == 0)
+                    return;
 
-                for (int i = _currentRouteIndex; i < _routePoints.Count; i++)
+                // Encontrar o ponto mais próximo na rota
+                int closestIndex = 0;
+                double minDistance = double.MaxValue;
+
+                for (int i = 0; i < _allRoutePoints.Count; i++)
                 {
-                    double distance = GeometryEngine.Distance(currentLocation, _routePoints[i]);
+                    double distance = GeometryEngine.Distance(currentLocation, _allRoutePoints[i]);
                     if (distance < minDistance)
                     {
                         minDistance = distance;
@@ -398,21 +416,53 @@ namespace TCC.Views
                     }
                 }
 
-                if (closestIndex > _currentRouteIndex)
+                // Só atualiza se estiver suficientemente próximo da rota (menos de 50 metros)
+                if (minDistance > 50)
+                    return;
+
+                // Dividir a rota em: percorrida (cinza) e restante (vermelha)
+                var completedPoints = _allRoutePoints.Take(closestIndex + 1).ToList();
+                var remainingPoints = _allRoutePoints.Skip(closestIndex).ToList();
+
+                // Incluir a posição atual do motorista na rota restante
+                remainingPoints.Insert(0, currentLocation);
+
+                // Limpar overlays
+                _completedRouteOverlay.Graphics.Clear();
+                _routeOverlay.Graphics.Clear();
+
+                // Desenhar rota já percorrida (CINZA e mais fina)
+                if (completedPoints.Count > 1)
                 {
-                    _currentRouteIndex = closestIndex;
+                    var completedBuilder = new PolylineBuilder(SpatialReferences.Wgs84);
+                    completedBuilder.AddPoints(completedPoints);
+                    var completedLine = completedBuilder.ToGeometry();
 
-                    var remainingPoints = _routePoints.Skip(_currentRouteIndex).ToList();
-                    remainingPoints.Insert(0, currentLocation);
+                    var completedSymbol = new SimpleLineSymbol(
+                        SimpleLineSymbolStyle.Solid,
+                        System.Drawing.Color.FromArgb(180, 128, 128, 128), // Cinza semi-transparente
+                        3
+                    );
 
-                    var polylineBuilder = new PolylineBuilder(SpatialReferences.Wgs84);
-                    polylineBuilder.AddPoints(remainingPoints);
-                    _routeLine = polylineBuilder.ToGeometry();
+                    var completedGraphic = new Graphic(completedLine, completedSymbol);
+                    _completedRouteOverlay.Graphics.Add(completedGraphic);
+                }
 
-                    _routeOverlay.Graphics.Clear();
-                    var routeSymbol = new SimpleLineSymbol(SimpleLineSymbolStyle.Solid, System.Drawing.Color.Red, 4);
-                    var routeGraphic = new Graphic(_routeLine, routeSymbol);
-                    _routeOverlay.Graphics.Add(routeGraphic);
+                // Desenhar rota restante (VERMELHA)
+                if (remainingPoints.Count > 1)
+                {
+                    var remainingBuilder = new PolylineBuilder(SpatialReferences.Wgs84);
+                    remainingBuilder.AddPoints(remainingPoints);
+                    var remainingLine = remainingBuilder.ToGeometry();
+
+                    var remainingSymbol = new SimpleLineSymbol(
+                        SimpleLineSymbolStyle.Solid,
+                        System.Drawing.Color.Red,
+                        4
+                    );
+
+                    _activeRouteGraphic = new Graphic(remainingLine, remainingSymbol);
+                    _routeOverlay.Graphics.Add(_activeRouteGraphic);
                 }
             }
             catch (Exception ex)
@@ -425,9 +475,9 @@ namespace TCC.Views
         {
             try
             {
-                if (_routeLine != null)
+                if (_fullRouteLine != null)
                 {
-                    var envelope = _routeLine.Extent;
+                    var envelope = _fullRouteLine.Extent;
                     MyMapView.SetViewpoint(new Viewpoint(envelope));
                 }
             }
@@ -439,7 +489,6 @@ namespace TCC.Views
 
         private MapPoint GetDestinationCoordinates(string localDestino)
         {
-            // AJUSTE ESTAS COORDENADAS PARA AS REAIS!
             switch (localDestino)
             {
                 case "ETEC Joaquim Ferreira do Amaral":
@@ -474,7 +523,7 @@ namespace TCC.Views
                     "OK"
                 );
 
-                await Navigation.PopToRootAsync();
+                await Navigation.PopAsync();
             }
         }
 

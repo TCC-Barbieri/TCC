@@ -117,7 +117,7 @@ public partial class PassengerRegisterPage : ContentPage
             // Limpa os campos após registro bem-sucedido
             ClearFields();
 
-            await Navigation.PushAsync(new Views.LoginPage());
+            await Navigation.PushAsync(new LoginPage());
         }
         catch (Exception ex)
         {

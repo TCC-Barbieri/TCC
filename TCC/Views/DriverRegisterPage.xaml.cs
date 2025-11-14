@@ -53,7 +53,7 @@ public partial class DriverRegisterPage : ContentPage
             await _databaseService.CreateDriver(driver);
 
             await DisplayAlert("Sucesso", "Conta criada com sucesso!", "OK");
-            await Navigation.PopAsync();
+            await Navigation.PushAsync(new LoginPage());
         }
         catch (Exception ex)
         {
