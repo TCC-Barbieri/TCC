@@ -344,7 +344,7 @@ namespace TCC.Views
             {
                 _isTrackingLocation = true;
 
-                Device.StartTimer(TimeSpan.FromSeconds(2), () =>
+                Device.StartTimer(TimeSpan.FromSeconds(1), () =>
                 {
                     if (_isTrackingLocation)
                     {
@@ -367,7 +367,7 @@ namespace TCC.Views
                 var location = await Geolocation.GetLocationAsync(new GeolocationRequest
                 {
                     DesiredAccuracy = GeolocationAccuracy.Best,
-                    Timeout = TimeSpan.FromSeconds(5)
+                    Timeout = TimeSpan.FromSeconds(1)
                 });
 
                 if (location != null)
