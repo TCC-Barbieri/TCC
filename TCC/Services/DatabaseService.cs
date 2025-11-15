@@ -1,5 +1,6 @@
 ﻿using SQLite;
 using TCC.Models;
+using Microsoft.Maui.Storage; // <- Necessário para Preferences
 
 namespace TCC.Services
 {
@@ -162,9 +163,8 @@ namespace TCC.Services
 
         #endregion
 
-        /// <summary>
-        /// Valida se os dados do usuário são únicos no sistema
-        /// </summary>
+        #region Unique data validation
+
         public async Task<(bool IsValid, string Message)> ValidateUniqueUserData(
             string rg = null,
             string cpf = null,
@@ -181,7 +181,6 @@ namespace TCC.Services
                 var drivers = await GetDrivers();
                 var passengers = await GetPassengers();
 
-                // Remove o usuário atual se estiver editando
                 if (excludeUserId.HasValue && !string.IsNullOrEmpty(userType))
                 {
                     if (userType == "driver")
@@ -190,23 +189,18 @@ namespace TCC.Services
                         passengers = passengers.Where(p => p.Id != excludeUserId.Value).ToList();
                 }
 
-                // Valida RG
                 if (!string.IsNullOrEmpty(rg) && (drivers.Any(d => d.RG == rg) || passengers.Any(p => p.RG == rg)))
                     return (false, "Este RG já está cadastrado no sistema.");
 
-                // Valida CPF
                 if (!string.IsNullOrEmpty(cpf) && (drivers.Any(d => d.CPF == cpf) || passengers.Any(p => p.CPF == cpf)))
                     return (false, "Este CPF já está cadastrado no sistema.");
 
-                // Valida Email
                 if (!string.IsNullOrEmpty(email) && (drivers.Any(d => d.Email == email) || passengers.Any(p => p.Email == email)))
                     return (false, "Este e-mail já está cadastrado no sistema.");
 
-                // Valida Telefone
                 if (!string.IsNullOrEmpty(phone) && (drivers.Any(d => d.PhoneNumber == phone) || passengers.Any(p => p.PhoneNumber == phone)))
                     return (false, "Este número de telefone já está cadastrado no sistema.");
 
-                // Valida CNH (apenas para motoristas)
                 if (!string.IsNullOrEmpty(cnh) && drivers.Any(d => d.CNH == cnh))
                     return (false, "Esta CNH já está cadastrada no sistema.");
 
@@ -218,19 +212,9 @@ namespace TCC.Services
             }
         }
 
-        /// <summary>
-        /// Verifica se um email já está em uso
-        /// </summary>
-        public async Task<bool> IsEmailTaken(string email, int? excludeUserId = null, string userType = null)
-        {
-            var result = await ValidateUniqueUserData(
-                email: email,
-                excludeUserId: excludeUserId,
-                userType: userType);
-            return !result.IsValid;
-        }
+        #endregion
 
-        #region Methods to update location in real time
+        #region Real time location update
 
         public async Task UpdatePassengerLocationAsync(int passengerId, double latitude, double longitude)
         {
@@ -265,6 +249,78 @@ namespace TCC.Services
         }
 
         #endregion
+
+
+        // =====================================================================
+        // 🔵 ADIÇÃO DOS MÉTODOS NOVOS
+        // =====================================================================
+
+        #region Logged user methods
+
+        public async Task<object?> GetLoggedUser()
+        {
+            await InitializeAsync();
+
+            var email = Preferences.Get("LoggedUserEmail", null as string);
+            var userType = Preferences.Get("LoggedUserType", null as string);
+
+            if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(userType))
+                return null;
+
+            if (userType.Equals("Driver", StringComparison.OrdinalIgnoreCase))
+                return await GetDriverByEmail(email);
+
+            if (userType.Equals("Passenger", StringComparison.OrdinalIgnoreCase))
+                return await GetPassengerByEmail(email);
+
+            return null;
+        }
+
+        #endregion
+
+        #region Group list methods
+
+        public class GroupDto
+        {
+            public string Name { get; set; } = string.Empty;
+            public string School { get; set; } = string.Empty;
+            public int Count { get; set; }
+        }
+
+        public async Task<List<GroupDto>> GetGroupsAsync()
+        {
+            await InitializeAsync();
+
+            var passengers = await GetPassengers();
+
+            var groups = passengers
+                .Where(p => !string.IsNullOrWhiteSpace(p.School))
+                .GroupBy(p => p.School.Trim())
+                .Select(g => new GroupDto
+                {
+                    Name = g.Key,
+                    School = g.Key,
+                    Count = g.Count()
+                })
+                .OrderByDescending(g => g.Count)
+                .ToList();
+
+            var withoutSchoolCount = passengers.Count(p => string.IsNullOrWhiteSpace(p.School));
+            if (withoutSchoolCount > 0)
+            {
+                groups.Add(new GroupDto
+                {
+                    Name = "Sem Escola",
+                    School = "Sem Escola",
+                    Count = withoutSchoolCount
+                });
+            }
+
+            return groups;
+        }
+
+        #endregion
+
 
         /// <summary>
         /// Fecha a conexão com o banco de dados

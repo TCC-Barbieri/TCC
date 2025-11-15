@@ -89,8 +89,7 @@ public static class PhoneValidationHelper
     /// <returns>Mensagem de erro</returns>
     public static string GetValidationErrorMessage()
     {
-        return "Número de telefone inválido. Por favor, insira um número brasileiro válido:\n\n" +
-               "• Fixo: (XX) XXXX-XXXX (10 dígitos)\n" +
+        return "Número de telefone inválido. Por favor, insira um número de telefone brasileiro válido:\n\n" +
                "• Celular: (XX) 9XXXX-XXXX (11 dígitos)";
     }
 

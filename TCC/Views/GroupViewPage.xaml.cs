@@ -1,114 +1,116 @@
-using System.Collections.ObjectModel;
+﻿using TCC.Models;
 using TCC.Services;
 
-namespace TCC.Views;
-
-public partial class GroupViewPage : ContentPage
+namespace TCC.Views
 {
-    private readonly DatabaseService _databaseService;
-
-    public ObservableCollection<UserDisplayModel> EtecUsers { get; set; } = new();
-    public ObservableCollection<UserDisplayModel> FatecUsers { get; set; } = new();
-    public ObservableCollection<UserDisplayModel> UnespUsers { get; set; } = new();
-    public ObservableCollection<UserDisplayModel> Drivers { get; set; } = new();
-
-    public GroupViewPage()
+    public partial class GroupViewPage : ContentPage
     {
-        InitializeComponent();
-        _databaseService = new DatabaseService();
-        BindingContext = this;
-    }
+        private readonly DatabaseService _databaseService;
+        private Driver _loggedDriver;
 
-    protected override async void OnAppearing()
-    {
-        base.OnAppearing();
-        await LoadUserGroups();
-    }
+        public List<Passenger> EtecUsers { get; set; } = new();
+        public List<Passenger> FatecUsers { get; set; } = new();
+        public List<Passenger> UnespUsers { get; set; } = new();
+        public List<Driver> Drivers { get; set; } = new();
 
-    private async Task LoadUserGroups()
-    {
-        try
+        public GroupViewPage()
         {
-            // Limpar as listas
-            EtecUsers.Clear();
-            FatecUsers.Clear();
-            UnespUsers.Clear();
-            Drivers.Clear();
+            InitializeComponent();
+            _databaseService = new DatabaseService();
+            BindingContext = this;
+        }
 
-            // Carregar passageiros
-            var passengers = await _databaseService.GetPassengers();
-            foreach (var passenger in passengers)
+        protected override async void OnAppearing()
+        {
+            base.OnAppearing();
+            await LoadLoggedDriverAsync();
+            await LoadGroupsAsync();
+        }
+
+        private async Task LoadLoggedDriverAsync()
+        {
+            try
             {
-                var userModel = new UserDisplayModel
-                {
-                    Id = passenger.Id,
-                    Name = passenger.Name,
-                    Email = passenger.Email,
-                    School = passenger.School,
-                    UserType = "Passageiro",
-                    TelephoneNumber = string.Empty
-                };
+                string userType = await SecureStorage.GetAsync("user_type");
+                string userIdString = await SecureStorage.GetAsync("user_id");
 
-                // Classificar por escola
-                var school = passenger.School?.ToUpper();
-                if (school != null)
+                if (userType == "driver" && int.TryParse(userIdString, out int driverId))
                 {
-                    if (school.Contains("ETEC"))
-                        EtecUsers.Add(userModel);
-                    else if (school.Contains("FATEC"))
-                        FatecUsers.Add(userModel);
-                    else 
-                        UnespUsers.Add(userModel);
+                    var drivers = await _databaseService.GetDrivers();
+                    _loggedDriver = drivers.FirstOrDefault(d => d.Id == driverId);
                 }
             }
-
-            // Carregar motoristas
-            var drivers = await _databaseService.GetDrivers();
-            foreach (var driver in drivers)
+            catch (Exception ex)
             {
-                var driverModel = new UserDisplayModel
-                {
-                    Id = driver.Id,
-                    Name = driver.Name,
-                    Email = driver.Email,
-                    School = "N/A",
-                    UserType = "Motorista",
-                    TelephoneNumber = $"Telephone Number: {driver.PhoneNumber}"
-                };
-
-                Drivers.Add(driverModel);
+                await DisplayAlert("Erro", $"Erro ao carregar motorista logado: {ex.Message}", "OK");
             }
-
-            // Atualizar contadores
-            UpdateCountLabels();
         }
-        catch (Exception ex)
+
+        private async Task LoadGroupsAsync()
         {
-            await DisplayAlert("Erro", $"Erro ao carregar grupos: {ex.Message}", "OK");
+            try
+            {
+                var loggedUser = await _databaseService.GetLoggedUser();
+                bool isPassenger = loggedUser is Passenger;
+                string loggedSchool = isPassenger ? ((Passenger)loggedUser).School.Trim().ToUpper() : "";
+
+                var allPassengers = await _databaseService.GetPassengers();
+                var allDrivers = await _databaseService.GetDrivers();
+
+                if (isPassenger)
+                {
+                    allPassengers = allPassengers
+                        .Where(p => p.School.Trim().ToUpper() == loggedSchool)
+                        .ToList();
+                }
+
+                EtecUsers = allPassengers.Where(p => p.School.ToUpper() == "ETEC").ToList();
+                FatecUsers = allPassengers.Where(p => p.School.ToUpper() == "FATEC").ToList();
+                UnespUsers = allPassengers.Where(p => p.School.ToUpper() == "UNESP").ToList();
+
+                Drivers = isPassenger ? new List<Driver>() : allDrivers;
+
+                EtecCountLabel.Text = $"{EtecUsers.Count} usuários";
+                FatecCountLabel.Text = $"{FatecUsers.Count} usuários";
+                UnespCountLabel.Text = $"{UnespUsers.Count} usuários";
+                DriversCountLabel.Text = $"{Drivers.Count} motoristas";
+
+                EtecCollectionView.ItemsSource = EtecUsers;
+                FatecCollectionView.ItemsSource = FatecUsers;
+                UnespCollectionView.ItemsSource = UnespUsers;
+                DriversCollectionView.ItemsSource = Drivers;
+            }
+            catch (Exception ex)
+            {
+                await DisplayAlert("Erro", ex.Message, "OK");
+            }
+        }
+
+        private async void BackButton_Clicked(object sender, EventArgs e)
+        {
+            await Navigation.PopAsync();
+        }
+
+        private async void OnUserSelected(object sender, SelectionChangedEventArgs e)
+        {
+            var selected = e.CurrentSelection.FirstOrDefault();
+            if (selected == null)
+                return;
+
+            // Limpa a seleção imediatamente
+            ((CollectionView)sender).SelectedItem = null;
+
+            // Se não for motorista logado, não faz nada
+            if (_loggedDriver == null)
+                return;
+
+            // Apenas passageiros podem ser visualizados
+            if (selected is Passenger passenger)
+            {
+                await Navigation.PushAsync(
+                    new UserProfilePage(_loggedDriver, passenger)
+                );
+            }
         }
     }
-
-    private void UpdateCountLabels()
-    {
-        EtecCountLabel.Text = $"{EtecUsers.Count} usu�rio{(EtecUsers.Count != 1 ? "s" : "")}";
-        FatecCountLabel.Text = $"{FatecUsers.Count} usu�rio{(FatecUsers.Count != 1 ? "s" : "")}";
-        UnespCountLabel.Text = $"{UnespUsers.Count} usu�rio{(UnespUsers.Count != 1 ? "s" : "")}";
-        DriversCountLabel.Text = $"{Drivers.Count} motorista{(Drivers.Count != 1 ? "s" : "")}";
-    }
-
-    private void BackButton_Clicked(object sender, EventArgs e)
-    {
-        Navigation.PopAsync();
-    }
 }
-
-public class UserDisplayModel
-{
-    public int Id { get; set; }
-    public string Name { get; set; }
-    public string Email { get; set; }
-    public string School { get; set; }
-    public string UserType { get; set; }
-    public string TelephoneNumber { get; set; }
-}
-

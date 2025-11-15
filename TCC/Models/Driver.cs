@@ -17,10 +17,10 @@ namespace TCC.Models
         [NotNull, MaxLength(300), Unique]
         public string Email { get; set; }
 
-        [NotNull, MaxLength(20), Unique]
+        [NotNull, MaxLength(20)]
         public string PhoneNumber { get; set; }
 
-        [NotNull, MaxLength(20), Unique]
+        [NotNull, MaxLength(20)]
         public string EmergencyPhoneNumber { get; set; }
 
         [NotNull, MaxLength(200)]

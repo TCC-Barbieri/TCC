@@ -1,0 +1,298 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="TCC.Views.UserProfilePage"
+             BackgroundColor="#F5F6FA"
+             Shell.NavBarIsVisible="False">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="25">
+
+            <!-- Header -->
+            <Grid HeightRequest="100">
+                <Rectangle>
+                    <Rectangle.Fill>
+                        <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                            <GradientStop Color="#E53E3E" Offset="0.0" />
+                            <GradientStop Color="#C53030" Offset="0.5" />
+                            <GradientStop Color="#9B2C2C" Offset="1.0" />
+                        </LinearGradientBrush>
+                    </Rectangle.Fill>
+                </Rectangle>
+
+                <Label Text="Perfil do Passageiro"
+                       FontSize="24"
+                       FontAttributes="Bold"
+                       TextColor="White"
+                       HorizontalOptions="Center"
+                       VerticalOptions="Center"/>
+            </Grid>
+
+            <!-- Card Principal -->
+            <Frame BackgroundColor="White"
+                   CornerRadius="20"
+                   Margin="0,-20,0,0"
+                   Padding="0"
+                   HasShadow="True">
+                <Frame.Shadow>
+                    <Shadow Brush="Black" 
+                            Opacity="0.1" 
+                            Radius="20" 
+                            Offset="0,10" />
+                </Frame.Shadow>
+
+                <VerticalStackLayout Spacing="0">
+
+                    <!-- Seção: Informações Pessoais -->
+                    <VerticalStackLayout Padding="25,25,25,15" Spacing="15">
+                        <Label Text="👤 Informações Pessoais"
+                               FontSize="18"
+                               FontAttributes="Bold"
+                               TextColor="#2D3748"
+                               Margin="0,0,0,5"/>
+
+                        <!-- Nome -->
+                        <Frame BackgroundColor="#F7FAFC"
+                               CornerRadius="12"
+                               Padding="15"
+                               HasShadow="False">
+                            <VerticalStackLayout Spacing="5">
+                                <Label Text="Nome Completo" 
+                                       FontSize="12" 
+                                       TextColor="#718096" 
+                                       FontAttributes="Bold"/>
+                                <Label x:Name="NameLabel" 
+                                       FontSize="16" 
+                                       TextColor="#2D3748"
+                                       FontAttributes="Bold"/>
+                            </VerticalStackLayout>
+                        </Frame>
+
+                        <!-- Email -->
+                        <Frame BackgroundColor="#F7FAFC"
+                               CornerRadius="12"
+                               Padding="15"
+                               HasShadow="False">
+                            <VerticalStackLayout Spacing="5">
+                                <Label Text="📧 Email" 
+                                       FontSize="12" 
+                                       TextColor="#718096" 
+                                       FontAttributes="Bold"/>
+                                <Label x:Name="EmailLabel" 
+                                       FontSize="16" 
+                                       TextColor="#2D3748"/>
+                            </VerticalStackLayout>
+                        </Frame>
+
+                        <!-- Grid: Telefone e RG -->
+                        <Grid ColumnSpacing="10">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <Frame Grid.Column="0"
+                                   BackgroundColor="#F7FAFC"
+                                   CornerRadius="12"
+                                   Padding="15"
+                                   HasShadow="False">
+                                <VerticalStackLayout Spacing="5">
+                                    <Label Text="📱 Telefone" 
+                                           FontSize="12" 
+                                           TextColor="#718096" 
+                                           FontAttributes="Bold"/>
+                                    <Label x:Name="PhoneLabel" 
+                                           FontSize="14" 
+                                           TextColor="#2D3748"/>
+                                </VerticalStackLayout>
+                            </Frame>
+
+                            <Frame Grid.Column="1"
+                                   BackgroundColor="#F7FAFC"
+                                   CornerRadius="12"
+                                   Padding="15"
+                                   HasShadow="False">
+                                <VerticalStackLayout Spacing="5">
+                                    <Label Text="📋 RG" 
+                                           FontSize="12" 
+                                           TextColor="#718096" 
+                                           FontAttributes="Bold"/>
+                                    <Label x:Name="RgLabel" 
+                                           FontSize="14" 
+                                           TextColor="#2D3748"/>
+                                </VerticalStackLayout>
+                            </Frame>
+                        </Grid>
+
+                        <!-- CPF -->
+                        <Frame BackgroundColor="#F7FAFC"
+                               CornerRadius="12"
+                               Padding="15"
+                               HasShadow="False">
+                            <VerticalStackLayout Spacing="5">
+                                <Label Text="🆔 CPF" 
+                                       FontSize="12" 
+                                       TextColor="#718096" 
+                                       FontAttributes="Bold"/>
+                                <Label x:Name="CpfLabel" 
+                                       FontSize="16" 
+                                       TextColor="#2D3748"
+                                       FontAttributes="Bold"/>
+                            </VerticalStackLayout>
+                        </Frame>
+
+                        <!-- Endereço -->
+                        <Frame BackgroundColor="#F7FAFC"
+                               CornerRadius="12"
+                               Padding="15"
+                               HasShadow="False">
+                            <VerticalStackLayout Spacing="5">
+                                <Label Text="📍 Endereço" 
+                                       FontSize="12" 
+                                       TextColor="#718096" 
+                                       FontAttributes="Bold"/>
+                                <Label x:Name="AddressLabel" 
+                                       FontSize="16" 
+                                       TextColor="#2D3748"/>
+                            </VerticalStackLayout>
+                        </Frame>
+                    </VerticalStackLayout>
+
+                    <!-- Linha separadora -->
+                    <BoxView HeightRequest="1" 
+                             BackgroundColor="#E2E8F0" 
+                             Margin="25,10"/>
+
+                    <!-- Seção: Informações Acadêmicas -->
+                    <VerticalStackLayout Padding="25,15,25,15" Spacing="15">
+                        <Label Text="📚 Informações Acadêmicas"
+                               FontSize="18"
+                               FontAttributes="Bold"
+                               TextColor="#2D3748"
+                               Margin="0,0,0,5"/>
+
+                        <!-- Grid: Escola e Responsável -->
+                        <Grid ColumnSpacing="10">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <Frame Grid.Column="0"
+                                   BackgroundColor="#EDF2F7"
+                                   CornerRadius="12"
+                                   Padding="15"
+                                   HasShadow="False">
+                                <VerticalStackLayout Spacing="5">
+                                    <Label Text="🏫 Escola" 
+                                           FontSize="12" 
+                                           TextColor="#718096" 
+                                           FontAttributes="Bold"/>
+                                    <Label x:Name="SchoolLabel" 
+                                           FontSize="14" 
+                                           TextColor="#2D3748"
+                                           FontAttributes="Bold"/>
+                                </VerticalStackLayout>
+                            </Frame>
+
+                            <Frame Grid.Column="1"
+                                   BackgroundColor="#EDF2F7"
+                                   CornerRadius="12"
+                                   Padding="15"
+                                   HasShadow="False">
+                                <VerticalStackLayout Spacing="5">
+                                    <Label Text="👨‍👩‍👧‍👦 Responsável" 
+                                           FontSize="12" 
+                                           TextColor="#718096" 
+                                           FontAttributes="Bold"/>
+                                    <Label x:Name="ResponsableLabel" 
+                                           FontSize="14" 
+                                           TextColor="#2D3748"/>
+                                </VerticalStackLayout>
+                            </Frame>
+                        </Grid>
+                    </VerticalStackLayout>
+
+                    <!-- Linha separadora -->
+                    <BoxView HeightRequest="1" 
+                             BackgroundColor="#E2E8F0" 
+                             Margin="25,10"/>
+
+                    <!-- Seção: Atendimento Especial -->
+                    <VerticalStackLayout Padding="25,15,25,25" Spacing="15">
+                        <Label Text="♿ Atendimento Especial"
+                               FontSize="18"
+                               FontAttributes="Bold"
+                               TextColor="#2D3748"
+                               Margin="0,0,0,5"/>
+
+                        <Frame BackgroundColor="#F0FFF4"
+                               BorderColor="#9AE6B4"
+                               CornerRadius="12"
+                               Padding="15"
+                               HasShadow="False">
+                            <VerticalStackLayout Spacing="5">
+                                <Label Text="Necessita Atendimento Especial?" 
+                                       FontSize="12" 
+                                       TextColor="#38A169" 
+                                       FontAttributes="Bold"/>
+                                <Label x:Name="SpecialTreatmentLabel" 
+                                       FontSize="16" 
+                                       TextColor="#2D3748"
+                                       FontAttributes="Bold"/>
+                            </VerticalStackLayout>
+                        </Frame>
+
+                        <Frame BackgroundColor="#F0FFF4"
+                               BorderColor="#9AE6B4"
+                               CornerRadius="12"
+                               Padding="15"
+                               HasShadow="False">
+                            <VerticalStackLayout Spacing="5">
+                                <Label Text="Observações" 
+                                       FontSize="12" 
+                                       TextColor="#38A169" 
+                                       FontAttributes="Bold"/>
+                                <Label x:Name="ObservationLabel" 
+                                       FontSize="14" 
+                                       TextColor="#2D3748"
+                                       LineBreakMode="WordWrap"/>
+                            </VerticalStackLayout>
+                        </Frame>
+                    </VerticalStackLayout>
+
+                    <!-- Botões de Ação -->
+                    <Grid Padding="25,0,25,25" 
+                          ColumnSpacing="15"
+                          ColumnDefinitions="*,Auto">
+
+                        <Button Grid.Column="0"
+                                Text="VOLTAR"
+                                BackgroundColor="#E2E8F0"
+                                TextColor="#4A5568"
+                                FontSize="14"
+                                FontAttributes="Bold"
+                                CornerRadius="12"
+                                HeightRequest="50"
+                                Clicked="OnBackClicked"/>
+
+                        <Button Grid.Column="1"
+                                x:Name="DeleteButton"
+                                Text="🗑️ EXCLUIR"
+                                BackgroundColor="#E53E3E"
+                                TextColor="White"
+                                FontSize="14"
+                                FontAttributes="Bold"
+                                CornerRadius="12"
+                                HeightRequest="50"
+                                Padding="25,0"
+                                IsVisible="False"
+                                Clicked="OnDeleteClicked"/>
+                    </Grid>
+
+                </VerticalStackLayout>
+            </Frame>
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

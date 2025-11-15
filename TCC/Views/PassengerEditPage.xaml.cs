@@ -1,5 +1,6 @@
 using TCC.Models;
 using TCC.Services;
+using TCC.Helpers;
 
 namespace TCC.Views;
 
@@ -13,6 +14,9 @@ public partial class PassengerEditPage : ContentPage
     {
         InitializeComponent();
         _passengerId = passengerId;
+
+        // Define a data máxima do DatePicker (14 anos atrás) — evita datas futuras e usuários menores que 14 anos.
+        BirthDatePicker.MaximumDate = DateTime.Today.AddYears(-14);
     }
 
     protected override async void OnAppearing()
@@ -32,23 +36,29 @@ public partial class PassengerEditPage : ContentPage
             {
                 // Preenche os campos básicos
                 NameEntry.Text = _currentPassenger.Name ?? string.Empty;
-                RGEntry.Text = _currentPassenger.RG ?? string.Empty;
+                RGEntry.Text = _currentPassenger.RG ?? string.Empty; // mantemos a string como veio do banco
                 CPFEntry.Text = _currentPassenger.CPF ?? string.Empty;
                 EmailEntry.Text = _currentPassenger.Email ?? string.Empty;
                 BirthDatePicker.Date = _currentPassenger.BirthDate;
-                PhoneEntry.Text = _currentPassenger.PhoneNumber ?? string.Empty;
-                EmergencyPhoneEntry.Text = _currentPassenger.EmergencyPhoneNumber ?? string.Empty;
+
+                // Formata os telefones para exibição (se existir)
+                PhoneEntry.Text = !string.IsNullOrWhiteSpace(_currentPassenger.PhoneNumber)
+                    ? PhoneValidationHelper.FormatPhone(_currentPassenger.PhoneNumber)
+                    : string.Empty;
+
+                EmergencyPhoneEntry.Text = !string.IsNullOrWhiteSpace(_currentPassenger.EmergencyPhoneNumber)
+                    ? PhoneValidationHelper.FormatPhone(_currentPassenger.EmergencyPhoneNumber)
+                    : string.Empty;
+
                 AddressEntry.Text = _currentPassenger.Address ?? string.Empty;
                 ResponsibleEntry.Text = _currentPassenger.ResponsableName ?? string.Empty;
                 BackupAddressEntry.Text = _currentPassenger.ReservableAddress ?? string.Empty;
 
-                // Seleciona o gênero no Picker
+                // Seleciona pickers
                 SetPickerSelection(GenderPicker, _currentPassenger.Genre);
-
-                // Seleciona a escola no Picker
                 SetPickerSelection(SchoolPicker, _currentPassenger.School);
 
-                // Configura o atendimento especial
+                // Atendimento especial
                 if (_currentPassenger.SpecialTreatment)
                 {
                     AtendimentoSimRadio.IsChecked = true;
@@ -59,6 +69,7 @@ public partial class PassengerEditPage : ContentPage
                 {
                     AtendimentoNaoRadio.IsChecked = true;
                     SpecialTreatmentDetailsLayout.IsVisible = false;
+                    SpecialTreatmentEditor.Text = string.Empty;
                 }
             }
             else
@@ -98,12 +109,56 @@ public partial class PassengerEditPage : ContentPage
     {
         try
         {
-            // Validação de campos obrigatórios
+            // Validação dos campos obrigatórios
             var fieldsValidation = ValidateFields();
 
             if (!fieldsValidation.IsValid)
             {
                 await DisplayAlert("Campos Obrigatórios", fieldsValidation.Message, "OK");
+                return;
+            }
+
+            // Validar RG
+            if (!RGValidatorHelper.IsValid(RGEntry.Text?.Trim()))
+            {
+                await DisplayAlert("Atenção", "RG inválido. Verifique os números digitados.", "OK");
+                RGEntry.Focus();
+                return;
+            }
+
+            // Validar CPF
+            if (!CPFValidator.IsValid(CPFEntry.Text?.Trim()))
+            {
+                await DisplayAlert("Atenção", "CPF inválido. Verifique os números digitados.", "OK");
+                CPFEntry.Focus();
+                return;
+            }
+
+            // Validar idade mínima (14 anos)
+            var age = DateTime.Today.Year - BirthDatePicker.Date.Year;
+            if (BirthDatePicker.Date > DateTime.Today.AddYears(-age)) age--;
+
+            if (age < 14)
+            {
+                await DisplayAlert("Atenção", "Passageiro deve ter no mínimo 14 anos.", "OK");
+                return;
+            }
+
+            // Validar Telefone
+            string phoneText = PhoneEntry.Text?.Trim();
+            if (!PhoneValidationHelper.IsValidPhone(phoneText))
+            {
+                await DisplayAlert("Atenção", PhoneValidationHelper.GetValidationErrorMessage(), "OK");
+                PhoneEntry.Focus();
+                return;
+            }
+
+            // Validar Telefone de Emergência
+            string emergencyPhoneText = EmergencyPhoneEntry.Text?.Trim();
+            if (!PhoneValidationHelper.IsValidPhone(emergencyPhoneText))
+            {
+                await DisplayAlert("Atenção", "Contato de emergência inválido. " + PhoneValidationHelper.GetValidationErrorMessage(), "OK");
+                EmergencyPhoneEntry.Focus();
                 return;
             }
 
@@ -116,10 +171,10 @@ public partial class PassengerEditPage : ContentPage
 
             // Verifica se algum dado foi alterado e se já está em uso por outro usuário
             var validationResult = await _databaseService.ValidateUniqueUserData(
-                rg: RGEntry.Text.Trim(),
-                cpf: CPFEntry.Text.Trim(),
+                rg: RGValidatorHelper.RemoveFormat(RGEntry.Text.Trim()),
+                cpf: CPFValidator.RemoveFormat(CPFEntry.Text.Trim()),
                 email: EmailEntry.Text.Trim(),
-                phone: PhoneEntry.Text.Trim(),
+                phone: PhoneValidationHelper.GetOnlyNumbers(PhoneEntry.Text.Trim()),
                 excludeUserId: _passengerId,
                 userType: "passenger"
             );
@@ -215,11 +270,11 @@ public partial class PassengerEditPage : ContentPage
     private void UpdatePassengerData()
     {
         _currentPassenger.Name = NameEntry.Text.Trim();
-        _currentPassenger.RG = RGEntry.Text.Trim();
-        _currentPassenger.CPF = CPFEntry.Text.Trim();
+        _currentPassenger.RG = RGValidatorHelper.RemoveFormat(RGEntry.Text.Trim());
+        _currentPassenger.CPF = CPFValidator.RemoveFormat(CPFEntry.Text.Trim());
         _currentPassenger.Email = EmailEntry.Text.Trim();
-        _currentPassenger.PhoneNumber = PhoneEntry.Text.Trim();
-        _currentPassenger.EmergencyPhoneNumber = EmergencyPhoneEntry.Text.Trim();
+        _currentPassenger.PhoneNumber = PhoneValidationHelper.GetOnlyNumbers(PhoneEntry.Text.Trim());
+        _currentPassenger.EmergencyPhoneNumber = PhoneValidationHelper.GetOnlyNumbers(EmergencyPhoneEntry.Text.Trim());
         _currentPassenger.Address = AddressEntry.Text.Trim();
         _currentPassenger.ReservableAddress = BackupAddressEntry.Text.Trim();
         _currentPassenger.Genre = GenderPicker.SelectedItem?.ToString() ?? "Não especificado";
@@ -248,5 +303,4 @@ public partial class PassengerEditPage : ContentPage
             await Navigation.PopAsync();
         }
     }
-
 }

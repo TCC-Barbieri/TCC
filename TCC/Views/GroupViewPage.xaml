@@ -37,7 +37,10 @@
 
                         <CollectionView x:Name="EtecCollectionView"
                                         ItemsSource="{Binding EtecUsers}"
-                                        BackgroundColor="Transparent">
+                                        BackgroundColor="Transparent"
+                                        SelectionMode="Single"
+                                        SelectionChanged="OnUserSelected">
+
                             <CollectionView.ItemTemplate>
                                 <DataTemplate>
                                     <Grid Padding="10,5"
@@ -85,8 +88,10 @@
                                Margin="0,0,0,10" />
 
                         <CollectionView x:Name="FatecCollectionView"
-                                        ItemsSource="{Binding FatecUsers}"
-                                        BackgroundColor="Transparent">
+                                        ItemsSource="{Binding EtecUsers}"
+                                        BackgroundColor="Transparent"
+                                        SelectionMode="Single"
+                                        SelectionChanged="OnUserSelected">
                             <CollectionView.ItemTemplate>
                                 <DataTemplate>
                                     <Grid Padding="10,5"
@@ -134,8 +139,10 @@
                                Margin="0,0,0,10" />
 
                         <CollectionView x:Name="UnespCollectionView"
-                                        ItemsSource="{Binding UnespUsers}"
-                                        BackgroundColor="Transparent">
+                                        ItemsSource="{Binding EtecUsers}"
+                                        BackgroundColor="Transparent"
+                                        SelectionMode="Single"
+                                        SelectionChanged="OnUserSelected">
                             <CollectionView.ItemTemplate>
                                 <DataTemplate>
                                     <Grid Padding="10,5"
