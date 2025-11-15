@@ -8,29 +8,47 @@ public partial class Index : ContentPage
     private string _currentUserType;
     private int _currentUserId;
 
-    public Index()
+    // Construtor com Injeção de Dependência
+    public Index(DatabaseService databaseService)
     {
         InitializeComponent();
-        _databaseService = new DatabaseService();
+        _databaseService = databaseService;
+    }
+
+    // Construtor alternativo (para compatibilidade)
+    public Index() : this(
+        Application.Current?.Handler?.MauiContext?.Services.GetService<DatabaseService>()
+        ?? new DatabaseService())
+    {
     }
 
     protected override async void OnAppearing()
     {
         base.OnAppearing();
 
-        string? userType = await SecureStorage.GetAsync("user_type");
-        string? userIdString = await SecureStorage.GetAsync("user_id");
-
-        if (!int.TryParse(userIdString, out int userId))
+        try
         {
-            await DisplayAlert("Erro", "Usuário inválido.", "OK");
-            return;
+            // Inicializa o banco de dados
+            await _databaseService.InitializeAsync();
+
+            string? userType = await SecureStorage.GetAsync("user_type");
+            string? userIdString = await SecureStorage.GetAsync("user_id");
+
+            if (!int.TryParse(userIdString, out int userId))
+            {
+                await DisplayAlert("Erro", "Usuário inválido.", "OK");
+                return;
+            }
+
+            _currentUserType = userType;
+            _currentUserId = userId;
+
+            await LoadUserData();
         }
-
-        _currentUserType = userType;
-        _currentUserId = userId;
-
-        await LoadUserData();
+        catch (Exception ex)
+        {
+            await DisplayAlert("Erro", $"Erro ao inicializar: {ex.Message}", "OK");
+        }
     }
 
     private async Task LoadUserData()
@@ -68,7 +86,6 @@ public partial class Index : ContentPage
             EmailLabel.Text = passenger.Email ?? "Não informado";
             AddressLabel.Text = passenger.Address ?? "Não informado";
             PhoneLabel.Text = FormatPhone(passenger.PhoneNumber) ?? "Não informado";
-            EmergencyContactLabel.Text = FormatPhone(passenger.EmergencyPhoneNumber) ?? "Não informado";
             GenderLabel.Text = passenger.Genre ?? "Não informado";
 
             // Campos específicos do passageiro
@@ -77,6 +94,11 @@ public partial class Index : ContentPage
 
             SpecificField2Label.Text = "👨‍👩‍👧‍👦 Responsável";
             SpecificField2Value.Text = passenger.ResponsableName ?? "Não informado";
+
+            // Contato de emergência - layout completo para passageiros
+            EmergencyContactFullLayout.IsVisible = true;
+            EmergencyContactLabel.Text = FormatPhone(passenger.EmergencyPhoneNumber) ?? "Não informado";
+            EmergencyContactCompactLayout.IsVisible = false;
 
             // Mostrar campo de atendimento especial
             SpecialTreatmentLayout.IsVisible = true;
@@ -98,17 +120,19 @@ public partial class Index : ContentPage
             EmailLabel.Text = driver.Email ?? "Não informado";
             AddressLabel.Text = driver.Address ?? "Não informado";
             PhoneLabel.Text = FormatPhone(driver.PhoneNumber) ?? "Não informado";
-            EmergencyContactLabel.Text = FormatPhone(driver.EmergencyPhoneNumber) ?? "Não informado";
             GenderLabel.Text = driver.Genre ?? "Não informado";
 
             // Campos específicos do motorista
             SpecificField1Label.Text = "🚗 CNH";
             SpecificField1Value.Text = driver.CNH ?? "Não informado";
 
-            SpecificField2Label.Text = "👔 Categoria";
-            SpecificField2Value.Text = "Profissional";
+            // Contato de emergência - layout compacto à direita para motoristas
+            EmergencyContactFullLayout.IsVisible = false;
+            EmergencyContactCompactLayout.IsVisible = true;
+            EmergencyContactCompactLabel.Text = FormatPhone(driver.EmergencyPhoneNumber) ?? "Não informado";
 
-            // Ocultar campo de atendimento especial para motoristas
+            // Ocultar campo 2 e PCD para motoristas
+            SpecificField2Layout.IsVisible = false;
             SpecialTreatmentLayout.IsVisible = false;
         }
     }
@@ -187,7 +211,8 @@ public partial class Index : ContentPage
     {
         try
         {
-            await Navigation.PopAsync();
+            if (Navigation.NavigationStack.Count > 1)
+                await Navigation.PopAsync();
         }
         catch (Exception ex)
         {
@@ -210,7 +235,7 @@ public partial class Index : ContentPage
         }
         catch (Exception ex)
         {
-            await DisplayAlert("Erro", $"Erro ao editar: {ex.Message}", "OK");
+            await DisplayAlert("Erro", $"Erro ao abrir página de edição: {ex.Message}", "OK");
         }
     }
 }

@@ -69,7 +69,7 @@ namespace TCC.Behaviors
                 return;
             }
 
-            bool isValid = RGValidator.IsValid(rg);
+            bool isValid = RGValidatorHelper.IsValid(rg);
 
             if (ErrorLabel != null)
             {

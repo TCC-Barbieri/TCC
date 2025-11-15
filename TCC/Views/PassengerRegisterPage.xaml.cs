@@ -60,7 +60,7 @@ public partial class PassengerRegisterPage : ContentPage
             }
 
             // Validar RG
-            if (!RGValidator.IsValid(RGEntry.Text?.Trim()))
+            if (!RGValidatorHelper.IsValid(RGEntry.Text?.Trim()))
             {
                 await DisplayAlert("Atenção", "RG inválido. Verifique os números digitados.", "OK");
                 RGEntry.Focus();
@@ -103,6 +103,36 @@ public partial class PassengerRegisterPage : ContentPage
                 BirthDateErrorLabel.IsVisible = false;
             }
 
+            // Validar Telefone
+            string phoneText = PhoneEntry.Text?.Trim();
+            if (!PhoneValidationHelper.IsValidPhone(phoneText))
+            {
+                PhoneErrorLabel.Text = PhoneValidationHelper.GetValidationErrorMessage();
+                PhoneErrorLabel.IsVisible = true;
+                await DisplayAlert("Atenção", PhoneValidationHelper.GetValidationErrorMessage(), "OK");
+                PhoneEntry.Focus();
+                return;
+            }
+            else
+            {
+                PhoneErrorLabel.IsVisible = false;
+            }
+
+            // Validar Telefone de Emergência
+            string emergencyPhoneText = EmergencyPhoneEntry.Text?.Trim();
+            if (!PhoneValidationHelper.IsValidPhone(emergencyPhoneText))
+            {
+                EmergencyPhoneErrorLabel.Text = PhoneValidationHelper.GetValidationErrorMessage();
+                EmergencyPhoneErrorLabel.IsVisible = true;
+                await DisplayAlert("Atenção", "Contato de emergência inválido. " + PhoneValidationHelper.GetValidationErrorMessage(), "OK");
+                EmergencyPhoneEntry.Focus();
+                return;
+            }
+            else
+            {
+                EmergencyPhoneErrorLabel.IsVisible = false;
+            }
+
             // Verificação de senhas
             if (PasswordEntry.Text != ConfirmPasswordEntry.Text)
             {
@@ -124,10 +154,10 @@ public partial class PassengerRegisterPage : ContentPage
 
             // Validação de dados únicos (RG, CPF, Email, Telefone)
             var uniqueDataValidation = await _databaseService.ValidateUniqueUserData(
-                rg: RGValidator.RemoveFormat(RGEntry.Text.Trim()),
+                rg: RGValidatorHelper.RemoveFormat(RGEntry.Text.Trim()),
                 cpf: CPFValidator.RemoveFormat(CPFEntry.Text.Trim()),
                 email: EmailEntry.Text.Trim(),
-                phone: PhoneEntry.Text.Trim()
+                phone: PhoneValidationHelper.GetOnlyNumbers(PhoneEntry.Text.Trim())
             );
 
             if (!uniqueDataValidation.IsValid)
@@ -142,11 +172,11 @@ public partial class PassengerRegisterPage : ContentPage
                 Name = NameEntry.Text.Trim(),
                 Password = PasswordEntry.Text,
                 Email = EmailEntry.Text.Trim(),
-                PhoneNumber = PhoneEntry.Text.Trim(),
-                EmergencyPhoneNumber = EmergencyPhoneEntry.Text.Trim(),
+                PhoneNumber = PhoneValidationHelper.GetOnlyNumbers(PhoneEntry.Text.Trim()),
+                EmergencyPhoneNumber = PhoneValidationHelper.GetOnlyNumbers(EmergencyPhoneEntry.Text.Trim()),
                 Address = AddressEntry.Text.Trim(),
                 ReservableAddress = BackupAddressEntry.Text.Trim(),
-                RG = RGValidator.RemoveFormat(RGEntry.Text.Trim()),
+                RG = RGValidatorHelper.RemoveFormat(RGEntry.Text.Trim()),
                 CPF = CPFValidator.RemoveFormat(CPFEntry.Text.Trim()),
                 Genre = GenderPicker.SelectedItem?.ToString() ?? "Não especificado",
                 School = SchoolPicker.SelectedItem?.ToString() ?? "Não especificado",

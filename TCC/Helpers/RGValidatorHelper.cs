@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace TCC.Helpers
 {
-    public static class RGValidator
+    public static class RGValidatorHelper
     {
         /// <summary>
         /// Valida se o RG está no formato correto

@@ -134,7 +134,7 @@
                            Margin="0,2,0,0" />
                 </VerticalStackLayout>
 
-                <!-- Telefone -->
+                <!-- Telefone com validação -->
                 <VerticalStackLayout Spacing="5">
                     <Label Text="Telefone" 
                            FontSize="14" 
@@ -148,11 +148,19 @@
                            HeightRequest="45">
                         <Entry.Behaviors>
                             <toolkit:MaskedBehavior Mask="(XX) XXXXX-XXXX" />
+                            <behaviors:PhoneValidationBehavior x:Name="PhoneValidation" 
+                                                               ValidColor="#333" 
+                                                               InvalidColor="Red" />
                         </Entry.Behaviors>
                     </Entry>
+                    <Label x:Name="PhoneErrorLabel" 
+                           FontSize="12" 
+                           TextColor="Red" 
+                           IsVisible="False" 
+                           Margin="0,2,0,0" />
                 </VerticalStackLayout>
 
-                <!-- Contato de Emergência -->
+                <!-- Contato de Emergência com validação -->
                 <VerticalStackLayout Spacing="5">
                     <Label Text="Contato de Emergência" 
                            FontSize="14" 
@@ -166,8 +174,16 @@
                            HeightRequest="45">
                         <Entry.Behaviors>
                             <toolkit:MaskedBehavior Mask="(XX) XXXXX-XXXX" />
+                            <behaviors:PhoneValidationBehavior x:Name="EmergencyPhoneValidation" 
+                                                               ValidColor="#333" 
+                                                               InvalidColor="Red" />
                         </Entry.Behaviors>
                     </Entry>
+                    <Label x:Name="EmergencyPhoneErrorLabel" 
+                           FontSize="12" 
+                           TextColor="Red" 
+                           IsVisible="False" 
+                           Margin="0,2,0,0" />
                 </VerticalStackLayout>
 
                 <!-- CNH com validação -->

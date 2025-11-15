@@ -110,24 +110,42 @@
                            Margin="0,2,0,0" />
                 </VerticalStackLayout>
 
+                <!-- Telefone com validação -->
                 <VerticalStackLayout Spacing="5">
                     <Label Text="Telefone" />
                     <Entry x:Name="PhoneEntry" Placeholder="(11) 99999-9999" HeightRequest="45" Keyboard="Telephone">
                         <Entry.Behaviors>
                             <toolkit:MaskedBehavior Mask="(XX) XXXXX-XXXX" />
+                            <behaviors:PhoneValidationBehavior x:Name="PhoneValidation" 
+                                                               ValidColor="#333" 
+                                                               InvalidColor="Red" />
                         </Entry.Behaviors>
                     </Entry>
+                    <Label x:Name="PhoneErrorLabel" 
+                           FontSize="12" 
+                           TextColor="Red" 
+                           IsVisible="False" 
+                           Margin="0,2,0,0" />
                 </VerticalStackLayout>
 
+                <!-- Contato de emergência com validação -->
                 <VerticalStackLayout Spacing="5">
                     <Label Text="Contato de emergência" />
                     <Border Stroke="#DDDDDD" StrokeThickness="1" StrokeShape="RoundRectangle 5,5,5,5">
                         <Entry x:Name="EmergencyPhoneEntry" Placeholder="Telefone de emergência" Keyboard="Telephone">
                             <Entry.Behaviors>
                                 <toolkit:MaskedBehavior Mask="(XX) XXXXX-XXXX" />
+                                <behaviors:PhoneValidationBehavior x:Name="EmergencyPhoneValidation" 
+                                                                   ValidColor="#333" 
+                                                                   InvalidColor="Red" />
                             </Entry.Behaviors>
                         </Entry>
                     </Border>
+                    <Label x:Name="EmergencyPhoneErrorLabel" 
+                           FontSize="12" 
+                           TextColor="Red" 
+                           IsVisible="False" 
+                           Margin="0,2,0,0" />
                 </VerticalStackLayout>
 
                 <VerticalStackLayout Spacing="5">

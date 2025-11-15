@@ -42,11 +42,11 @@ public partial class DriverRegisterPage : ContentPage
             {
                 Name = NameEntry.Text?.Trim(),
                 CPF = CPFValidator.RemoveFormat(CPFEntry.Text?.Trim()),
-                RG = RGValidator.RemoveFormat(RGEntry.Text?.Trim()),
+                RG = RGValidatorHelper.RemoveFormat(RGEntry.Text?.Trim()),
                 Email = EmailEntry.Text?.Trim(),
-                PhoneNumber = PhoneEntry.Text?.Trim(),
-                EmergencyPhoneNumber = ContatoEmergenciaEntry.Text?.Trim(),
-                CNH = CNHValidator.RemoveFormat(CNHEntry.Text?.Trim()),
+                PhoneNumber = PhoneValidationHelper.GetOnlyNumbers(PhoneEntry.Text?.Trim()),
+                EmergencyPhoneNumber = PhoneValidationHelper.GetOnlyNumbers(ContatoEmergenciaEntry.Text?.Trim()),
+                CNH = CNHValidatorHelper.RemoveFormat(CNHEntry.Text?.Trim()),
                 Genre = GenderPicker.SelectedItem?.ToString(),
                 Address = AddressEntry.Text?.Trim(),
                 BirthDate = BirthDatePicker.Date,
@@ -89,7 +89,7 @@ public partial class DriverRegisterPage : ContentPage
         }
 
         string rgText = RGEntry.Text?.Trim();
-        if (!RGValidator.IsValid(rgText))
+        if (!RGValidatorHelper.IsValid(rgText))
         {
             await DisplayAlert("Atenção", "RG inválido. Verifique os números digitados.", "OK");
             RGEntry.Focus();
@@ -153,7 +153,55 @@ public partial class DriverRegisterPage : ContentPage
             BirthDateErrorLabel.IsVisible = false;
         }
 
-        // 6. Validar CNH
+        // 6. Validar Telefone
+        if (string.IsNullOrWhiteSpace(PhoneEntry.Text))
+        {
+            PhoneErrorLabel.Text = "Telefone é obrigatório";
+            PhoneErrorLabel.IsVisible = true;
+            await DisplayAlert("Atenção", "Telefone é obrigatório", "OK");
+            PhoneEntry.Focus();
+            return false;
+        }
+
+        string phoneText = PhoneEntry.Text?.Trim();
+        if (!PhoneValidationHelper.IsValidPhone(phoneText))
+        {
+            PhoneErrorLabel.Text = PhoneValidationHelper.GetValidationErrorMessage();
+            PhoneErrorLabel.IsVisible = true;
+            await DisplayAlert("Atenção", PhoneValidationHelper.GetValidationErrorMessage(), "OK");
+            PhoneEntry.Focus();
+            return false;
+        }
+        else
+        {
+            PhoneErrorLabel.IsVisible = false;
+        }
+
+        // 7. Validar Telefone de Emergência
+        if (string.IsNullOrWhiteSpace(ContatoEmergenciaEntry.Text))
+        {
+            EmergencyPhoneErrorLabel.Text = "Contato de emergência é obrigatório";
+            EmergencyPhoneErrorLabel.IsVisible = true;
+            await DisplayAlert("Atenção", "Contato de emergência é obrigatório", "OK");
+            ContatoEmergenciaEntry.Focus();
+            return false;
+        }
+
+        string emergencyPhoneText = ContatoEmergenciaEntry.Text?.Trim();
+        if (!PhoneValidationHelper.IsValidPhone(emergencyPhoneText))
+        {
+            EmergencyPhoneErrorLabel.Text = PhoneValidationHelper.GetValidationErrorMessage();
+            EmergencyPhoneErrorLabel.IsVisible = true;
+            await DisplayAlert("Atenção", "Contato de emergência inválido. " + PhoneValidationHelper.GetValidationErrorMessage(), "OK");
+            ContatoEmergenciaEntry.Focus();
+            return false;
+        }
+        else
+        {
+            EmergencyPhoneErrorLabel.IsVisible = false;
+        }
+
+        // 8. Validar CNH
         if (string.IsNullOrWhiteSpace(CNHEntry.Text))
         {
             await DisplayAlert("Atenção", "CNH é obrigatória", "OK");
@@ -162,7 +210,7 @@ public partial class DriverRegisterPage : ContentPage
         }
 
         string cnhText = CNHEntry.Text?.Trim();
-        if (!CNHValidator.IsValid(cnhText))
+        if (!CNHValidatorHelper.IsValid(cnhText))
         {
             await DisplayAlert("Atenção", "CNH inválida. Verifique os números digitados.", "OK");
             CNHEntry.Focus();
@@ -175,7 +223,7 @@ public partial class DriverRegisterPage : ContentPage
             return false;
         }
 
-        // 7. Validar Senha
+        // 9. Validar Senha
         if (string.IsNullOrWhiteSpace(PasswordEntry.Text))
         {
             await DisplayAlert("Atenção", "Senha é obrigatória", "OK");

@@ -9,7 +9,7 @@
         <VerticalStackLayout Spacing="0">
 
             <!-- Header com gradiente moderno -->
-            <Grid HeightRequest="220">
+            <Grid HeightRequest="140">
                 <!-- Gradiente de fundo -->
                 <Rectangle>
                     <Rectangle.Fill>
@@ -38,52 +38,27 @@
                          VerticalOptions="End" 
                          Margin="0,0,0,-30" />
 
-                <!-- Avatar e informações do usuário -->
+                <!-- Nome do usuário -->
                 <VerticalStackLayout HorizontalOptions="Center" 
                                      VerticalOptions="Center" 
-                                     Spacing="15">
-
-                    <!-- Avatar com sombra melhorada -->
-                    <Frame BackgroundColor="White" 
-                           CornerRadius="50" 
-                           Padding="0" 
-                           HorizontalOptions="Center" 
-                           HeightRequest="100" 
-                           WidthRequest="100" 
-                           HasShadow="True">
-                        <Frame.Shadow>
-                            <Shadow Brush="Black" 
-                                    Opacity="0.3" 
-                                    Radius="15" 
-                                    Offset="0,5" />
-                        </Frame.Shadow>
-                        <Label Text="👤" 
-                               FontSize="50" 
-                               HorizontalOptions="Center" 
-                               VerticalOptions="Center"
-                               TextColor="#C53030" />
-                    </Frame>
-
-                    <!-- Nome do usuário com estilo melhorado -->
-                    <VerticalStackLayout Spacing="5">
-                        <Label Text="Olá,"
-                               FontSize="14"
-                               TextColor="White"
-                               Opacity="0.9"
-                               HorizontalOptions="Center"/>
-                        <Label x:Name="WelcomeLabel"
-                               Text=""
-                               FontSize="18"
-                               FontAttributes="Bold"
-                               TextColor="White"
-                               HorizontalOptions="Center"/>
-                    </VerticalStackLayout>
+                                     Spacing="5">
+                    <Label Text="Olá,"
+                           FontSize="14"
+                           TextColor="White"
+                           Opacity="0.9"
+                           HorizontalOptions="Center"/>
+                    <Label x:Name="WelcomeLabel"
+                           Text=""
+                           FontSize="24"
+                           FontAttributes="Bold"
+                           TextColor="White"
+                           HorizontalOptions="Center"/>
                 </VerticalStackLayout>
             </Grid>
 
             <!-- Card principal redesenhado -->
             <Frame BackgroundColor="White"
-                   Margin="20,-30,20,20"
+                   Margin="20,-20,20,20"
                    CornerRadius="20"
                    HasShadow="True"
                    Padding="0">
@@ -307,7 +282,7 @@
                                 </VerticalStackLayout>
                             </Frame>
 
-                            <!-- Contato de emergência -->
+                            <!-- Contato de emergência - passageiros (linha completa) -->
                             <Frame Grid.Row="1" 
                                    Grid.Column="0"
                                    Grid.ColumnSpan="2"
@@ -315,7 +290,8 @@
                                    BorderColor="#FEB2B2"
                                    CornerRadius="10"
                                    Padding="15"
-                                   HasShadow="False">
+                                   HasShadow="False"
+                                   x:Name="EmergencyContactFullLayout">
                                 <VerticalStackLayout Spacing="5">
                                     <Label Text="🚨 Contato de Emergência" 
                                            FontSize="12" 
@@ -324,6 +300,29 @@
                                     <Label x:Name="EmergencyContactLabel" 
                                            Text="(98) 27389-7234" 
                                            FontSize="14" 
+                                           TextColor="#2D3748"
+                                           FontAttributes="Bold" />
+                                </VerticalStackLayout>
+                            </Frame>
+
+                            <!-- Contato de emergência - motoristas (à direita, menor) -->
+                            <Frame Grid.Row="0" 
+                                   Grid.Column="1"
+                                   BackgroundColor="#FFF5F5"
+                                   BorderColor="#FEB2B2"
+                                   CornerRadius="10"
+                                   Padding="12"
+                                   HasShadow="False"
+                                   x:Name="EmergencyContactCompactLayout"
+                                   IsVisible="False">
+                                <VerticalStackLayout Spacing="5">
+                                    <Label Text="🚨 Emergência" 
+                                           FontSize="11" 
+                                           TextColor="#C53030" 
+                                           FontAttributes="Bold" />
+                                                        <Label x:Name="EmergencyContactCompactLabel" 
+                                           Text="(98) 27389-7234" 
+                                           FontSize="13" 
                                            TextColor="#2D3748"
                                            FontAttributes="Bold" />
                                 </VerticalStackLayout>

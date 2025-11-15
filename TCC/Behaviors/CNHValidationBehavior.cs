@@ -69,7 +69,7 @@ namespace TCC.Behaviors
                 return;
             }
 
-            bool isValid = CNHValidator.IsValid(cnh);
+            bool isValid = CNHValidatorHelper.IsValid(cnh);
 
             if (ErrorLabel != null)
             {
