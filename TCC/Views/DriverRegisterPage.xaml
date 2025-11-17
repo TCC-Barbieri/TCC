@@ -199,9 +199,6 @@
                            Keyboard="Numeric"
                            MaxLength="11"
                            HeightRequest="45">
-                        <Entry.Behaviors>
-                            <behaviors:CNHValidationBehavior x:Name="CNHValidation" ErrorLabel="{x:Reference CNHErrorLabel}" />
-                        </Entry.Behaviors>
                     </Entry>
                     <!-- Label de erro para CNH -->
                     <Label x:Name="CNHErrorLabel" 

@@ -46,7 +46,7 @@ public partial class DriverRegisterPage : ContentPage
                 Email = EmailEntry.Text?.Trim(),
                 PhoneNumber = PhoneValidationHelper.GetOnlyNumbers(PhoneEntry.Text?.Trim()),
                 EmergencyPhoneNumber = PhoneValidationHelper.GetOnlyNumbers(ContatoEmergenciaEntry.Text?.Trim()),
-                CNH = CNHValidatorHelper.RemoveFormat(CNHEntry.Text?.Trim()),
+                CNH = CNHEntry.Text?.Trim(),
                 Genre = GenderPicker.SelectedItem?.ToString(),
                 Address = AddressEntry.Text?.Trim(),
                 BirthDate = BirthDatePicker.Date,
@@ -206,20 +206,6 @@ public partial class DriverRegisterPage : ContentPage
         {
             await DisplayAlert("Atenção", "CNH é obrigatória", "OK");
             CNHEntry.Focus();
-            return false;
-        }
-
-        string cnhText = CNHEntry.Text?.Trim();
-        if (!CNHValidatorHelper.IsValid(cnhText))
-        {
-            await DisplayAlert("Atenção", "CNH inválida. Verifique os números digitados.", "OK");
-            CNHEntry.Focus();
-
-            if (CNHValidation != null)
-            {
-                CNHValidation.ValidateCNH();
-            }
-
             return false;
         }
 
