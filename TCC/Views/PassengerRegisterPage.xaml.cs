@@ -118,6 +118,14 @@ public partial class PassengerRegisterPage : ContentPage
                 PhoneErrorLabel.IsVisible = false;
             }
 
+            if (PhoneValidationHelper.GetOnlyNumbers(PhoneEntry.Text?.Trim()).Length != 11)
+            {
+                PhoneErrorLabel.Text = "Telefone de emergência precisa ter 11 dígitos";
+                PhoneErrorLabel.IsVisible = true;
+                await DisplayAlert("Atenção", "Telefone de emergência precisa ter 11 dígitos", "OK");
+                PhoneEntry.Focus();
+            }
+
             // Validar Telefone de Emergência
             string emergencyPhoneText = EmergencyPhoneEntry.Text?.Trim();
             if (!PhoneValidationHelper.IsValidPhone(emergencyPhoneText))
@@ -131,6 +139,14 @@ public partial class PassengerRegisterPage : ContentPage
             else
             {
                 EmergencyPhoneErrorLabel.IsVisible = false;
+            }
+
+            if (PhoneValidationHelper.GetOnlyNumbers(EmergencyPhoneEntry.Text?.Trim()).Length != 11)
+            {
+                PhoneErrorLabel.Text = "Telefone de emergência precisa ter 11 dígitos";
+                PhoneErrorLabel.IsVisible = true;
+                await DisplayAlert("Atenção", "Telefone de emergência precisa ter 11 dígitos", "OK");
+                PhoneEntry.Focus();
             }
 
             // Verificação de senhas
