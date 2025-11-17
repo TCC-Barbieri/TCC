@@ -40,7 +40,7 @@ namespace TCC.Behaviors
         {
             if (_entry == null) return;
 
-            // Limpa erro durante a digitação
+            // Limpa erro durante a digitação e mantém a cor preta
             ClearError();
         }
 
@@ -80,7 +80,6 @@ namespace TCC.Behaviors
             else
             {
                 ClearError();
-                _entry.TextColor = Color.FromArgb("#333333");
                 return true;
             }
         }
@@ -111,7 +110,7 @@ namespace TCC.Behaviors
 
             if (_entry != null)
             {
-                _entry.TextColor = Color.FromArgb("#333333");
+                _entry.TextColor = Color.FromArgb("#333333"); // Preto padrão
             }
         }
     }

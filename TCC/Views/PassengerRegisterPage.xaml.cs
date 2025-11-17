@@ -14,161 +14,48 @@ public partial class PassengerRegisterPage : ContentPage
     {
         InitializeComponent();
 
-        // Define a data máxima do DatePicker (14 anos atrás)
         BirthDatePicker.MaximumDate = MaxPassengerBirthDate;
         BirthDatePicker.Date = MaxPassengerBirthDate;
     }
 
-    // Mostrar detalhes se "Sim" for selecionado
     private void OnSimTapped(object sender, EventArgs e)
     {
         AtendimentoSimRadio.IsChecked = true;
     }
 
-    // Ocultar detalhes se "Não" for selecionado
     private void OnNaoTapped(object sender, EventArgs e)
     {
         AtendimentoNaoRadio.IsChecked = true;
     }
 
-    // Controla a visibilidade dos detalhes do atendimento especial
     private void OnAtendimentoEspecialChanged(object sender, CheckedChangedEventArgs e)
     {
         SpecialTreatmentDetailsLayout.IsVisible = AtendimentoSimRadio.IsChecked;
 
-        // Limpa o campo se "Não" for selecionado
         if (!AtendimentoSimRadio.IsChecked)
         {
             SpecialTreatmentEditor.Text = string.Empty;
+            SpecialTreatmentErrorLabel.IsVisible = false;
         }
     }
 
-    // Evento do botão registrar
     private async void OnRegisterClicked(object sender, EventArgs e)
     {
         try
         {
+            // Limpar todas as mensagens de erro
+            ClearAllErrors();
+
+            // Validar campos antes de prosseguir
+            if (!await ValidateAllFieldsAsync())
+            {
+                return;
+            }
+
             var request = new GeolocationRequest(GeolocationAccuracy.High, TimeSpan.FromSeconds(5));
             var location = await Geolocation.Default.GetLocationAsync(request);
 
-            // Verificação dos campos obrigatórios
-            var validationResult = ValidateRequiredFields();
-            if (!validationResult.IsValid)
-            {
-                await DisplayAlert("Campos obrigatórios", validationResult.Message, "OK");
-                return;
-            }
-
-            // Validar RG
-            if (!RGValidatorHelper.IsValid(RGEntry.Text?.Trim()))
-            {
-                await DisplayAlert("Atenção", "RG inválido. Verifique os números digitados.", "OK");
-                RGEntry.Focus();
-
-                if (RGValidation != null)
-                {
-                    RGValidation.ValidateRG();
-                }
-
-                return;
-            }
-
-            // Validar CPF
-            if (!CPFValidator.IsValid(CPFEntry.Text?.Trim()))
-            {
-                await DisplayAlert("Atenção", "CPF inválido. Verifique os números digitados.", "OK");
-                CPFEntry.Focus();
-
-                if (CPFValidation != null)
-                {
-                    CPFValidation.ValidateCPF();
-                }
-
-                return;
-            }
-
-            // Validar idade (mínimo 14 anos)
-            var age = DateTime.Today.Year - BirthDatePicker.Date.Year;
-            if (BirthDatePicker.Date > DateTime.Today.AddYears(-age)) age--;
-
-            if (age < 14)
-            {
-                BirthDateErrorLabel.Text = "Passageiro deve ter no mínimo 14 anos";
-                BirthDateErrorLabel.IsVisible = true;
-                await DisplayAlert("Atenção", "Passageiro deve ter no mínimo 14 anos para se cadastrar", "OK");
-                return;
-            }
-            else
-            {
-                BirthDateErrorLabel.IsVisible = false;
-            }
-
-            // Validar Telefone
-            string phoneText = PhoneEntry.Text?.Trim();
-            if (!PhoneValidationHelper.IsValidPhone(phoneText))
-            {
-                PhoneErrorLabel.Text = PhoneValidationHelper.GetValidationErrorMessage();
-                PhoneErrorLabel.IsVisible = true;
-                await DisplayAlert("Atenção", PhoneValidationHelper.GetValidationErrorMessage(), "OK");
-                PhoneEntry.Focus();
-                return;
-            }
-            else
-            {
-                PhoneErrorLabel.IsVisible = false;
-            }
-
-            if (PhoneValidationHelper.GetOnlyNumbers(PhoneEntry.Text?.Trim()).Length != 11)
-            {
-                PhoneErrorLabel.Text = "Telefone de emergência precisa ter 11 dígitos";
-                PhoneErrorLabel.IsVisible = true;
-                await DisplayAlert("Atenção", "Telefone de emergência precisa ter 11 dígitos", "OK");
-                PhoneEntry.Focus();
-            }
-
-            // Validar Telefone de Emergência
-            string emergencyPhoneText = EmergencyPhoneEntry.Text?.Trim();
-            if (!PhoneValidationHelper.IsValidPhone(emergencyPhoneText))
-            {
-                EmergencyPhoneErrorLabel.Text = PhoneValidationHelper.GetValidationErrorMessage();
-                EmergencyPhoneErrorLabel.IsVisible = true;
-                await DisplayAlert("Atenção", "Contato de emergência inválido. " + PhoneValidationHelper.GetValidationErrorMessage(), "OK");
-                EmergencyPhoneEntry.Focus();
-                return;
-            }
-            else
-            {
-                EmergencyPhoneErrorLabel.IsVisible = false;
-            }
-
-            if (PhoneValidationHelper.GetOnlyNumbers(EmergencyPhoneEntry.Text?.Trim()).Length != 11)
-            {
-                PhoneErrorLabel.Text = "Telefone de emergência precisa ter 11 dígitos";
-                PhoneErrorLabel.IsVisible = true;
-                await DisplayAlert("Atenção", "Telefone de emergência precisa ter 11 dígitos", "OK");
-                PhoneEntry.Focus();
-            }
-
-            // Verificação de senhas
-            if (PasswordEntry.Text != ConfirmPasswordEntry.Text)
-            {
-                await DisplayAlert("Erro", "As senhas não coincidem.", "OK");
-                return;
-            }
-
-            if (PasswordEntry.Text.Length < 6)
-            {
-                await DisplayAlert("Erro", "A senha deve ter pelo menos 6 caracteres.", "OK");
-                return;
-            }
-
-            if (GenderPicker.SelectedIndex == -1)
-            {
-                await DisplayAlert("Campos Obrigatórios", "Por favor informe seu gênero", "OK");
-                return;
-            }
-
-            // Validação de dados únicos (RG, CPF, Email, Telefone)
+            // Validação de dados únicos
             var uniqueDataValidation = await _databaseService.ValidateUniqueUserData(
                 rg: RGValidatorHelper.RemoveFormat(RGEntry.Text.Trim()),
                 cpf: CPFValidator.RemoveFormat(CPFEntry.Text.Trim()),
@@ -182,7 +69,6 @@ public partial class PassengerRegisterPage : ContentPage
                 return;
             }
 
-            // Cria o objeto passageiro
             Passenger passenger = new Passenger
             {
                 Name = NameEntry.Text.Trim(),
@@ -206,12 +92,10 @@ public partial class PassengerRegisterPage : ContentPage
                 Latitude = location.Latitude
             };
 
-            // Registra o passageiro
             await _databaseService.CreatePassenger(passenger);
 
             await DisplayAlert("Sucesso", "Passageiro registrado com sucesso!", "OK");
 
-            // Limpa os campos após registro bem-sucedido
             ClearFields();
 
             await Navigation.PushAsync(new LoginPage());
@@ -222,47 +106,257 @@ public partial class PassengerRegisterPage : ContentPage
         }
     }
 
-    private (bool IsValid, string Message) ValidateRequiredFields()
+    private void ClearAllErrors()
     {
-        var requiredFields = new[]
-        {
-            (NameEntry.Text, "Nome"),
-            (PasswordEntry.Text, "Senha"),
-            (ConfirmPasswordEntry.Text, "Confirmação de Senha"),
-            (EmailEntry.Text, "Email"),
-            (PhoneEntry.Text, "Telefone"),
-            (EmergencyPhoneEntry.Text, "Contato de Emergência"),
-            (AddressEntry.Text, "Endereço"),
-            (BackupAddressEntry.Text, "Endereço Alternativo"),
-            (RGEntry.Text, "RG"),
-            (CPFEntry.Text, "CPF"),
-            (ResponsibleEntry.Text, "Nome do Responsável")
-        };
+        NameErrorLabel.IsVisible = false;
+        RGErrorLabel.IsVisible = false;
+        CPFErrorLabel.IsVisible = false;
+        EmailErrorLabel.IsVisible = false;
+        BirthDateErrorLabel.IsVisible = false;
+        PhoneErrorLabel.IsVisible = false;
+        EmergencyPhoneErrorLabel.IsVisible = false;
+        GenderErrorLabel.IsVisible = false;
+        SchoolErrorLabel.IsVisible = false;
+        AddressErrorLabel.IsVisible = false;
+        BackupAddressErrorLabel.IsVisible = false;
+        ResponsibleErrorLabel.IsVisible = false;
+        SpecialTreatmentErrorLabel.IsVisible = false;
+        PasswordErrorLabel.IsVisible = false;
+        ConfirmPasswordErrorLabel.IsVisible = false;
+    }
 
-        foreach (var (value, fieldName) in requiredFields)
+    private async Task<bool> ValidateAllFieldsAsync()
+    {
+        bool isValid = true;
+
+        // 1. Nome
+        if (string.IsNullOrWhiteSpace(NameEntry.Text))
         {
-            if (string.IsNullOrWhiteSpace(value))
+            NameErrorLabel.Text = "Nome é obrigatório";
+            NameErrorLabel.IsVisible = true;
+            isValid = false;
+        }
+        else if (NameEntry.Text.Trim().Length < 3)
+        {
+            NameErrorLabel.Text = "Nome deve ter pelo menos 3 caracteres";
+            NameErrorLabel.IsVisible = true;
+            isValid = false;
+        }
+
+        // 2. RG
+        if (string.IsNullOrWhiteSpace(RGEntry.Text))
+        {
+            RGErrorLabel.Text = "RG é obrigatório";
+            RGErrorLabel.IsVisible = true;
+            isValid = false;
+        }
+        else if (!RGValidatorHelper.IsValid(RGEntry.Text?.Trim()))
+        {
+            RGErrorLabel.Text = "RG inválido. Verifique os números digitados";
+            RGErrorLabel.IsVisible = true;
+            isValid = false;
+        }
+
+        // 3. CPF
+        if (string.IsNullOrWhiteSpace(CPFEntry.Text))
+        {
+            CPFErrorLabel.Text = "CPF é obrigatório";
+            CPFErrorLabel.IsVisible = true;
+            isValid = false;
+        }
+        else if (!CPFValidator.IsValid(CPFEntry.Text?.Trim()))
+        {
+            CPFErrorLabel.Text = "CPF inválido. Verifique os números digitados";
+            CPFErrorLabel.IsVisible = true;
+            isValid = false;
+        }
+
+        // 4. Email
+        if (string.IsNullOrWhiteSpace(EmailEntry.Text))
+        {
+            EmailErrorLabel.Text = "Email é obrigatório";
+            EmailErrorLabel.IsVisible = true;
+            isValid = false;
+        }
+        else if (!IsValidEmail(EmailEntry.Text.Trim()))
+        {
+            EmailErrorLabel.Text = "Email inválido. Use o formato: exemplo@email.com";
+            EmailErrorLabel.IsVisible = true;
+            isValid = false;
+        }
+
+        // 5. Data de Nascimento
+        var age = DateTime.Today.Year - BirthDatePicker.Date.Year;
+        if (BirthDatePicker.Date > DateTime.Today.AddYears(-age)) age--;
+
+        if (age < 14)
+        {
+            BirthDateErrorLabel.Text = "Passageiro deve ter no mínimo 14 anos";
+            BirthDateErrorLabel.IsVisible = true;
+            isValid = false;
+        }
+
+        // 6. Telefone
+        if (string.IsNullOrWhiteSpace(PhoneEntry.Text))
+        {
+            PhoneErrorLabel.Text = "Telefone é obrigatório";
+            PhoneErrorLabel.IsVisible = true;
+            isValid = false;
+        }
+        else
+        {
+            var phoneNumbers = PhoneValidationHelper.GetOnlyNumbers(PhoneEntry.Text?.Trim());
+            if (phoneNumbers.Length != 11)
             {
-                return (false, $"Por favor, preencha o campo {fieldName}.");
+                PhoneErrorLabel.Text = "Telefone deve ter 11 dígitos (DDD + número)";
+                PhoneErrorLabel.IsVisible = true;
+                isValid = false;
+            }
+            else if (!PhoneValidationHelper.IsValidPhone(PhoneEntry.Text?.Trim()))
+            {
+                PhoneErrorLabel.Text = PhoneValidationHelper.GetValidationErrorMessage();
+                PhoneErrorLabel.IsVisible = true;
+                isValid = false;
             }
         }
 
-        if (GenderPicker.SelectedItem == null)
+        // 7. Telefone de Emergência
+        if (string.IsNullOrWhiteSpace(EmergencyPhoneEntry.Text))
         {
-            return (false, "Por favor, selecione o gênero.");
+            EmergencyPhoneErrorLabel.Text = "Contato de emergência é obrigatório";
+            EmergencyPhoneErrorLabel.IsVisible = true;
+            isValid = false;
+        }
+        else
+        {
+            var emergencyNumbers = PhoneValidationHelper.GetOnlyNumbers(EmergencyPhoneEntry.Text?.Trim());
+            if (emergencyNumbers.Length != 11)
+            {
+                EmergencyPhoneErrorLabel.Text = "Telefone de emergência deve ter 11 dígitos (DDD + número)";
+                EmergencyPhoneErrorLabel.IsVisible = true;
+                isValid = false;
+            }
+            else if (!PhoneValidationHelper.IsValidPhone(EmergencyPhoneEntry.Text?.Trim()))
+            {
+                EmergencyPhoneErrorLabel.Text = PhoneValidationHelper.GetValidationErrorMessage();
+                EmergencyPhoneErrorLabel.IsVisible = true;
+                isValid = false;
+            }
         }
 
-        if (SchoolPicker.SelectedItem == null)
+        // 8. Gênero
+        if (GenderPicker.SelectedIndex == -1)
         {
-            return (false, "Por favor, selecione a escola.");
+            GenderErrorLabel.Text = "Selecione seu gênero";
+            GenderErrorLabel.IsVisible = true;
+            isValid = false;
         }
 
+        // 9. Escola
+        if (SchoolPicker.SelectedIndex == -1)
+        {
+            SchoolErrorLabel.Text = "Selecione sua escola";
+            SchoolErrorLabel.IsVisible = true;
+            isValid = false;
+        }
+
+        // 10. Endereço
+        if (string.IsNullOrWhiteSpace(AddressEntry.Text))
+        {
+            AddressErrorLabel.Text = "Endereço é obrigatório";
+            AddressErrorLabel.IsVisible = true;
+            isValid = false;
+        }
+        else if (AddressEntry.Text.Trim().Length < 10)
+        {
+            AddressErrorLabel.Text = "Endereço deve conter pelo menos 10 caracteres";
+            AddressErrorLabel.IsVisible = true;
+            isValid = false;
+        }
+
+        // 11. Endereço Alternativo
+        if (string.IsNullOrWhiteSpace(BackupAddressEntry.Text))
+        {
+            BackupAddressErrorLabel.Text = "Endereço alternativo é obrigatório";
+            BackupAddressErrorLabel.IsVisible = true;
+            isValid = false;
+        }
+        else if (BackupAddressEntry.Text.Trim().Length < 10)
+        {
+            BackupAddressErrorLabel.Text = "Endereço deve conter pelo menos 10 caracteres";
+            BackupAddressErrorLabel.IsVisible = true;
+            isValid = false;
+        }
+
+        // 12. Nome do Responsável
+        if (string.IsNullOrWhiteSpace(ResponsibleEntry.Text))
+        {
+            ResponsibleErrorLabel.Text = "Nome do responsável é obrigatório";
+            ResponsibleErrorLabel.IsVisible = true;
+            isValid = false;
+        }
+        else if (ResponsibleEntry.Text.Trim().Length < 3)
+        {
+            ResponsibleErrorLabel.Text = "Nome deve ter pelo menos 3 caracteres";
+            ResponsibleErrorLabel.IsVisible = true;
+            isValid = false;
+        }
+
+        // 13. Atendimento Especial
         if (AtendimentoSimRadio.IsChecked && string.IsNullOrWhiteSpace(SpecialTreatmentEditor.Text))
         {
-            return (false, "Por favor, descreva os detalhes do atendimento especial.");
+            SpecialTreatmentErrorLabel.Text = "Descreva os detalhes do atendimento especial";
+            SpecialTreatmentErrorLabel.IsVisible = true;
+            isValid = false;
         }
 
-        return (true, string.Empty);
+        // 14. Senha
+        if (string.IsNullOrWhiteSpace(PasswordEntry.Text))
+        {
+            PasswordErrorLabel.Text = "Senha é obrigatória";
+            PasswordErrorLabel.IsVisible = true;
+            isValid = false;
+        }
+        else if (PasswordEntry.Text.Length < 6)
+        {
+            PasswordErrorLabel.Text = "Senha deve ter no mínimo 6 caracteres";
+            PasswordErrorLabel.IsVisible = true;
+            isValid = false;
+        }
+
+        // 15. Confirmar Senha
+        if (string.IsNullOrWhiteSpace(ConfirmPasswordEntry.Text))
+        {
+            ConfirmPasswordErrorLabel.Text = "Confirmação de senha é obrigatória";
+            ConfirmPasswordErrorLabel.IsVisible = true;
+            isValid = false;
+        }
+        else if (PasswordEntry.Text != ConfirmPasswordEntry.Text)
+        {
+            ConfirmPasswordErrorLabel.Text = "As senhas não coincidem";
+            ConfirmPasswordErrorLabel.IsVisible = true;
+            isValid = false;
+        }
+
+        if (!isValid)
+        {
+            await DisplayAlert("Atenção", "Por favor, corrija os campos destacados em vermelho", "OK");
+        }
+
+        return isValid;
+    }
+
+    private bool IsValidEmail(string email)
+    {
+        try
+        {
+            var addr = new System.Net.Mail.MailAddress(email);
+            return addr.Address == email && email.Contains("@") && email.Contains(".");
+        }
+        catch
+        {
+            return false;
+        }
     }
 
     private void ClearFields()
@@ -286,6 +380,8 @@ public partial class PassengerRegisterPage : ContentPage
 
         AtendimentoNaoRadio.IsChecked = true;
         SpecialTreatmentDetailsLayout.IsVisible = false;
+
+        ClearAllErrors();
     }
 
     private async void Button_Clicked(object sender, EventArgs e)
@@ -294,8 +390,8 @@ public partial class PassengerRegisterPage : ContentPage
         await DisplayAlert("Database Path", dbPath, "OK");
     }
 
-    private void OnAlreadyHaveAccount_Clicked(object sender, EventArgs e)
+    private async void OnAlreadyHaveAccount_Clicked(object sender, EventArgs e)
     {
-        Navigation.PushAsync(new Views.LoginPage());
+        await Navigation.PushAsync(new Views.LoginPage());
     }
 }

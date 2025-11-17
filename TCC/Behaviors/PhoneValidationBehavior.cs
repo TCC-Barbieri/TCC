@@ -1,167 +1,80 @@
 ﻿using TCC.Helpers;
 
-namespace TCC.Behaviors;
-
-/// <summary>
-/// Behavior para validação de telefone em tempo real
-/// </summary>
-public class PhoneValidationBehavior : Behavior<Entry>
+namespace TCC.Behaviors
 {
-    private Entry? _entry;
-
-    // Propriedades bindáveis para customização
-    public static readonly BindableProperty ValidColorProperty =
-        BindableProperty.Create(nameof(ValidColor), typeof(Color), typeof(PhoneValidationBehavior), Colors.Black);
-
-    public static readonly BindableProperty InvalidColorProperty =
-        BindableProperty.Create(nameof(InvalidColor), typeof(Color), typeof(PhoneValidationBehavior), Colors.Red);
-
-    public static readonly BindableProperty ShowBorderProperty =
-        BindableProperty.Create(nameof(ShowBorder), typeof(bool), typeof(PhoneValidationBehavior), false);
-
-    public static readonly BindableProperty AutoFormatProperty =
-        BindableProperty.Create(nameof(AutoFormat), typeof(bool), typeof(PhoneValidationBehavior), true);
-
-    /// <summary>
-    /// Cor do texto quando o telefone é válido
-    /// </summary>
-    public Color ValidColor
+    public class PhoneValidationBehavior : Behavior<Entry>
     {
-        get => (Color)GetValue(ValidColorProperty);
-        set => SetValue(ValidColorProperty, value);
-    }
+        private Entry _entry;
 
-    /// <summary>
-    /// Cor do texto quando o telefone é inválido
-    /// </summary>
-    public Color InvalidColor
-    {
-        get => (Color)GetValue(InvalidColorProperty);
-        set => SetValue(InvalidColorProperty, value);
-    }
+        public static readonly BindableProperty ValidColorProperty =
+            BindableProperty.Create(nameof(ValidColor), typeof(Color), typeof(PhoneValidationBehavior), Color.FromArgb("#333333"));
 
-    /// <summary>
-    /// Define se deve mostrar borda colorida
-    /// </summary>
-    public bool ShowBorder
-    {
-        get => (bool)GetValue(ShowBorderProperty);
-        set => SetValue(ShowBorderProperty, value);
-    }
+        public static readonly BindableProperty InvalidColorProperty =
+            BindableProperty.Create(nameof(InvalidColor), typeof(Color), typeof(PhoneValidationBehavior), Colors.Red);
 
-    /// <summary>
-    /// Define se deve formatar automaticamente o telefone
-    /// </summary>
-    public bool AutoFormat
-    {
-        get => (bool)GetValue(AutoFormatProperty);
-        set => SetValue(AutoFormatProperty, value);
-    }
-
-    /// <summary>
-    /// Propriedade para verificar se o telefone é válido externamente
-    /// </summary>
-    public bool IsValid { get; private set; }
-
-    protected override void OnAttachedTo(Entry entry)
-    {
-        base.OnAttachedTo(entry);
-        _entry = entry;
-
-        // Configura o teclado para telefone
-        entry.Keyboard = Keyboard.Telephone;
-
-        // Adiciona evento de mudança de texto
-        entry.TextChanged += OnEntryTextChanged;
-        entry.Unfocused += OnEntryUnfocused;
-    }
-
-    protected override void OnDetachingFrom(Entry entry)
-    {
-        base.OnDetachingFrom(entry);
-
-        // Remove eventos
-        entry.TextChanged -= OnEntryTextChanged;
-        entry.Unfocused -= OnEntryUnfocused;
-
-        _entry = null;
-    }
-
-    private void OnEntryTextChanged(object? sender, TextChangedEventArgs e)
-    {
-        if (_entry == null || string.IsNullOrWhiteSpace(e.NewTextValue))
+        public Color ValidColor
         {
-            ResetValidation();
-            return;
+            get => (Color)GetValue(ValidColorProperty);
+            set => SetValue(ValidColorProperty, value);
         }
 
-        // Valida o telefone
-        IsValid = PhoneValidationHelper.IsValidPhone(e.NewTextValue);
-
-        // Aplica a cor baseada na validação
-        _entry.TextColor = IsValid ? ValidColor : InvalidColor;
-
-        // Aplica borda se configurado
-        if (ShowBorder)
+        public Color InvalidColor
         {
-            // Note: Isso funciona melhor se o Entry estiver dentro de um Frame
-            // ou se você estiver usando um controle customizado
+            get => (Color)GetValue(InvalidColorProperty);
+            set => SetValue(InvalidColorProperty, value);
         }
-    }
 
-    private void OnEntryUnfocused(object? sender, FocusEventArgs e)
-    {
-        if (_entry == null || string.IsNullOrWhiteSpace(_entry.Text))
-            return;
-
-        // Formata automaticamente quando perde o foco (se configurado)
-        if (AutoFormat && IsValid)
+        protected override void OnAttachedTo(Entry bindable)
         {
-            string formattedPhone = PhoneValidationHelper.FormatPhone(_entry.Text);
-            if (_entry.Text != formattedPhone)
+            _entry = bindable;
+            _entry.TextChanged += OnTextChanged;
+            _entry.Unfocused += OnUnfocused;
+            base.OnAttachedTo(bindable);
+        }
+
+        protected override void OnDetachingFrom(Entry bindable)
+        {
+            if (_entry != null)
             {
-                _entry.Text = formattedPhone;
+                _entry.TextChanged -= OnTextChanged;
+                _entry.Unfocused -= OnUnfocused;
+                _entry = null;
             }
+            base.OnDetachingFrom(bindable);
         }
-    }
 
-    private void ResetValidation()
-    {
-        if (_entry != null)
+        private void OnTextChanged(object sender, TextChangedEventArgs e)
         {
+            if (_entry == null) return;
+
+            // Mantém a cor preta durante a digitação
             _entry.TextColor = ValidColor;
-            IsValid = false;
         }
-    }
-}
 
-/// <summary>
-/// Behavior simplificado que apenas formata o telefone
-/// </summary>
-public class PhoneFormatterBehavior : Behavior<Entry>
-{
-    private Entry? _entry;
-
-    protected override void OnAttachedTo(Entry entry)
-    {
-        base.OnAttachedTo(entry);
-        _entry = entry;
-        entry.Keyboard = Keyboard.Telephone;
-        entry.Unfocused += OnEntryUnfocused;
-    }
-
-    protected override void OnDetachingFrom(Entry entry)
-    {
-        base.OnDetachingFrom(entry);
-        entry.Unfocused -= OnEntryUnfocused;
-        _entry = null;
-    }
-
-    private void OnEntryUnfocused(object? sender, FocusEventArgs e)
-    {
-        if (_entry != null && !string.IsNullOrWhiteSpace(_entry.Text))
+        private void OnUnfocused(object sender, FocusEventArgs e)
         {
-            _entry.Text = PhoneValidationHelper.FormatPhone(_entry.Text);
+            ValidatePhone();
+        }
+
+        public bool ValidatePhone()
+        {
+            if (_entry == null)
+                return true;
+
+            string phone = _entry.Text;
+
+            if (string.IsNullOrWhiteSpace(phone))
+            {
+                _entry.TextColor = ValidColor;
+                return true; // Campo vazio é válido se não for obrigatório
+            }
+
+            bool isValid = PhoneValidationHelper.IsValidPhone(phone);
+
+            // Define a cor baseado na validação
+            _entry.TextColor = isValid ? ValidColor : InvalidColor;
+
+            return isValid;
         }
     }
 }

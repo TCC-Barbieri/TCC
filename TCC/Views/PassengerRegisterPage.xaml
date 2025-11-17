@@ -52,6 +52,11 @@
                 <VerticalStackLayout Spacing="5">
                     <Label Text="Nome" />
                     <Entry x:Name="NameEntry" Placeholder="Nome completo" HeightRequest="45" />
+                    <Label x:Name="NameErrorLabel" 
+                           FontSize="12" 
+                           TextColor="Red" 
+                           IsVisible="False" 
+                           Margin="0,2,0,0" />
                 </VerticalStackLayout>
 
                 <!-- RG com validação -->
@@ -94,6 +99,11 @@
                 <VerticalStackLayout Spacing="5">
                     <Label Text="Email" />
                     <Entry x:Name="EmailEntry" Placeholder="Email" Keyboard="Email" HeightRequest="45" />
+                    <Label x:Name="EmailErrorLabel" 
+                           FontSize="12" 
+                           TextColor="Red" 
+                           IsVisible="False" 
+                           Margin="0,2,0,0" />
                 </VerticalStackLayout>
 
                 <VerticalStackLayout Spacing="5">
@@ -160,21 +170,41 @@
                             </Picker.Items>
                         </Picker>
                     </Border>
+                    <Label x:Name="GenderErrorLabel" 
+                           FontSize="12" 
+                           TextColor="Red" 
+                           IsVisible="False" 
+                           Margin="0,2,0,0" />
                 </VerticalStackLayout>
 
                 <VerticalStackLayout Spacing="5">
                     <Label Text="Endereço" />
                     <Entry x:Name="AddressEntry" Placeholder="Endereço residencial" HeightRequest="45" />
+                    <Label x:Name="AddressErrorLabel" 
+                           FontSize="12" 
+                           TextColor="Red" 
+                           IsVisible="False" 
+                           Margin="0,2,0,0" />
                 </VerticalStackLayout>
 
                 <VerticalStackLayout Spacing="5">
                     <Label Text="Senha" />
                     <Entry x:Name="PasswordEntry" Placeholder="Mínimo 6 caracteres" IsPassword="True" HeightRequest="45" />
+                    <Label x:Name="PasswordErrorLabel" 
+                           FontSize="12" 
+                           TextColor="Red" 
+                           IsVisible="False" 
+                           Margin="0,2,0,0" />
                 </VerticalStackLayout>
 
                 <VerticalStackLayout Spacing="5">
                     <Label Text="Confirmar Senha" />
                     <Entry x:Name="ConfirmPasswordEntry" Placeholder="Digite a senha novamente" IsPassword="True" HeightRequest="45" />
+                    <Label x:Name="ConfirmPasswordErrorLabel" 
+                           FontSize="12" 
+                           TextColor="Red" 
+                           IsVisible="False" 
+                           Margin="0,2,0,0" />
                 </VerticalStackLayout>
 
                 <!-- Additional Info -->
@@ -190,6 +220,11 @@
                                 </Picker.Items>
                             </Picker>
                         </Border>
+                        <Label x:Name="SchoolErrorLabel" 
+                               FontSize="12" 
+                               TextColor="Red" 
+                               IsVisible="False" 
+                               Margin="0,2,0,0" />
                     </VerticalStackLayout>
 
                     <!-- Special Treatment -->
@@ -213,6 +248,11 @@
                         <Border Stroke="#DDDDDD" StrokeThickness="1" StrokeShape="RoundRectangle 5,5,5,5">
                             <Editor x:Name="SpecialTreatmentEditor" Placeholder="Descreva alguma necessidade especial" HeightRequest="100" AutoSize="TextChanges" />
                         </Border>
+                        <Label x:Name="SpecialTreatmentErrorLabel" 
+                               FontSize="12" 
+                               TextColor="Red" 
+                               IsVisible="False" 
+                               Margin="0,2,0,0" />
                     </VerticalStackLayout>
 
                     <VerticalStackLayout Spacing="5">
@@ -220,6 +260,11 @@
                         <Border Stroke="#DDDDDD" StrokeThickness="1" StrokeShape="RoundRectangle 5,5,5,5">
                             <Entry x:Name="ResponsibleEntry" Placeholder="Nome completo do responsável" />
                         </Border>
+                        <Label x:Name="ResponsibleErrorLabel" 
+                               FontSize="12" 
+                               TextColor="Red" 
+                               IsVisible="False" 
+                               Margin="0,2,0,0" />
                     </VerticalStackLayout>
 
                     <VerticalStackLayout Spacing="5">
@@ -227,6 +272,11 @@
                         <Border Stroke="#DDDDDD" StrokeThickness="1" StrokeShape="RoundRectangle 5,5,5,5">
                             <Entry x:Name="BackupAddressEntry" Placeholder="Endereço alternativo" />
                         </Border>
+                        <Label x:Name="BackupAddressErrorLabel" 
+                               FontSize="12" 
+                               TextColor="Red" 
+                               IsVisible="False" 
+                               Margin="0,2,0,0" />
                     </VerticalStackLayout>
                 </VerticalStackLayout>
 

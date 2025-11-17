@@ -5,6 +5,8 @@ namespace TCC.Behaviors
 {
     public class RGValidationBehavior : Behavior<Entry>
     {
+        private Entry _entry;
+
         public static readonly BindableProperty ErrorLabelProperty =
             BindableProperty.Create(nameof(ErrorLabel), typeof(Label), typeof(RGValidationBehavior));
 
@@ -17,24 +19,26 @@ namespace TCC.Behaviors
         protected override void OnAttachedTo(Entry entry)
         {
             base.OnAttachedTo(entry);
-            entry.TextChanged += OnTextChanged;
-            entry.Unfocused += OnUnfocused;
+            _entry = entry;
+            _entry.TextChanged += OnTextChanged;
+            _entry.Unfocused += OnUnfocused;
         }
 
         protected override void OnDetachingFrom(Entry entry)
         {
             base.OnDetachingFrom(entry);
-            entry.TextChanged -= OnTextChanged;
-            entry.Unfocused -= OnUnfocused;
+            if (_entry != null)
+            {
+                _entry.TextChanged -= OnTextChanged;
+                _entry.Unfocused -= OnUnfocused;
+                _entry = null;
+            }
         }
 
         private void OnTextChanged(object sender, TextChangedEventArgs e)
         {
-            // Limpa o erro enquanto digita
-            if (ErrorLabel != null)
-            {
-                ErrorLabel.IsVisible = false;
-            }
+            // Limpa o erro enquanto digita e mantém a cor preta
+            ClearError();
         }
 
         private void OnUnfocused(object sender, FocusEventArgs e)
@@ -42,68 +46,56 @@ namespace TCC.Behaviors
             ValidateRG();
         }
 
-        public void ValidateRG()
+        public bool ValidateRG()
         {
-            var entry = (Entry)BindingContext;
-            if (BindingContext is Entry bindingEntry)
-            {
-                entry = bindingEntry;
-            }
-            else if (ErrorLabel?.Parent is VisualElement parent)
-            {
-                entry = FindEntry(parent);
-            }
+            if (_entry == null)
+                return true;
 
-            if (entry == null) return;
-
-            string rg = entry.Text;
+            string rg = _entry.Text;
 
             if (string.IsNullOrWhiteSpace(rg))
             {
-                if (ErrorLabel != null)
-                {
-                    ErrorLabel.Text = "";
-                    ErrorLabel.IsVisible = false;
-                }
-                entry.TextColor = Colors.Black;
-                return;
+                ClearError();
+                return true; // Campo vazio é válido se não for obrigatório
             }
 
             bool isValid = RGValidatorHelper.IsValid(rg);
 
-            if (ErrorLabel != null)
+            if (!isValid)
             {
-                if (!isValid)
-                {
-                    ErrorLabel.Text = "RG inválido";
-                    ErrorLabel.IsVisible = true;
-                    entry.TextColor = Colors.Red;
-                }
-                else
-                {
-                    ErrorLabel.Text = "";
-                    ErrorLabel.IsVisible = false;
-                    entry.TextColor = Colors.Green;
-                }
+                ShowError("RG inválido");
+                _entry.TextColor = Colors.Red;
+                return false;
+            }
+            else
+            {
+                ClearError();
+                return true;
             }
         }
 
-        private Entry FindEntry(VisualElement parent)
+        private void ShowError(string message)
         {
-            if (parent is Layout layout)
+            if (ErrorLabel != null)
             {
-                foreach (var child in layout.Children)
-                {
-                    if (child is Entry entry)
-                        return entry;
-                    if (child is VisualElement ve)
-                    {
-                        var found = FindEntry(ve);
-                        if (found != null) return found;
-                    }
-                }
+                ErrorLabel.Text = message;
+                ErrorLabel.TextColor = Colors.Red;
+                ErrorLabel.IsVisible = true;
             }
-            return null;
+        }
+
+        private void ClearError()
+        {
+            if (ErrorLabel != null)
+            {
+                ErrorLabel.Text = string.Empty;
+                ErrorLabel.IsVisible = false;
+            }
+
+            if (_entry != null)
+            {
+                _entry.TextColor = Color.FromArgb("#333333"); // Preto padrão
+            }
         }
     }
 }

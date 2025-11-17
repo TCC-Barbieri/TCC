@@ -50,6 +50,11 @@
                            BackgroundColor="White" 
                            TextColor="#333" 
                            HeightRequest="45" />
+                    <Label x:Name="NameErrorLabel" 
+                           FontSize="12" 
+                           TextColor="Red" 
+                           IsVisible="False" 
+                           Margin="0,2,0,0" />
                 </VerticalStackLayout>
 
                 <!-- RG com validação -->
@@ -114,6 +119,11 @@
                            TextColor="#333" 
                            Keyboard="Email"
                            HeightRequest="45" />
+                    <Label x:Name="EmailErrorLabel" 
+                           FontSize="12" 
+                           TextColor="Red" 
+                           IsVisible="False" 
+                           Margin="0,2,0,0" />
                 </VerticalStackLayout>
 
                 <!-- Data de Nascimento -->
@@ -227,6 +237,11 @@
                             </Picker.Items>
                         </Picker>
                     </Border>
+                    <Label x:Name="GenderErrorLabel" 
+                           FontSize="12" 
+                           TextColor="Red" 
+                           IsVisible="False" 
+                           Margin="0,2,0,0" />
                 </VerticalStackLayout>
 
                 <!-- Endereço -->
@@ -240,6 +255,11 @@
                            BackgroundColor="White" 
                            TextColor="#333" 
                            HeightRequest="45" />
+                    <Label x:Name="AddressErrorLabel" 
+                           FontSize="12" 
+                           TextColor="Red" 
+                           IsVisible="False" 
+                           Margin="0,2,0,0" />
                 </VerticalStackLayout>
 
                 <!-- Senha -->
@@ -254,6 +274,11 @@
                            TextColor="#333" 
                            IsPassword="True"
                            HeightRequest="45" />
+                    <Label x:Name="PasswordErrorLabel" 
+                           FontSize="12" 
+                           TextColor="Red" 
+                           IsVisible="False" 
+                           Margin="0,2,0,0" />
                 </VerticalStackLayout>
 
                 <!-- Confirmar Senha -->
@@ -268,6 +293,11 @@
                            TextColor="#333" 
                            IsPassword="True"
                            HeightRequest="45" />
+                    <Label x:Name="ConfirmPasswordErrorLabel" 
+                           FontSize="12" 
+                           TextColor="Red" 
+                           IsVisible="False" 
+                           Margin="0,2,0,0" />
                 </VerticalStackLayout>
 
                 <!-- Botão Criar Conta -->
