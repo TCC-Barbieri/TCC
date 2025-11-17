@@ -163,6 +163,15 @@ public partial class DriverRegisterPage : ContentPage
             return false;
         }
 
+        if(PhoneValidationHelper.GetOnlyNumbers(PhoneEntry.Text?.Trim()).Length != 11)
+        {
+            PhoneErrorLabel.Text = "Telefone precisa ter 11 dígitos";
+            PhoneErrorLabel.IsVisible = true;
+            await DisplayAlert("Atenção", "Telefone precisa ter 11 dígitos", "OK");
+            PhoneEntry.Focus();
+            return false;
+        }
+
         string phoneText = PhoneEntry.Text?.Trim();
         if (!PhoneValidationHelper.IsValidPhone(phoneText))
         {
@@ -200,6 +209,16 @@ public partial class DriverRegisterPage : ContentPage
         {
             EmergencyPhoneErrorLabel.IsVisible = false;
         }
+
+        if (PhoneValidationHelper.GetOnlyNumbers(ContatoEmergenciaEntry.Text?.Trim()).Length != 11)
+        {
+            PhoneErrorLabel.Text = "Telefone de emergência precisa ter 11 dígitos";
+            PhoneErrorLabel.IsVisible = true;
+            await DisplayAlert("Atenção", "Telefone de emergência precisa ter 11 dígitos", "OK");
+            PhoneEntry.Focus();
+            return false;
+        }
+
 
         // 8. Validar CNH
         if (string.IsNullOrWhiteSpace(CNHEntry.Text))
