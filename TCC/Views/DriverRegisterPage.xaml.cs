@@ -1,6 +1,7 @@
 using TCC.Models;
 using TCC.Services;
 using TCC.Helpers;
+using Esri.ArcGISRuntime.Mapping.FeatureForms;
 
 namespace TCC.Views;
 
@@ -82,6 +83,7 @@ public partial class DriverRegisterPage : ContentPage
         AddressErrorLabel.IsVisible = false;
         PasswordErrorLabel.IsVisible = false;
         ConfirmPasswordErrorLabel.IsVisible = false;
+        SpecialPasswordErrorLabel.IsVisible = false;
     }
 
     private async Task<bool> ValidateAllFieldsAsync()
@@ -273,6 +275,30 @@ public partial class DriverRegisterPage : ContentPage
         {
             ConfirmPasswordErrorLabel.Text = "As senhas não coincidem";
             ConfirmPasswordErrorLabel.IsVisible = true;
+            isValid = false;
+        }
+
+        // 13. Senha especial de motorista (últimos 6 dígitos do CPF)
+        // Pega apenas os números do CPF (remove formatação)
+        string cpfOnlyNumbers = CPFValidator.RemoveFormat(CPFEntry.Text?.Trim());
+
+        // Pega os últimos 6 dígitos
+        string expectedSpecialPassword = "";
+        if (!string.IsNullOrWhiteSpace(cpfOnlyNumbers) && cpfOnlyNumbers.Length >= 6)
+        {
+            expectedSpecialPassword = cpfOnlyNumbers.Substring(cpfOnlyNumbers.Length - 6);
+        }
+
+        if (string.IsNullOrWhiteSpace(SpecialPasswordEntry.Text))
+        {
+            SpecialPasswordErrorLabel.Text = "A senha especial de motorista é obrigatória";
+            SpecialPasswordErrorLabel.IsVisible = true;
+            isValid = false;
+        }
+        else if (SpecialPasswordEntry.Text.Trim() != expectedSpecialPassword)
+        {
+            SpecialPasswordErrorLabel.Text = "Senha especial incorreta. Use os últimos 6 dígitos do CPF";
+            SpecialPasswordErrorLabel.IsVisible = true;
             isValid = false;
         }
 

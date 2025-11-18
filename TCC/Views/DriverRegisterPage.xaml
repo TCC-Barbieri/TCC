@@ -299,6 +299,25 @@
                            Margin="0,2,0,0" />
                 </VerticalStackLayout>
 
+                <!-- Senha especial motorista -->
+                <VerticalStackLayout Spacing="5">
+                    <Label Text="Senha Especial" 
+                           FontSize="14" 
+                           TextColor="#333"  />
+                    <Entry x:Name="SpecialPasswordEntry" 
+                           Placeholder="?" 
+                           FontSize="16" 
+                           BackgroundColor="White" 
+                           TextColor="#333" 
+                           IsPassword="True"
+                           HeightRequest="45" />
+                    <Label x:Name="SpecialPasswordErrorLabel" 
+                           FontSize="12" 
+                           TextColor="Red" 
+                           IsVisible="False" 
+                           Margin="0,2,0,0" />
+                </VerticalStackLayout>
+
                 <!-- Botão Criar Conta -->
                 <Button Text="CRIAR CONTA" 
                         x:Name="OnRegister"
