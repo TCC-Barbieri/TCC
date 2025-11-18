@@ -34,8 +34,7 @@
 
             <!-- Botões -->
             <VerticalStackLayout Spacing="20" 
-                                 WidthRequest="250"
-                                 >
+                                 WidthRequest="250">
 
                 <!-- Botão Iniciar Viagem -->
                 <Button x:Name="iniciarViagemButton"
@@ -114,6 +113,127 @@
             </VerticalStackLayout>
 
         </VerticalStackLayout>
+
+        <!-- Botão de Ajuda no canto inferior direito -->
+        <Button x:Name="ajudaButton"
+                Text="?"
+                TextColor="White"
+                FontSize="24"
+                FontAttributes="Bold"
+                BackgroundColor="#007bff"
+                CornerRadius="30"
+                WidthRequest="60"
+                HeightRequest="60"
+                HorizontalOptions="End"
+                VerticalOptions="End"
+                Margin="0,0,20,20"
+                SemanticProperties.Hint="Ajuda"
+                Clicked="AjudaButton_Clicked">
+            <Button.Shadow>
+                <Shadow Brush="Black" 
+                        Offset="0,4" 
+                        Radius="8" 
+                        Opacity="0.3"/>
+            </Button.Shadow>
+        </Button>
+
+        <!-- Popup de Ajuda -->
+        <Frame x:Name="ajudaPopup"
+               IsVisible="False"
+               BackgroundColor="White"
+               CornerRadius="15"
+               Padding="20"
+               HasShadow="True"
+               HorizontalOptions="Center"
+               VerticalOptions="Center"
+               WidthRequest="320"
+               MaximumHeightRequest="500">
+            <ScrollView>
+                <VerticalStackLayout Spacing="15">
+
+                    <!-- Título -->
+                    <Label Text="ℹ️ Ajuda"
+                           FontSize="24"
+                           FontAttributes="Bold"
+                           TextColor="#2C3E50"
+                           HorizontalOptions="Center"
+                           Margin="0,0,0,10"/>
+
+                    <!-- Explicação Iniciar Viagem -->
+                    <VerticalStackLayout Spacing="5">
+                        <Label Text="🚗 Iniciar Viagem"
+                               FontSize="16"
+                               FontAttributes="Bold"
+                               TextColor="#FF6B35"/>
+                        <Label Text="Inicie uma nova viagem para transportar os passageiros. Você verá a lista de passageiros que confirmaram presença e as rotas a seguir."
+                               TextColor="#555"
+                               LineBreakMode="WordWrap"/>
+                    </VerticalStackLayout>
+
+                    <BoxView HeightRequest="1" Color="#E0E0E0"/>
+
+                    <!-- Explicação Perfil -->
+                    <VerticalStackLayout Spacing="5">
+                        <Label Text="👤 Perfil"
+                               FontSize="16"
+                               FontAttributes="Bold"
+                               TextColor="#2C3E50"/>
+                        <Label Text="Visualize e edite suas informações pessoais, dados do veículo e informações de contato."
+                               TextColor="#555"
+                               LineBreakMode="WordWrap"/>
+                    </VerticalStackLayout>
+
+                    <BoxView HeightRequest="1" Color="#E0E0E0"/>
+
+                    <!-- Explicação Grupos -->
+                    <VerticalStackLayout Spacing="5">
+                        <Label Text="👥 Grupos"
+                               FontSize="16"
+                               FontAttributes="Bold"
+                               TextColor="#2C3E50"/>
+                        <Label Text="Acesse seus grupos de transporte, gerencie rotas e veja informações sobre os passageiros."
+                               TextColor="#555"
+                               LineBreakMode="WordWrap"/>
+                    </VerticalStackLayout>
+
+                    <BoxView HeightRequest="1" Color="#E0E0E0"/>
+
+                    <!-- Explicação Desconectar -->
+                    <VerticalStackLayout Spacing="5">
+                        <Label Text="❌ Desconectar"
+                               FontSize="16"
+                               FontAttributes="Bold"
+                               TextColor="#dc3545"/>
+                        <Label Text="Saia da sua conta com segurança."
+                               TextColor="#555"
+                               LineBreakMode="WordWrap"/>
+                    </VerticalStackLayout>
+
+                    <!-- Botão Fechar -->
+                    <Button Text="Fechar"
+                            TextColor="White"
+                            FontAttributes="Bold"
+                            BackgroundColor="#007bff"
+                            CornerRadius="20"
+                            HeightRequest="45"
+                            Margin="0,10,0,0"
+                            Clicked="FecharAjudaButton_Clicked"/>
+
+                </VerticalStackLayout>
+            </ScrollView>
+        </Frame>
+
+        <!-- Overlay escuro quando popup está aberto -->
+        <BoxView x:Name="ajudaOverlay"
+                 IsVisible="False"
+                 Color="Black"
+                 Opacity="0.5"
+                 HorizontalOptions="FillAndExpand"
+                 VerticalOptions="FillAndExpand">
+            <BoxView.GestureRecognizers>
+                <TapGestureRecognizer Tapped="FecharAjudaButton_Clicked"/>
+            </BoxView.GestureRecognizers>
+        </BoxView>
 
     </Grid>
 </ContentPage>
