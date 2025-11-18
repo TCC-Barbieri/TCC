@@ -67,11 +67,11 @@
                     <VerticalStackLayout Spacing="5">
                         <Label Text="CPF" FontSize="14" TextColor="#333" FontAttributes="Bold" />
                         <Entry x:Name="CPFEntry" 
-           Placeholder="000.000.000-00" 
-           BackgroundColor="White" 
-           TextColor="#333"
-           HeightRequest="45" 
-           Keyboard="Numeric">
+                               Placeholder="000.000.000-00" 
+                               BackgroundColor="White" 
+                               TextColor="#333"
+                               HeightRequest="45" 
+                               Keyboard="Numeric">
                             <Entry.Behaviors>
                                 <toolkit:MaskedBehavior Mask="XXX.XXX.XXX-XX" />
                                 <behaviors:CPFValidationBehavior x:Name="CPFValidation" ErrorLabel="{x:Reference CPFErrorLabel}" />
@@ -79,10 +79,10 @@
                         </Entry>
                         <!-- Label de erro para CPF -->
                         <Label x:Name="CPFErrorLabel" 
-           FontSize="12" 
-           TextColor="Red" 
-           IsVisible="False" 
-           Margin="0,2,0,0" />
+                               FontSize="12" 
+                               TextColor="Red" 
+                               IsVisible="False" 
+                               Margin="0,2,0,0" />
                     </VerticalStackLayout>
 
                     <!-- Email -->
@@ -136,16 +136,17 @@
                     <!-- Gênero -->
                     <VerticalStackLayout Spacing="5">
                         <Label Text="Gênero" FontSize="14" TextColor="#333" FontAttributes="Bold" />
-                        <Border Stroke="#DDDDDD" StrokeThickness="1" StrokeShape="RoundRectangle 5,5,5,5" HeightRequest="45">
-                            <Picker x:Name="GenderPicker" BackgroundColor="White" TextColor="#333">
-                                <Picker.Items>
-                                    <x:String>Masculino</x:String>
-                                    <x:String>Feminino</x:String>
-                                    <x:String>Outro</x:String>
-                                    <x:String>Prefiro não dizer</x:String>
-                                </Picker.Items>
-                            </Picker>
-                        </Border>
+                        <Picker x:Name="GenderPicker" 
+                                BackgroundColor="White" 
+                                TextColor="#333"
+                                HeightRequest="45">
+                            <Picker.Items>
+                                <x:String>Masculino</x:String>
+                                <x:String>Feminino</x:String>
+                                <x:String>Outro</x:String>
+                                <x:String>Prefiro não dizer</x:String>
+                            </Picker.Items>
+                        </Picker>
                     </VerticalStackLayout>
 
                     <!-- Endereço -->
@@ -160,15 +161,16 @@
                     <!-- Escola -->
                     <VerticalStackLayout Spacing="5">
                         <Label Text="Escola" FontSize="14" TextColor="#333" FontAttributes="Bold" />
-                        <Border Stroke="#DDDDDD" StrokeThickness="1" StrokeShape="RoundRectangle 5,5,5,5" HeightRequest="45">
-                            <Picker x:Name="SchoolPicker" BackgroundColor="White" TextColor="#333">
-                                <Picker.Items>
-                                    <x:String>ETEC</x:String>
-                                    <x:String>FATEC</x:String>
-                                    <x:String>UNESP</x:String>
-                                </Picker.Items>
-                            </Picker>
-                        </Border>
+                        <Picker x:Name="SchoolPicker" 
+                                BackgroundColor="White" 
+                                TextColor="#333"
+                                HeightRequest="45">
+                            <Picker.Items>
+                                <x:String>ETEC</x:String>
+                                <x:String>FATEC</x:String>
+                                <x:String>UNESP</x:String>
+                            </Picker.Items>
+                        </Picker>
                     </VerticalStackLayout>
 
                     <!-- Nome do responsável -->
@@ -208,14 +210,12 @@
                     <!-- Detalhes do Atendimento Especial -->
                     <VerticalStackLayout x:Name="SpecialTreatmentDetailsLayout" IsVisible="False" Spacing="5">
                         <Label Text="Detalhes do Atendimento Especial" FontSize="14" TextColor="#333" FontAttributes="Bold" />
-                        <Border Stroke="#DDDDDD" StrokeThickness="1" StrokeShape="RoundRectangle 5,5,5,5">
-                            <Editor x:Name="SpecialTreatmentEditor" 
-                                    Placeholder="Descreva as necessidades especiais" 
-                                    BackgroundColor="White" 
-                                    TextColor="#333"
-                                    HeightRequest="100" 
-                                    AutoSize="TextChanges" />
-                        </Border>
+                        <Editor x:Name="SpecialTreatmentEditor" 
+                                Placeholder="Descreva as necessidades especiais" 
+                                BackgroundColor="White" 
+                                TextColor="#333"
+                                HeightRequest="100" 
+                                AutoSize="TextChanges" />
                     </VerticalStackLayout>
                 </VerticalStackLayout>
 

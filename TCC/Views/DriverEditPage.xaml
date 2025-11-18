@@ -74,15 +74,15 @@
                 <!-- CPF com validação -->
                 <VerticalStackLayout Spacing="5">
                     <Label Text="CPF" 
-           FontSize="14" 
-           TextColor="#333" />
+                           FontSize="14" 
+                           TextColor="#333" />
                     <Entry x:Name="CPFEntry" 
-           Placeholder="000.000.000-00" 
-           FontSize="16" 
-           BackgroundColor="White" 
-           TextColor="#333" 
-           Keyboard="Numeric"
-           HeightRequest="45">
+                           Placeholder="000.000.000-00" 
+                           FontSize="16" 
+                           BackgroundColor="White" 
+                           TextColor="#333" 
+                           Keyboard="Numeric"
+                           HeightRequest="45">
                         <Entry.Behaviors>
                             <toolkit:MaskedBehavior Mask="XXX.XXX.XXX-XX" />
                             <behaviors:CPFValidationBehavior x:Name="CPFValidation" ErrorLabel="{x:Reference CPFErrorLabel}" />
@@ -90,10 +90,10 @@
                     </Entry>
                     <!-- Label de erro para CPF -->
                     <Label x:Name="CPFErrorLabel" 
-           FontSize="12" 
-           TextColor="Red" 
-           IsVisible="False" 
-           Margin="0,2,0,0" />
+                           FontSize="12" 
+                           TextColor="Red" 
+                           IsVisible="False" 
+                           Margin="0,2,0,0" />
                 </VerticalStackLayout>
 
                 <!-- Email -->
@@ -119,6 +119,7 @@
                                 BackgroundColor="White" 
                                 TextColor="#333" 
                                 FontSize="16"
+                                Format="dd/MM/yyyy"
                                 HeightRequest="45" />
                 </VerticalStackLayout>
 
@@ -177,19 +178,17 @@
                     <Label Text="Gênero" 
                            FontSize="14" 
                            TextColor="#333" />
-                    <Border Stroke="#DDDDDD" 
-                            StrokeThickness="1" 
-                            StrokeShape="RoundRectangle 5,5,5,5" 
+                    <Picker x:Name="GenderPicker"
+                            BackgroundColor="White"
+                            TextColor="#333"
                             HeightRequest="45">
-                        <Picker x:Name="GenderPicker">
-                            <Picker.Items>
-                                <x:String>Masculino</x:String>
-                                <x:String>Feminino</x:String>
-                                <x:String>Outro</x:String>
-                                <x:String>Prefiro não dizer</x:String>
-                            </Picker.Items>
-                        </Picker>
-                    </Border>
+                        <Picker.Items>
+                            <x:String>Masculino</x:String>
+                            <x:String>Feminino</x:String>
+                            <x:String>Outro</x:String>
+                            <x:String>Prefiro não dizer</x:String>
+                        </Picker.Items>
+                    </Picker>
                 </VerticalStackLayout>
 
                 <!-- Endereço -->
