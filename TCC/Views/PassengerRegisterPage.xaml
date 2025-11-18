@@ -38,16 +38,6 @@
             <!-- Conteúdo do formulário com padding -->
             <VerticalStackLayout Padding="20" Spacing="20">
 
-                <!-- Debug Button -->
-                <Button Text="Mostrar Caminho do Banco de Dados"
-                        BackgroundColor="#333333"
-                        TextColor="White"
-                        FontSize="12"
-                        Clicked="Button_Clicked"
-                        CornerRadius="10"
-                        HeightRequest="40">
-                </Button>
-
                 <!-- Registration Fields -->
                 <VerticalStackLayout Spacing="5">
                     <Label Text="Nome" />
@@ -215,7 +205,6 @@
                             <Picker x:Name="SchoolPicker">
                                 <Picker.Items>
                                     <x:String>ETEC</x:String>
-                                    <x:String>UNESP</x:String>
                                     <x:String>UNISAGRADO</x:String>
                                 </Picker.Items>
                             </Picker>

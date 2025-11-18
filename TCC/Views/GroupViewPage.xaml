@@ -68,78 +68,27 @@
                     </StackLayout>
                 </Frame>
 
-                <!-- FATEC -->
-                <Frame BackgroundColor="#FDF2E9"
-                       BorderColor="#E67E22"
+                <!-- Unisagrado -->
+                <Frame BackgroundColor="#fde0e0"
+                       BorderColor="Red"
                        CornerRadius="10"
                        Padding="15">
                     <StackLayout>
-                        <Label Text="FATEC"
+                        <Label Text="Unisagrado"
                                FontSize="20"
                                FontAttributes="Bold"
-                               TextColor="#E67E22"
+                               TextColor="Red"
                                HorizontalOptions="Center" />
 
-                        <Label x:Name="FatecCountLabel"
+                        <Label x:Name="UnisagradoCountLabel"
                                Text="0 usuários"
                                FontSize="14"
                                TextColor="#7F8C8D"
                                HorizontalOptions="Center"
                                Margin="0,0,0,10" />
 
-                        <CollectionView x:Name="FatecCollectionView"
-                                        ItemsSource="{Binding EtecUsers}"
-                                        BackgroundColor="Transparent"
-                                        SelectionMode="Single"
-                                        SelectionChanged="OnUserSelected">
-                            <CollectionView.ItemTemplate>
-                                <DataTemplate>
-                                    <Grid Padding="10,5"
-                                          ColumnDefinitions="*,Auto">
-                                        <StackLayout Grid.Column="0">
-                                            <Label Text="{Binding Name}"
-                                                   FontSize="16"
-                                                   FontAttributes="Bold"
-                                                   TextColor="#2C3E50" />
-                                            <Label Text="{Binding UserType}"
-                                                   FontSize="12"
-                                                   TextColor="#7F8C8D" />
-                                            <Label Text="{Binding Email}"
-                                                   FontSize="12"
-                                                   TextColor="#7F8C8D" />
-                                        </StackLayout>
-                                        <Label Grid.Column="1"
-                                               Text="🎓"
-                                               FontSize="20"
-                                               VerticalOptions="Center" />
-                                    </Grid>
-                                </DataTemplate>
-                            </CollectionView.ItemTemplate>
-                        </CollectionView>
-                    </StackLayout>
-                </Frame>
-
-                <!-- UNESP -->
-                <Frame BackgroundColor="#EBF5FB"
-                       BorderColor="#3498DB"
-                       CornerRadius="10"
-                       Padding="15">
-                    <StackLayout>
-                        <Label Text="UNESP"
-                               FontSize="20"
-                               FontAttributes="Bold"
-                               TextColor="#3498DB"
-                               HorizontalOptions="Center" />
-
-                        <Label x:Name="UnespCountLabel"
-                               Text="0 usuários"
-                               FontSize="14"
-                               TextColor="#7F8C8D"
-                               HorizontalOptions="Center"
-                               Margin="0,0,0,10" />
-
-                        <CollectionView x:Name="UnespCollectionView"
-                                        ItemsSource="{Binding EtecUsers}"
+                        <CollectionView x:Name="UnisagradoCollectionView"
+                                        ItemsSource="{Binding UnisagradoUsers}"
                                         BackgroundColor="Transparent"
                                         SelectionMode="Single"
                                         SelectionChanged="OnUserSelected">

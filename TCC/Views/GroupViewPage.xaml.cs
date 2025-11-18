@@ -9,8 +9,7 @@ namespace TCC.Views
         private Driver _loggedDriver;
 
         public List<Passenger> EtecUsers { get; set; } = new();
-        public List<Passenger> FatecUsers { get; set; } = new();
-        public List<Passenger> UnespUsers { get; set; } = new();
+        public List<Passenger> UnisagradoUsers { get; set; } = new();
         public List<Driver> Drivers { get; set; } = new();
 
         public GroupViewPage()
@@ -65,19 +64,16 @@ namespace TCC.Views
                 }
 
                 EtecUsers = allPassengers.Where(p => p.School.ToUpper() == "ETEC").ToList();
-                FatecUsers = allPassengers.Where(p => p.School.ToUpper() == "FATEC").ToList();
-                UnespUsers = allPassengers.Where(p => p.School.ToUpper() == "UNESP").ToList();
+                UnisagradoUsers = allPassengers.Where(p => p.School.ToUpper() == "UNESP").ToList();
 
                 Drivers = isPassenger ? new List<Driver>() : allDrivers;
 
                 EtecCountLabel.Text = $"{EtecUsers.Count} usuários";
-                FatecCountLabel.Text = $"{FatecUsers.Count} usuários";
-                UnespCountLabel.Text = $"{UnespUsers.Count} usuários";
+                UnisagradoCountLabel.Text = $"{UnisagradoUsers.Count} usuários";
                 DriversCountLabel.Text = $"{Drivers.Count} motoristas";
 
                 EtecCollectionView.ItemsSource = EtecUsers;
-                FatecCollectionView.ItemsSource = FatecUsers;
-                UnespCollectionView.ItemsSource = UnespUsers;
+                UnisagradoCollectionView.ItemsSource = UnisagradoUsers;
                 DriversCollectionView.ItemsSource = Drivers;
             }
             catch (Exception ex)
