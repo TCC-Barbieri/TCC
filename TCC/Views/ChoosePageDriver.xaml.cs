@@ -69,5 +69,16 @@ namespace TCC.Views
                 await DisplayAlert("Erro", $"Erro ao desconectar: {ex.Message}", "OK");
             }
         }
+        private void AjudaButton_Clicked(object sender, EventArgs e)
+        {
+            ajudaOverlay.IsVisible = true;
+            ajudaPopup.IsVisible = true;
+        }
+
+        private void FecharAjudaButton_Clicked(object sender, EventArgs e)
+        {
+            ajudaOverlay.IsVisible = false;
+            ajudaPopup.IsVisible = false;
+        }
     }
 }
