@@ -501,26 +501,44 @@ namespace TCC.Views
 
         private async void OnFinishTripClicked(object sender, EventArgs e)
         {
-            bool confirm = await DisplayAlert(
-                "Finalizar Viagem",
-                "Deseja finalizar a viagem?",
-                "Sim",
-                "Não"
-            );
-
-            if (confirm)
+            try
             {
-                _isTrackingLocation = false;
-
-                await DisplayAlert(
-                    "Viagem Finalizada!",
-                    $"Passageiros na rota: {_passageiros.Count}",
-                    "OK"
+                bool confirm = await DisplayAlert(
+                    "Voltar",
+                    "Deseja realmente voltar para a configuração da viagem?",
+                    "Sim",
+                    "Não"
                 );
 
-                await Navigation.PopAsync();
+                if (!confirm)
+                    return;
+
+                // PEGAR driverId DO SECURE STORAGE
+                var driverIdString = await SecureStorage.GetAsync("user_id");
+
+                if (string.IsNullOrEmpty(driverIdString))
+                {
+                    await DisplayAlert("Erro", "Não foi possível recuperar o ID do motorista.", "OK");
+                    return;
+                }
+
+                int driverId = int.Parse(driverIdString);
+
+                // PARAR RASTREAMENTO
+                _isTrackingLocation = false;
+
+                // Voltar para configurar viagem
+                await Navigation.PushAsync(new ConfigurarViagemPage(driverId));
+
+                // Remove a página atual do stack
+                Navigation.RemovePage(this);
+            }
+            catch (Exception ex)
+            {
+                await DisplayAlert("Erro", $"Falha ao voltar: {ex.Message}", "OK");
             }
         }
+
 
         protected override void OnDisappearing()
         {
