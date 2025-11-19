@@ -236,7 +236,7 @@
         <!-- Overlay escuro quando popup está aberto -->
         <BoxView x:Name="ajudaOverlay"
                  IsVisible="False"
-                 Color="Black"
+                 Color="Transparent"
                  Opacity="0.5"
                  HorizontalOptions="FillAndExpand"
                  VerticalOptions="FillAndExpand">
