@@ -29,6 +29,7 @@
                     </Picker.ItemsSource>
                 </Picker>
                 <Button Text="Entrar" BackgroundColor="Red" TextColor="White" Clicked="OnLoginClicked" IsEnabled="True"/>
+                <Button Text="Criar Conta" BackgroundColor="Transparent" TextColor="Red" Clicked="Button_Clicked" IsEnabled="True"/>
             </VerticalStackLayout>
 
         </VerticalStackLayout>
