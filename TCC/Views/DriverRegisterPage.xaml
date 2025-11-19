@@ -328,7 +328,7 @@
                         FontSize="16"
                         FontAttributes="Bold"
                         Margin="0,20,0,10"
-                        Clicked="OnRegister_Clicked">
+                        Clicked="OnRegisterClicked">
                 </Button>
 
                 <!-- Botão Já tenho conta -->

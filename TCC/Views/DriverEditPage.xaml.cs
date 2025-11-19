@@ -1,4 +1,4 @@
-using TCC.Models;
+ï»¿using TCC.Models;
 using TCC.Services;
 using TCC.Helpers;
 
@@ -15,7 +15,6 @@ public partial class DriverEditPage : ContentPage
         InitializeComponent();
         _driverId = driverId;
 
-        // Motorista deve ter no mínimo 18 anos
         BirthDatePicker.MaximumDate = DateTime.Today.AddYears(-18);
     }
 
@@ -32,47 +31,31 @@ public partial class DriverEditPage : ContentPage
             var drivers = await _databaseService.GetDrivers();
             _currentDriver = drivers.FirstOrDefault(d => d.Id == _driverId);
 
-            if (_currentDriver != null)
+            if (_currentDriver == null)
             {
-                NameEntry.Text = _currentDriver.Name ?? string.Empty;
-                RGEntry.Text = _currentDriver.RG ?? string.Empty;
-                CPFEntry.Text = _currentDriver.CPF ?? string.Empty;
-
-                EmailEntry.Text = _currentDriver.Email ?? string.Empty;
-                AddressEntry.Text = _currentDriver.Address ?? string.Empty;
-                CNHEntry.Text = _currentDriver.CNH ?? string.Empty;
-
-                BirthDatePicker.Date = _currentDriver.BirthDate;
-
-                PhoneEntry.Text = !string.IsNullOrWhiteSpace(_currentDriver.PhoneNumber)
-                    ? PhoneValidationHelper.FormatPhone(_currentDriver.PhoneNumber)
-                    : string.Empty;
-
-                ContatoEmergenciaEntry.Text = !string.IsNullOrWhiteSpace(_currentDriver.EmergencyPhoneNumber)
-                    ? PhoneValidationHelper.FormatPhone(_currentDriver.EmergencyPhoneNumber)
-                    : string.Empty;
-
-                SetPickerSelection(GenderPicker, _currentDriver.Genre);
-            }
-            else
-            {
-                await DisplayAlert("Erro", "Motorista não encontrado.", "OK");
+                await DisplayAlert("Erro", "Motorista nÃ£o encontrado.", "OK");
                 await Navigation.PopAsync();
+                return;
             }
+
+            NameEntry.Text = _currentDriver.Name;
+            RGEntry.Text = _currentDriver.RG;
+            CPFEntry.Text = _currentDriver.CPF;
+            EmailEntry.Text = _currentDriver.Email;
+
+            PhoneEntry.Text = PhoneValidationHelper.FormatPhone(_currentDriver.PhoneNumber);
+            ContatoEmergenciaEntry.Text = PhoneValidationHelper.FormatPhone(_currentDriver.EmergencyPhoneNumber);
+
+            AddressEntry.Text = _currentDriver.Address;
+            CNHEntry.Text = _currentDriver.CNH;
+            BirthDatePicker.Date = _currentDriver.BirthDate;
+
+            GenderPicker.SelectedItem = _currentDriver.Genre;
+
         }
         catch (Exception ex)
         {
-            await DisplayAlert("Erro", $"Erro ao carregar dados: {ex.Message}", "OK");
-        }
-    }
-
-    private void SetPickerSelection(Picker picker, string value)
-    {
-        if (!string.IsNullOrWhiteSpace(value))
-        {
-            var index = picker.Items.IndexOf(value);
-            if (index >= 0)
-                picker.SelectedIndex = index;
+            await DisplayAlert("Erro", ex.Message, "OK");
         }
     }
 
@@ -80,62 +63,54 @@ public partial class DriverEditPage : ContentPage
     {
         try
         {
-            var validation = ValidateFields();
-            if (!validation.IsValid)
+            var fieldsCheck = ValidateRequiredFields();
+            if (!fieldsCheck.IsValid)
             {
-                await DisplayAlert("Campos obrigatórios", validation.Message, "OK");
+                await DisplayAlert("AtenÃ§Ã£o", fieldsCheck.Message, "OK");
                 return;
             }
 
-            // Validar RG
-            if (!RGValidatorHelper.IsValid(RGEntry.Text?.Trim()))
+            if (!RGValidatorHelper.IsValid(RGEntry.Text.Trim()))
             {
-                await DisplayAlert("Atenção", "RG inválido. Verifique os números.", "OK");
+                await DisplayAlert("Erro", "RG invÃ¡lido.", "OK");
                 return;
             }
 
-            // Validar CPF
-            if (!CPFValidator.IsValid(CPFEntry.Text?.Trim()))
+            if (!CPFValidator.IsValid(CPFEntry.Text.Trim()))
             {
-                await DisplayAlert("Atenção", "CPF inválido.", "OK");
+                await DisplayAlert("Erro", "CPF invÃ¡lido.", "OK");
                 return;
             }
 
-            // Idade mínima 18 anos
-            var age = DateTime.Today.Year - BirthDatePicker.Date.Year;
+            int age = DateTime.Today.Year - BirthDatePicker.Date.Year;
             if (BirthDatePicker.Date > DateTime.Today.AddYears(-age)) age--;
 
             if (age < 18)
             {
-                await DisplayAlert("Atenção", "O motorista deve ter no mínimo 18 anos.", "OK");
+                await DisplayAlert("Erro", "Motorista deve ter no mÃ­nimo 18 anos.", "OK");
                 return;
             }
 
-            // Validar telefone
-            if (!PhoneValidationHelper.IsValidPhone(PhoneEntry.Text?.Trim()))
+            if (!PhoneValidationHelper.IsValidPhone(PhoneEntry.Text))
             {
-                await DisplayAlert("Atenção", PhoneValidationHelper.GetValidationErrorMessage(), "OK");
+                await DisplayAlert("Erro", PhoneValidationHelper.GetValidationErrorMessage(), "OK");
                 return;
             }
 
-            // Validar contato emergência
-            if (!PhoneValidationHelper.IsValidPhone(ContatoEmergenciaEntry.Text?.Trim()))
+            if (!PhoneValidationHelper.IsValidPhone(ContatoEmergenciaEntry.Text))
             {
-                await DisplayAlert("Atenção",
-                    "Contato de emergência inválido. " + PhoneValidationHelper.GetValidationErrorMessage(),
-                    "OK");
+                await DisplayAlert("Erro", PhoneValidationHelper.GetValidationErrorMessage(), "OK");
                 return;
             }
 
-            // Validar senha
             if (!ValidatePasswordChange())
             {
-                await DisplayAlert("Erro", "As senhas não coincidem ou são muito curtas.", "OK");
+                await DisplayAlert("Erro", "As senhas nÃ£o coincidem ou sÃ£o muito curtas.", "OK");
                 return;
             }
 
-            // Validação de unicidade
-            var validationResult = await _databaseService.ValidateUniqueUserData(
+            // ðŸ”µ VALIDA APENAS MOTORISTA
+            var uniqueCheck = await _databaseService.ValidateUniqueUserData(
                 rg: RGValidatorHelper.RemoveFormat(RGEntry.Text.Trim()),
                 cpf: CPFValidator.RemoveFormat(CPFEntry.Text.Trim()),
                 email: EmailEntry.Text.Trim(),
@@ -145,13 +120,14 @@ public partial class DriverEditPage : ContentPage
                 userType: "driver"
             );
 
-            if (!validationResult.IsValid)
+            if (!uniqueCheck.IsValid)
             {
-                await DisplayAlert("Atenção", validationResult.Message, "OK");
+                await DisplayAlert("Erro", uniqueCheck.Message, "OK");
                 return;
             }
 
-            UpdateDriverData();
+            UpdateDriverModel();
+
             await _databaseService.UpdateDriver(_currentDriver);
 
             await DisplayAlert("Sucesso", "Dados atualizados com sucesso!", "OK");
@@ -163,47 +139,56 @@ public partial class DriverEditPage : ContentPage
         }
     }
 
-    private (bool IsValid, string Message) ValidateFields()
+    private (bool IsValid, string Message) ValidateRequiredFields()
     {
-        var required = new[]
-        {
-            (NameEntry.Text, "Nome"),
-            (RGEntry.Text, "RG"),
-            (CPFEntry.Text, "CPF"),
-            (EmailEntry.Text, "Email"),
-            (PhoneEntry.Text, "Telefone"),
-            (ContatoEmergenciaEntry.Text, "Contato de Emergência"),
-            (CNHEntry.Text, "CNH"),
-            (AddressEntry.Text, "Endereço")
-        };
+        if (string.IsNullOrWhiteSpace(NameEntry.Text))
+            return (false, "Informe o nome.");
 
-        foreach (var (value, name) in required)
-        {
-            if (string.IsNullOrWhiteSpace(value))
-                return (false, $"Preencha o campo {name}.");
-        }
+        if (string.IsNullOrWhiteSpace(RGEntry.Text))
+            return (false, "Informe o RG.");
 
-        if (GenderPicker.SelectedItem == null)
-            return (false, "Selecione o gênero.");
+        if (string.IsNullOrWhiteSpace(CPFEntry.Text))
+            return (false, "Informe o CPF.");
+
+        if (string.IsNullOrWhiteSpace(EmailEntry.Text))
+            return (false, "Informe o Email.");
+
+        if (string.IsNullOrWhiteSpace(PhoneEntry.Text))
+            return (false, "Informe o Telefone.");
+
+        if (string.IsNullOrWhiteSpace(ContatoEmergenciaEntry.Text))
+            return (false, "Informe o Contato de EmergÃªncia.");
+
+        if (string.IsNullOrWhiteSpace(AddressEntry.Text))
+            return (false, "Informe o EndereÃ§o.");
+
+        if (string.IsNullOrWhiteSpace(CNHEntry.Text))
+            return (false, "Informe a CNH.");
+
+        if (GenderPicker.SelectedIndex == -1)
+            return (false, "Selecione o gÃªnero.");
 
         return (true, "");
     }
 
     private bool ValidatePasswordChange()
     {
-        var newPass = NewPasswordEntry.Text?.Trim();
-        var confirmPass = ConfirmNewPasswordEntry.Text?.Trim();
+        string newPass = NewPasswordEntry.Text?.Trim();
+        string confirm = ConfirmNewPasswordEntry.Text?.Trim();
 
-        if (string.IsNullOrWhiteSpace(newPass) && string.IsNullOrWhiteSpace(confirmPass))
+        if (string.IsNullOrWhiteSpace(newPass) && string.IsNullOrWhiteSpace(confirm))
             return true;
 
-        if (newPass != confirmPass)
+        if (newPass != confirm)
             return false;
 
-        return newPass.Length >= 6;
+        if (newPass.Length < 6)
+            return false;
+
+        return true;
     }
 
-    private void UpdateDriverData()
+    private void UpdateDriverModel()
     {
         _currentDriver.Name = NameEntry.Text.Trim();
         _currentDriver.RG = RGValidatorHelper.RemoveFormat(RGEntry.Text.Trim());
@@ -213,20 +198,20 @@ public partial class DriverEditPage : ContentPage
         _currentDriver.PhoneNumber = PhoneValidationHelper.GetOnlyNumbers(PhoneEntry.Text.Trim());
         _currentDriver.EmergencyPhoneNumber = PhoneValidationHelper.GetOnlyNumbers(ContatoEmergenciaEntry.Text.Trim());
 
-        _currentDriver.CNH = CNHEntry.Text.Trim();
+        _currentDriver.Genre = GenderPicker.SelectedItem.ToString();
         _currentDriver.Address = AddressEntry.Text.Trim();
-
-        _currentDriver.Genre = GenderPicker.SelectedItem?.ToString() ?? "Não especificado";
+        _currentDriver.CNH = CNHEntry.Text.Trim();
         _currentDriver.BirthDate = BirthDatePicker.Date;
 
-        var newPassword = NewPasswordEntry.Text?.Trim();
-        if (!string.IsNullOrEmpty(newPassword))
-            _currentDriver.Password = newPassword;
+        if (!string.IsNullOrWhiteSpace(NewPasswordEntry.Text))
+            _currentDriver.Password = NewPasswordEntry.Text.Trim();
     }
 
     private async void OnCancel_Clicked(object sender, EventArgs e)
     {
-        if (await DisplayAlert("Cancelar", "Deseja descartar as alterações?", "Sim", "Não"))
+        bool confirm = await DisplayAlert("Cancelar", "Deseja descartar alteraÃ§Ãµes?", "Sim", "NÃ£o");
+
+        if (confirm)
             await Navigation.PopAsync();
     }
 }

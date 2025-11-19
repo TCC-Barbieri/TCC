@@ -41,7 +41,7 @@ namespace TCC.Models
         [NotNull, MaxLength(200)]
         public string School { get; set; }
 
-        [NotNull, MaxLength(200)]
+        [MaxLength(200)]
         public string ResponsableName { get; set; }
 
         [NotNull, MaxLength(200)]

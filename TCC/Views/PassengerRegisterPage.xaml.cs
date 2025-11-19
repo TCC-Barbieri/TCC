@@ -1,4 +1,4 @@
-using TCC.Models;
+ï»¿using TCC.Models;
 using TCC.Services;
 using TCC.Helpers;
 
@@ -43,36 +43,33 @@ public partial class PassengerRegisterPage : ContentPage
     {
         try
         {
-            // Limpar todas as mensagens de erro
             ClearAllErrors();
 
-            // Validar campos antes de prosseguir
             if (!await ValidateAllFieldsAsync())
-            {
                 return;
-            }
 
             var request = new GeolocationRequest(GeolocationAccuracy.High, TimeSpan.FromSeconds(5));
             var location = await Geolocation.Default.GetLocationAsync(request);
 
-            // Validação de dados únicos
-            var uniqueDataValidation = await _databaseService.ValidateUniqueUserData(
+            // ðŸ”µ AGORA A VALIDAÃ‡ÃƒO Ã‰ APENAS PARA PASSAGEIRO
+            var uniqueValidation = await _databaseService.ValidateUniqueUserData(
                 rg: RGValidatorHelper.RemoveFormat(RGEntry.Text.Trim()),
                 cpf: CPFValidator.RemoveFormat(CPFEntry.Text.Trim()),
                 email: EmailEntry.Text.Trim(),
-                phone: PhoneValidationHelper.GetOnlyNumbers(PhoneEntry.Text.Trim())
+                phone: PhoneValidationHelper.GetOnlyNumbers(PhoneEntry.Text.Trim()),
+                userType: "passenger" // ðŸ”¥ IMPORTANTE
             );
 
-            if (!uniqueDataValidation.IsValid)
+            if (!uniqueValidation.IsValid)
             {
-                await DisplayAlert("Dados já cadastrados", uniqueDataValidation.Message, "OK");
+                await DisplayAlert("Dados jÃ¡ cadastrados", uniqueValidation.Message, "OK");
                 return;
             }
 
             Passenger passenger = new Passenger
             {
                 Name = NameEntry.Text.Trim(),
-                Password = PasswordEntry.Text,
+                Password = PasswordEntry.Text.Trim(),
                 Email = EmailEntry.Text.Trim(),
                 PhoneNumber = PhoneValidationHelper.GetOnlyNumbers(PhoneEntry.Text.Trim()),
                 EmergencyPhoneNumber = PhoneValidationHelper.GetOnlyNumbers(EmergencyPhoneEntry.Text.Trim()),
@@ -80,13 +77,11 @@ public partial class PassengerRegisterPage : ContentPage
                 ReservableAddress = BackupAddressEntry.Text.Trim(),
                 RG = RGValidatorHelper.RemoveFormat(RGEntry.Text.Trim()),
                 CPF = CPFValidator.RemoveFormat(CPFEntry.Text.Trim()),
-                Genre = GenderPicker.SelectedItem?.ToString() ?? "Não especificado",
-                School = SchoolPicker.SelectedItem?.ToString() ?? "Não especificado",
+                Genre = GenderPicker.SelectedItem?.ToString() ?? "NÃ£o especificado",
+                School = SchoolPicker.SelectedItem?.ToString() ?? "NÃ£o especificado",
                 ResponsableName = ResponsibleEntry.Text.Trim(),
                 SpecialTreatment = AtendimentoSimRadio.IsChecked,
-                SpecialTreatmentObservations = AtendimentoSimRadio.IsChecked
-                    ? SpecialTreatmentEditor.Text?.Trim() ?? string.Empty
-                    : string.Empty,
+                SpecialTreatmentObservations = AtendimentoSimRadio.IsChecked ? SpecialTreatmentEditor.Text?.Trim() ?? "" : "",
                 BirthDate = BirthDatePicker.Date,
                 Longitude = location.Longitude,
                 Latitude = location.Latitude
@@ -95,14 +90,13 @@ public partial class PassengerRegisterPage : ContentPage
             await _databaseService.CreatePassenger(passenger);
 
             await DisplayAlert("Sucesso", "Passageiro registrado com sucesso!", "OK");
-
             ClearFields();
 
             await Navigation.PushAsync(new LoginPage());
         }
         catch (Exception ex)
         {
-            await DisplayAlert("Erro", $"Erro ao registrar passageiro: {ex.Message}", "OK");
+            await DisplayAlert("Erro", $"Erro ao registrar: {ex.Message}", "OK");
         }
     }
 
@@ -127,223 +121,95 @@ public partial class PassengerRegisterPage : ContentPage
 
     private async Task<bool> ValidateAllFieldsAsync()
     {
-        bool isValid = true;
+        bool valid = true;
 
-        // 1. Nome
         if (string.IsNullOrWhiteSpace(NameEntry.Text))
         {
-            NameErrorLabel.Text = "Nome é obrigatório";
+            NameErrorLabel.Text = "Nome Ã© obrigatÃ³rio";
             NameErrorLabel.IsVisible = true;
-            isValid = false;
-        }
-        else if (NameEntry.Text.Trim().Length < 3)
-        {
-            NameErrorLabel.Text = "Nome deve ter pelo menos 3 caracteres";
-            NameErrorLabel.IsVisible = true;
-            isValid = false;
+            valid = false;
         }
 
-        // 2. RG
-        if (string.IsNullOrWhiteSpace(RGEntry.Text))
+        if (string.IsNullOrWhiteSpace(RGEntry.Text) ||
+            !RGValidatorHelper.IsValid(RGEntry.Text.Trim()))
         {
-            RGErrorLabel.Text = "RG é obrigatório";
+            RGErrorLabel.Text = "RG invÃ¡lido";
             RGErrorLabel.IsVisible = true;
-            isValid = false;
-        }
-        else if (!RGValidatorHelper.IsValid(RGEntry.Text?.Trim()))
-        {
-            RGErrorLabel.Text = "RG inválido. Verifique os números digitados";
-            RGErrorLabel.IsVisible = true;
-            isValid = false;
+            valid = false;
         }
 
-        // 3. CPF
-        if (string.IsNullOrWhiteSpace(CPFEntry.Text))
+        if (string.IsNullOrWhiteSpace(CPFEntry.Text) ||
+            !CPFValidator.IsValid(CPFEntry.Text.Trim()))
         {
-            CPFErrorLabel.Text = "CPF é obrigatório";
+            CPFErrorLabel.Text = "CPF invÃ¡lido";
             CPFErrorLabel.IsVisible = true;
-            isValid = false;
-        }
-        else if (!CPFValidator.IsValid(CPFEntry.Text?.Trim()))
-        {
-            CPFErrorLabel.Text = "CPF inválido. Verifique os números digitados";
-            CPFErrorLabel.IsVisible = true;
-            isValid = false;
+            valid = false;
         }
 
-        // 4. Email
-        if (string.IsNullOrWhiteSpace(EmailEntry.Text))
+        if (string.IsNullOrWhiteSpace(EmailEntry.Text) ||
+            !IsValidEmail(EmailEntry.Text.Trim()))
         {
-            EmailErrorLabel.Text = "Email é obrigatório";
+            EmailErrorLabel.Text = "Email invÃ¡lido";
             EmailErrorLabel.IsVisible = true;
-            isValid = false;
-        }
-        else if (!IsValidEmail(EmailEntry.Text.Trim()))
-        {
-            EmailErrorLabel.Text = "Email inválido. Use o formato: exemplo@email.com";
-            EmailErrorLabel.IsVisible = true;
-            isValid = false;
+            valid = false;
         }
 
-        // 5. Data de Nascimento
-        var age = DateTime.Today.Year - BirthDatePicker.Date.Year;
+        int age = DateTime.Today.Year - BirthDatePicker.Date.Year;
         if (BirthDatePicker.Date > DateTime.Today.AddYears(-age)) age--;
 
         if (age < 14)
         {
-            BirthDateErrorLabel.Text = "Passageiro deve ter no mínimo 14 anos";
+            BirthDateErrorLabel.Text = "Idade mÃ­nima: 14 anos";
             BirthDateErrorLabel.IsVisible = true;
-            isValid = false;
+            valid = false;
         }
 
-        // 6. Telefone
-        if (string.IsNullOrWhiteSpace(PhoneEntry.Text))
+        if (!PhoneValidationHelper.IsValidPhone(PhoneEntry.Text))
         {
-            PhoneErrorLabel.Text = "Telefone é obrigatório";
+            PhoneErrorLabel.Text = PhoneValidationHelper.GetValidationErrorMessage();
             PhoneErrorLabel.IsVisible = true;
-            isValid = false;
-        }
-        else
-        {
-            var phoneNumbers = PhoneValidationHelper.GetOnlyNumbers(PhoneEntry.Text?.Trim());
-            if (phoneNumbers.Length != 11)
-            {
-                PhoneErrorLabel.Text = "Telefone deve ter 11 dígitos (DDD + número)";
-                PhoneErrorLabel.IsVisible = true;
-                isValid = false;
-            }
-            else if (!PhoneValidationHelper.IsValidPhone(PhoneEntry.Text?.Trim()))
-            {
-                PhoneErrorLabel.Text = PhoneValidationHelper.GetValidationErrorMessage();
-                PhoneErrorLabel.IsVisible = true;
-                isValid = false;
-            }
+            valid = false;
         }
 
-        // 7. Telefone de Emergência
-        if (string.IsNullOrWhiteSpace(EmergencyPhoneEntry.Text))
+        if (!PhoneValidationHelper.IsValidPhone(EmergencyPhoneEntry.Text))
         {
-            EmergencyPhoneErrorLabel.Text = "Contato de emergência é obrigatório";
+            EmergencyPhoneErrorLabel.Text = PhoneValidationHelper.GetValidationErrorMessage();
             EmergencyPhoneErrorLabel.IsVisible = true;
-            isValid = false;
-        }
-        else
-        {
-            var emergencyNumbers = PhoneValidationHelper.GetOnlyNumbers(EmergencyPhoneEntry.Text?.Trim());
-            if (emergencyNumbers.Length != 11)
-            {
-                EmergencyPhoneErrorLabel.Text = "Telefone de emergência deve ter 11 dígitos (DDD + número)";
-                EmergencyPhoneErrorLabel.IsVisible = true;
-                isValid = false;
-            }
-            else if (!PhoneValidationHelper.IsValidPhone(EmergencyPhoneEntry.Text?.Trim()))
-            {
-                EmergencyPhoneErrorLabel.Text = PhoneValidationHelper.GetValidationErrorMessage();
-                EmergencyPhoneErrorLabel.IsVisible = true;
-                isValid = false;
-            }
+            valid = false;
         }
 
-        // 8. Gênero
         if (GenderPicker.SelectedIndex == -1)
         {
-            GenderErrorLabel.Text = "Selecione seu gênero";
+            GenderErrorLabel.Text = "Selecione o gÃªnero";
             GenderErrorLabel.IsVisible = true;
-            isValid = false;
+            valid = false;
         }
 
-        // 9. Escola
         if (SchoolPicker.SelectedIndex == -1)
         {
-            SchoolErrorLabel.Text = "Selecione sua escola";
+            SchoolErrorLabel.Text = "Selecione a escola";
             SchoolErrorLabel.IsVisible = true;
-            isValid = false;
+            valid = false;
         }
 
-        // 10. Endereço
-        if (string.IsNullOrWhiteSpace(AddressEntry.Text))
-        {
-            AddressErrorLabel.Text = "Endereço é obrigatório";
-            AddressErrorLabel.IsVisible = true;
-            isValid = false;
-        }
-        else if (AddressEntry.Text.Trim().Length < 10)
-        {
-            AddressErrorLabel.Text = "Endereço deve conter pelo menos 10 caracteres";
-            AddressErrorLabel.IsVisible = true;
-            isValid = false;
-        }
-
-        // 11. Endereço Alternativo
-        if (string.IsNullOrWhiteSpace(BackupAddressEntry.Text))
-        {
-            BackupAddressErrorLabel.Text = "Endereço alternativo é obrigatório";
-            BackupAddressErrorLabel.IsVisible = true;
-            isValid = false;
-        }
-        else if (BackupAddressEntry.Text.Trim().Length < 10)
-        {
-            BackupAddressErrorLabel.Text = "Endereço deve conter pelo menos 10 caracteres";
-            BackupAddressErrorLabel.IsVisible = true;
-            isValid = false;
-        }
-
-        // 12. Nome do Responsável
-        if (string.IsNullOrWhiteSpace(ResponsibleEntry.Text))
-        {
-            ResponsibleErrorLabel.Text = "Nome do responsável é obrigatório";
-            ResponsibleErrorLabel.IsVisible = true;
-            isValid = false;
-        }
-        else if (ResponsibleEntry.Text.Trim().Length < 3)
-        {
-            ResponsibleErrorLabel.Text = "Nome deve ter pelo menos 3 caracteres";
-            ResponsibleErrorLabel.IsVisible = true;
-            isValid = false;
-        }
-
-        // 13. Atendimento Especial
-        if (AtendimentoSimRadio.IsChecked && string.IsNullOrWhiteSpace(SpecialTreatmentEditor.Text))
-        {
-            SpecialTreatmentErrorLabel.Text = "Descreva os detalhes do atendimento especial";
-            SpecialTreatmentErrorLabel.IsVisible = true;
-            isValid = false;
-        }
-
-        // 14. Senha
         if (string.IsNullOrWhiteSpace(PasswordEntry.Text))
         {
-            PasswordErrorLabel.Text = "Senha é obrigatória";
+            PasswordErrorLabel.Text = "Senha obrigatÃ³ria";
             PasswordErrorLabel.IsVisible = true;
-            isValid = false;
-        }
-        else if (PasswordEntry.Text.Length < 6)
-        {
-            PasswordErrorLabel.Text = "Senha deve ter no mínimo 6 caracteres";
-            PasswordErrorLabel.IsVisible = true;
-            isValid = false;
+            valid = false;
         }
 
-        // 15. Confirmar Senha
-        if (string.IsNullOrWhiteSpace(ConfirmPasswordEntry.Text))
+        if (PasswordEntry.Text != ConfirmPasswordEntry.Text)
         {
-            ConfirmPasswordErrorLabel.Text = "Confirmação de senha é obrigatória";
+            ConfirmPasswordErrorLabel.Text = "As senhas nÃ£o coincidem";
             ConfirmPasswordErrorLabel.IsVisible = true;
-            isValid = false;
-        }
-        else if (PasswordEntry.Text != ConfirmPasswordEntry.Text)
-        {
-            ConfirmPasswordErrorLabel.Text = "As senhas não coincidem";
-            ConfirmPasswordErrorLabel.IsVisible = true;
-            isValid = false;
+            valid = false;
         }
 
-        if (!isValid)
-        {
-            await DisplayAlert("Atenção", "Por favor, corrija os campos destacados em vermelho", "OK");
-        }
+        if (!valid)
+            await DisplayAlert("AtenÃ§Ã£o", "Corrija os campos destacados", "OK");
 
-        return isValid;
+        return valid;
     }
 
     private bool IsValidEmail(string email)
@@ -351,7 +217,7 @@ public partial class PassengerRegisterPage : ContentPage
         try
         {
             var addr = new System.Net.Mail.MailAddress(email);
-            return addr.Address == email && email.Contains("@") && email.Contains(".");
+            return addr.Address == email;
         }
         catch
         {
@@ -361,37 +227,25 @@ public partial class PassengerRegisterPage : ContentPage
 
     private void ClearFields()
     {
-        NameEntry.Text = string.Empty;
-        PasswordEntry.Text = string.Empty;
-        ConfirmPasswordEntry.Text = string.Empty;
-        EmailEntry.Text = string.Empty;
-        PhoneEntry.Text = string.Empty;
-        EmergencyPhoneEntry.Text = string.Empty;
-        AddressEntry.Text = string.Empty;
-        BackupAddressEntry.Text = string.Empty;
-        RGEntry.Text = string.Empty;
-        CPFEntry.Text = string.Empty;
-        ResponsibleEntry.Text = string.Empty;
-        SpecialTreatmentEditor.Text = string.Empty;
-
+        NameEntry.Text = "";
+        PasswordEntry.Text = "";
+        ConfirmPasswordEntry.Text = "";
+        EmailEntry.Text = "";
+        PhoneEntry.Text = "";
+        EmergencyPhoneEntry.Text = "";
+        AddressEntry.Text = "";
+        BackupAddressEntry.Text = "";
+        RGEntry.Text = "";
+        CPFEntry.Text = "";
+        ResponsibleEntry.Text = "";
+        SpecialTreatmentEditor.Text = "";
         GenderPicker.SelectedIndex = -1;
         SchoolPicker.SelectedIndex = -1;
-        BirthDatePicker.Date = MaxPassengerBirthDate;
-
         AtendimentoNaoRadio.IsChecked = true;
-        SpecialTreatmentDetailsLayout.IsVisible = false;
-
-        ClearAllErrors();
-    }
-
-    private async void Button_Clicked(object sender, EventArgs e)
-    {
-        string dbPath = FileSystem.AppDataDirectory;
-        await DisplayAlert("Database Path", dbPath, "OK");
     }
 
     private async void OnAlreadyHaveAccount_Clicked(object sender, EventArgs e)
     {
-        await Navigation.PushAsync(new Views.LoginPage());
+        await Navigation.PushAsync(new LoginPage());
     }
 }

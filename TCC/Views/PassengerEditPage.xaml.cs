@@ -1,4 +1,4 @@
-using TCC.Models;
+ï»¿using TCC.Models;
 using TCC.Services;
 using TCC.Helpers;
 
@@ -15,7 +15,6 @@ public partial class PassengerEditPage : ContentPage
         InitializeComponent();
         _passengerId = passengerId;
 
-        // Define a data máxima do DatePicker (14 anos atrás) — evita datas futuras e usuários menores que 14 anos.
         BirthDatePicker.MaximumDate = DateTime.Today.AddYears(-14);
     }
 
@@ -30,53 +29,35 @@ public partial class PassengerEditPage : ContentPage
         try
         {
             var passengers = await _databaseService.GetPassengers();
-            _currentPassenger = passengers.FirstOrDefault(p => p.Id == _passengerId);
+            _currentPassenger = passengers.FirstOrDefault(x => x.Id == _passengerId);
 
-            if (_currentPassenger != null)
+            if (_currentPassenger == null)
             {
-                // Preenche os campos básicos
-                NameEntry.Text = _currentPassenger.Name ?? string.Empty;
-                RGEntry.Text = _currentPassenger.RG ?? string.Empty; // mantemos a string como veio do banco
-                CPFEntry.Text = _currentPassenger.CPF ?? string.Empty;
-                EmailEntry.Text = _currentPassenger.Email ?? string.Empty;
-                BirthDatePicker.Date = _currentPassenger.BirthDate;
-
-                // Formata os telefones para exibição (se existir)
-                PhoneEntry.Text = !string.IsNullOrWhiteSpace(_currentPassenger.PhoneNumber)
-                    ? PhoneValidationHelper.FormatPhone(_currentPassenger.PhoneNumber)
-                    : string.Empty;
-
-                EmergencyPhoneEntry.Text = !string.IsNullOrWhiteSpace(_currentPassenger.EmergencyPhoneNumber)
-                    ? PhoneValidationHelper.FormatPhone(_currentPassenger.EmergencyPhoneNumber)
-                    : string.Empty;
-
-                AddressEntry.Text = _currentPassenger.Address ?? string.Empty;
-                ResponsibleEntry.Text = _currentPassenger.ResponsableName ?? string.Empty;
-                BackupAddressEntry.Text = _currentPassenger.ReservableAddress ?? string.Empty;
-
-                // Seleciona pickers
-                SetPickerSelection(GenderPicker, _currentPassenger.Genre);
-                SetPickerSelection(SchoolPicker, _currentPassenger.School);
-
-                // Atendimento especial
-                if (_currentPassenger.SpecialTreatment)
-                {
-                    AtendimentoSimRadio.IsChecked = true;
-                    SpecialTreatmentDetailsLayout.IsVisible = true;
-                    SpecialTreatmentEditor.Text = _currentPassenger.SpecialTreatmentObservations ?? string.Empty;
-                }
-                else
-                {
-                    AtendimentoNaoRadio.IsChecked = true;
-                    SpecialTreatmentDetailsLayout.IsVisible = false;
-                    SpecialTreatmentEditor.Text = string.Empty;
-                }
-            }
-            else
-            {
-                await DisplayAlert("Erro", "Passageiro não encontrado.", "OK");
+                await DisplayAlert("Erro", "Passageiro nÃ£o encontrado.", "OK");
                 await Navigation.PopAsync();
+                return;
             }
+
+            NameEntry.Text = _currentPassenger.Name;
+            RGEntry.Text = _currentPassenger.RG;
+            CPFEntry.Text = _currentPassenger.CPF;
+            EmailEntry.Text = _currentPassenger.Email;
+
+            PhoneEntry.Text = PhoneValidationHelper.FormatPhone(_currentPassenger.PhoneNumber);
+            EmergencyPhoneEntry.Text = PhoneValidationHelper.FormatPhone(_currentPassenger.EmergencyPhoneNumber);
+
+            AddressEntry.Text = _currentPassenger.Address;
+            BackupAddressEntry.Text = _currentPassenger.ReservableAddress;
+            ResponsibleEntry.Text = _currentPassenger.ResponsableName;
+            BirthDatePicker.Date = _currentPassenger.BirthDate;
+
+            GenderPicker.SelectedItem = _currentPassenger.Genre;
+            SchoolPicker.SelectedItem = _currentPassenger.School;
+
+            AtendimentoSimRadio.IsChecked = _currentPassenger.SpecialTreatment;
+            AtendimentoNaoRadio.IsChecked = !_currentPassenger.SpecialTreatment;
+            SpecialTreatmentDetailsLayout.IsVisible = _currentPassenger.SpecialTreatment;
+            SpecialTreatmentEditor.Text = _currentPassenger.SpecialTreatmentObservations;
         }
         catch (Exception ex)
         {
@@ -84,93 +65,57 @@ public partial class PassengerEditPage : ContentPage
         }
     }
 
-    private void SetPickerSelection(Picker picker, string value)
-    {
-        if (!string.IsNullOrEmpty(value))
-        {
-            var index = picker.Items.IndexOf(value);
-            if (index >= 0)
-                picker.SelectedIndex = index;
-        }
-    }
-
     private void OnAtendimentoEspecialChanged(object sender, CheckedChangedEventArgs e)
     {
         SpecialTreatmentDetailsLayout.IsVisible = AtendimentoSimRadio.IsChecked;
 
-        // Limpa o campo de observações se "Não" for selecionado
         if (!AtendimentoSimRadio.IsChecked)
-        {
-            SpecialTreatmentEditor.Text = string.Empty;
-        }
+            SpecialTreatmentEditor.Text = "";
     }
 
     private async void OnSave_Clicked(object sender, EventArgs e)
     {
         try
         {
-            // Validação dos campos obrigatórios
-            var fieldsValidation = ValidateFields();
-
-            if (!fieldsValidation.IsValid)
+            var requiredFields = ValidateRequiredFields();
+            if (!requiredFields.IsValid)
             {
-                await DisplayAlert("Campos Obrigatórios", fieldsValidation.Message, "OK");
+                await DisplayAlert("AtenÃ§Ã£o", requiredFields.Message, "OK");
                 return;
             }
 
-            // Validar RG
-            if (!RGValidatorHelper.IsValid(RGEntry.Text?.Trim()))
+            if (!RGValidatorHelper.IsValid(RGEntry.Text.Trim()))
             {
-                await DisplayAlert("Atenção", "RG inválido. Verifique os números digitados.", "OK");
-                RGEntry.Focus();
+                await DisplayAlert("Erro", "RG invÃ¡lido", "OK");
                 return;
             }
 
-            // Validar CPF
-            if (!CPFValidator.IsValid(CPFEntry.Text?.Trim()))
+            if (!CPFValidator.IsValid(CPFEntry.Text.Trim()))
             {
-                await DisplayAlert("Atenção", "CPF inválido. Verifique os números digitados.", "OK");
-                CPFEntry.Focus();
+                await DisplayAlert("Erro", "CPF invÃ¡lido", "OK");
                 return;
             }
 
-            // Validar idade mínima (14 anos)
-            var age = DateTime.Today.Year - BirthDatePicker.Date.Year;
-            if (BirthDatePicker.Date > DateTime.Today.AddYears(-age)) age--;
-
-            if (age < 14)
+            if (!PhoneValidationHelper.IsValidPhone(PhoneEntry.Text))
             {
-                await DisplayAlert("Atenção", "Passageiro deve ter no mínimo 14 anos.", "OK");
+                await DisplayAlert("Erro", PhoneValidationHelper.GetValidationErrorMessage(), "OK");
                 return;
             }
 
-            // Validar Telefone
-            string phoneText = PhoneEntry.Text?.Trim();
-            if (!PhoneValidationHelper.IsValidPhone(phoneText))
+            if (!PhoneValidationHelper.IsValidPhone(EmergencyPhoneEntry.Text))
             {
-                await DisplayAlert("Atenção", PhoneValidationHelper.GetValidationErrorMessage(), "OK");
-                PhoneEntry.Focus();
+                await DisplayAlert("Erro", "Contato de emergÃªncia invÃ¡lido", "OK");
                 return;
             }
 
-            // Validar Telefone de Emergência
-            string emergencyPhoneText = EmergencyPhoneEntry.Text?.Trim();
-            if (!PhoneValidationHelper.IsValidPhone(emergencyPhoneText))
-            {
-                await DisplayAlert("Atenção", "Contato de emergência inválido. " + PhoneValidationHelper.GetValidationErrorMessage(), "OK");
-                EmergencyPhoneEntry.Focus();
-                return;
-            }
-
-            // Validação de senha (se alterada)
             if (!ValidatePasswordChange())
             {
-                await DisplayAlert("Erro", "As novas senhas não coincidem ou são muito curtas (mínimo 6 caracteres).", "OK");
+                await DisplayAlert("Erro", "Senha nova invÃ¡lida ou nÃ£o coincide", "OK");
                 return;
             }
 
-            // Verifica se algum dado foi alterado e se já está em uso por outro usuário
-            var validationResult = await _databaseService.ValidateUniqueUserData(
+            // ðŸ”µ VALIDA APENAS PASSAGEIROS
+            var uniqueCheck = await _databaseService.ValidateUniqueUserData(
                 rg: RGValidatorHelper.RemoveFormat(RGEntry.Text.Trim()),
                 cpf: CPFValidator.RemoveFormat(CPFEntry.Text.Trim()),
                 email: EmailEntry.Text.Trim(),
@@ -179,16 +124,14 @@ public partial class PassengerEditPage : ContentPage
                 userType: "passenger"
             );
 
-            if (!validationResult.IsValid)
+            if (!uniqueCheck.IsValid)
             {
-                await DisplayAlert("Dados já cadastrados", validationResult.Message, "OK");
+                await DisplayAlert("Dados jÃ¡ cadastrados", uniqueCheck.Message, "OK");
                 return;
             }
 
-            // Atualiza os dados do passageiro
-            UpdatePassengerData();
+            UpdatePassengerModel();
 
-            // Salva no banco de dados
             await _databaseService.UpdatePassenger(_currentPassenger);
 
             await DisplayAlert("Sucesso", "Dados atualizados com sucesso!", "OK");
@@ -196,78 +139,69 @@ public partial class PassengerEditPage : ContentPage
         }
         catch (Exception ex)
         {
-            await DisplayAlert("Erro", $"Erro ao salvar alterações: {ex.Message}", "OK");
+            await DisplayAlert("Erro", ex.Message, "OK");
         }
     }
 
-    private (bool IsValid, string Message) ValidateFields()
+    private (bool IsValid, string Message) ValidateRequiredFields()
     {
-        var requiredFields = new[]
-        {
-            (NameEntry.Text, "Nome"),
-            (RGEntry.Text, "RG"),
-            (CPFEntry.Text, "CPF"),
-            (EmailEntry.Text, "Email"),
-            (PhoneEntry.Text, "Telefone"),
-            (EmergencyPhoneEntry.Text, "Contato de Emergência"),
-            (AddressEntry.Text, "Endereço"),
-            (ResponsibleEntry.Text, "Nome do Responsável"),
-            (BackupAddressEntry.Text, "Endereço Alternativo")
-        };
+        if (string.IsNullOrWhiteSpace(NameEntry.Text))
+            return (false, "Informe o nome.");
 
-        foreach (var (value, fieldName) in requiredFields)
-        {
-            if (string.IsNullOrWhiteSpace(value))
-            {
-                return (false, $"Por favor, preencha o campo {fieldName}.");
-            }
-        }
+        if (string.IsNullOrWhiteSpace(RGEntry.Text))
+            return (false, "Informe o RG.");
 
-        if (GenderPicker.SelectedItem == null)
-        {
-            return (false, "Por favor, selecione o gênero.");
-        }
+        if (string.IsNullOrWhiteSpace(CPFEntry.Text))
+            return (false, "Informe o CPF.");
 
-        if (SchoolPicker.SelectedItem == null)
-        {
-            return (false, "Por favor, selecione a escola.");
-        }
+        if (string.IsNullOrWhiteSpace(EmailEntry.Text))
+            return (false, "Informe o Email.");
+
+        if (string.IsNullOrWhiteSpace(PhoneEntry.Text))
+            return (false, "Informe o Telefone.");
+
+        if (string.IsNullOrWhiteSpace(EmergencyPhoneEntry.Text))
+            return (false, "Informe o Contato de EmergÃªncia.");
+
+        if (string.IsNullOrWhiteSpace(AddressEntry.Text))
+            return (false, "Informe o EndereÃ§o.");
+
+        if (string.IsNullOrWhiteSpace(BackupAddressEntry.Text))
+            return (false, "Informe o EndereÃ§o Alternativo.");
+
+        if (string.IsNullOrWhiteSpace(ResponsibleEntry.Text))
+            return (false, "Informe o nome do responsÃ¡vel.");
+
+        if (GenderPicker.SelectedIndex == -1)
+            return (false, "Selecione o gÃªnero.");
+
+        if (SchoolPicker.SelectedIndex == -1)
+            return (false, "Selecione a escola.");
 
         if (AtendimentoSimRadio.IsChecked && string.IsNullOrWhiteSpace(SpecialTreatmentEditor.Text))
-        {
-            return (false, "Por favor, descreva os detalhes do atendimento especial.");
-        }
+            return (false, "Descreva o atendimento especial.");
 
-        return (true, string.Empty);
+        return (true, "");
     }
 
     private bool ValidatePasswordChange()
     {
-        var newPassword = NewPasswordEntry.Text?.Trim();
-        var confirmPassword = ConfirmNewPasswordEntry.Text?.Trim();
+        string newPass = NewPasswordEntry.Text?.Trim();
+        string confirm = ConfirmNewPasswordEntry.Text?.Trim();
 
-        // Se não está tentando alterar a senha, validação OK
-        if (string.IsNullOrEmpty(newPassword) && string.IsNullOrEmpty(confirmPassword))
-        {
+        if (string.IsNullOrWhiteSpace(newPass) && string.IsNullOrWhiteSpace(confirm))
             return true;
-        }
 
-        // Se está alterando, deve preencher ambos campos e eles devem coincidir
-        if (newPassword != confirmPassword)
-        {
+        if (newPass != confirm)
             return false;
-        }
 
-        // Senha deve ter pelo menos 6 caracteres
-        if (!string.IsNullOrEmpty(newPassword) && newPassword.Length < 6)
-        {
+        if (newPass.Length < 6)
             return false;
-        }
 
         return true;
     }
 
-    private void UpdatePassengerData()
+    private void UpdatePassengerModel()
     {
         _currentPassenger.Name = NameEntry.Text.Trim();
         _currentPassenger.RG = RGValidatorHelper.RemoveFormat(RGEntry.Text.Trim());
@@ -277,30 +211,22 @@ public partial class PassengerEditPage : ContentPage
         _currentPassenger.EmergencyPhoneNumber = PhoneValidationHelper.GetOnlyNumbers(EmergencyPhoneEntry.Text.Trim());
         _currentPassenger.Address = AddressEntry.Text.Trim();
         _currentPassenger.ReservableAddress = BackupAddressEntry.Text.Trim();
-        _currentPassenger.Genre = GenderPicker.SelectedItem?.ToString() ?? "Não especificado";
-        _currentPassenger.School = SchoolPicker.SelectedItem?.ToString() ?? "Não especificado";
+        _currentPassenger.Genre = GenderPicker.SelectedItem.ToString();
+        _currentPassenger.School = SchoolPicker.SelectedItem.ToString();
         _currentPassenger.ResponsableName = ResponsibleEntry.Text.Trim();
-        _currentPassenger.SpecialTreatment = AtendimentoSimRadio.IsChecked;
-        _currentPassenger.SpecialTreatmentObservations = AtendimentoSimRadio.IsChecked
-            ? SpecialTreatmentEditor.Text?.Trim() ?? string.Empty
-            : string.Empty;
-        _currentPassenger.BirthDate = BirthDatePicker.Date;
 
-        // Atualiza a senha se foi alterada
-        var newPassword = NewPasswordEntry.Text?.Trim();
-        if (!string.IsNullOrEmpty(newPassword))
-        {
-            _currentPassenger.Password = newPassword;
-        }
+        _currentPassenger.SpecialTreatment = AtendimentoSimRadio.IsChecked;
+        _currentPassenger.SpecialTreatmentObservations =
+            AtendimentoSimRadio.IsChecked ? SpecialTreatmentEditor.Text.Trim() : "";
+
+        if (!string.IsNullOrWhiteSpace(NewPasswordEntry.Text))
+            _currentPassenger.Password = NewPasswordEntry.Text.Trim();
     }
 
     private async void OnCancel_Clicked(object sender, EventArgs e)
     {
-        bool confirm = await DisplayAlert("Cancelar", "Deseja descartar as alterações?", "Sim", "Não");
-
+        bool confirm = await DisplayAlert("Cancelar", "Descartar alteraÃ§Ãµes?", "Sim", "NÃ£o");
         if (confirm)
-        {
             await Navigation.PopAsync();
-        }
     }
 }

@@ -166,51 +166,78 @@ namespace TCC.Services
         #region Unique data validation
 
         public async Task<(bool IsValid, string Message)> ValidateUniqueUserData(
-            string rg = null,
-            string cpf = null,
-            string email = null,
-            string phone = null,
-            string cnh = null,
-            int? excludeUserId = null,
-            string userType = null)
+    string rg = null,
+    string cpf = null,
+    string email = null,
+    string phone = null,
+    string cnh = null,
+    int? excludeUserId = null,
+    string userType = null)
         {
             try
             {
                 await InitializeAsync();
 
-                var drivers = await GetDrivers();
-                var passengers = await GetPassengers();
+                if (string.IsNullOrEmpty(userType))
+                    return (false, "Tipo de usuário não informado na validação.");
 
-                if (excludeUserId.HasValue && !string.IsNullOrEmpty(userType))
+                // Carrega SOMENTE a tabela correta
+                if (userType == "driver")
                 {
-                    if (userType == "driver")
+                    var drivers = await GetDrivers();
+
+                    // Exclui o próprio usuário em caso de edição
+                    if (excludeUserId.HasValue)
                         drivers = drivers.Where(d => d.Id != excludeUserId.Value).ToList();
-                    else if (userType == "passenger")
+
+                    if (!string.IsNullOrEmpty(rg) && drivers.Any(d => d.RG == rg))
+                        return (false, "Este RG já está cadastrado para outro motorista.");
+
+                    if (!string.IsNullOrEmpty(cpf) && drivers.Any(d => d.CPF == cpf))
+                        return (false, "Este CPF já está cadastrado para outro motorista.");
+
+                    if (!string.IsNullOrEmpty(email) && drivers.Any(d => d.Email == email))
+                        return (false, "Este e-mail já está cadastrado para outro motorista.");
+
+                    if (!string.IsNullOrEmpty(phone) && drivers.Any(d => d.PhoneNumber == phone))
+                        return (false, "Este telefone já está cadastrado para outro motorista.");
+
+                    if (!string.IsNullOrEmpty(cnh) && drivers.Any(d => d.CNH == cnh))
+                        return (false, "Esta CNH já está cadastrada para outro motorista.");
+
+                    return (true, string.Empty);
+                }
+                else if (userType == "passenger")
+                {
+                    var passengers = await GetPassengers();
+
+                    // Exclui o próprio usuário em caso de edição
+                    if (excludeUserId.HasValue)
                         passengers = passengers.Where(p => p.Id != excludeUserId.Value).ToList();
+
+                    if (!string.IsNullOrEmpty(rg) && passengers.Any(p => p.RG == rg))
+                        return (false, "Este RG já está cadastrado para outro passageiro.");
+
+                    if (!string.IsNullOrEmpty(cpf) && passengers.Any(p => p.CPF == cpf))
+                        return (false, "Este CPF já está cadastrado para outro passageiro.");
+
+                    if (!string.IsNullOrEmpty(email) && passengers.Any(p => p.Email == email))
+                        return (false, "Este e-mail já está cadastrado para outro passageiro.");
+
+                    if (!string.IsNullOrEmpty(phone) && passengers.Any(p => p.PhoneNumber == phone))
+                        return (false, "Este telefone já está cadastrado para outro passageiro.");
+
+                    return (true, string.Empty);
                 }
 
-                if (!string.IsNullOrEmpty(rg) && (drivers.Any(d => d.RG == rg) || passengers.Any(p => p.RG == rg)))
-                    return (false, "Este RG já está cadastrado no sistema.");
-
-                if (!string.IsNullOrEmpty(cpf) && (drivers.Any(d => d.CPF == cpf) || passengers.Any(p => p.CPF == cpf)))
-                    return (false, "Este CPF já está cadastrado no sistema.");
-
-                if (!string.IsNullOrEmpty(email) && (drivers.Any(d => d.Email == email) || passengers.Any(p => p.Email == email)))
-                    return (false, "Este e-mail já está cadastrado no sistema.");
-
-                if (!string.IsNullOrEmpty(phone) && (drivers.Any(d => d.PhoneNumber == phone) || passengers.Any(p => p.PhoneNumber == phone)))
-                    return (false, "Este número de telefone já está cadastrado no sistema.");
-
-                if (!string.IsNullOrEmpty(cnh) && drivers.Any(d => d.CNH == cnh))
-                    return (false, "Esta CNH já está cadastrada no sistema.");
-
-                return (true, string.Empty);
+                return (false, "Tipo de usuário inválido.");
             }
             catch (Exception ex)
             {
                 return (false, $"Erro ao validar dados: {ex.Message}");
             }
         }
+
 
         #endregion
 
