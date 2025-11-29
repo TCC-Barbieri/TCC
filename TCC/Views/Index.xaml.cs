@@ -1,4 +1,6 @@
 ﻿using TCC.Services;
+using Microsoft.Maui.Controls;
+using Microsoft.Maui.Media;
 
 namespace TCC.Views;
 
@@ -25,6 +27,7 @@ public partial class Index : ContentPage
     protected override async void OnAppearing()
     {
         base.OnAppearing();
+        LoadSavedProfilePhoto();
 
         try
         {
@@ -207,6 +210,248 @@ public partial class Index : ContentPage
         }
     }
 
+    private async void OnSelectPhotoClicked(object sender, EventArgs e)
+    {
+        try
+        {
+            System.Diagnostics.Debug.WriteLine("🔵 Botão de foto clicado!");
+
+            // Pergunta ao usuário se deseja tirar foto ou escolher da galeria
+            var action = await DisplayActionSheet(
+                "Foto de Perfil",
+                "Cancelar",
+                null,
+                "📷 Tirar Foto",
+                "🖼️ Escolher da Galeria"
+            );
+
+            System.Diagnostics.Debug.WriteLine($"🔵 Ação selecionada: {action}");
+
+            if (action == "Cancelar" || string.IsNullOrEmpty(action))
+            {
+                return;
+            }
+
+            FileResult photo = null;
+
+            if (action == "📷 Tirar Foto")
+            {
+                photo = await TakePhotoAsync();
+            }
+            else if (action == "🖼️ Escolher da Galeria")
+            {
+                photo = await PickPhotoAsync();
+            }
+
+            if (photo != null)
+            {
+                await LoadPhotoToProfile(photo);
+            }
+        }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine($"🔴 ERRO: {ex.Message}");
+            await DisplayAlert("Erro", $"Erro ao selecionar foto: {ex.Message}", "OK");
+        }
+    }
+
+    private async Task<FileResult> TakePhotoAsync()
+    {
+        try
+        {
+            System.Diagnostics.Debug.WriteLine("🔵 Verificando permissão da câmera...");
+
+            // Verifica se o dispositivo suporta captura de foto
+            if (!MediaPicker.Default.IsCaptureSupported)
+            {
+                await DisplayAlert(
+                    "Não Suportado",
+                    "Este dispositivo não suporta captura de fotos.",
+                    "OK"
+                );
+                return null;
+            }
+
+            // Verifica o status atual da permissão
+            var status = await Permissions.CheckStatusAsync<Permissions.Camera>();
+            System.Diagnostics.Debug.WriteLine($"🔵 Status inicial da câmera: {status}");
+
+            // Se não tiver permissão, solicita
+            if (status != PermissionStatus.Granted)
+            {
+                // Verifica se deve mostrar explicação
+                if (status == PermissionStatus.Denied && DeviceInfo.Platform == DevicePlatform.iOS)
+                {
+                    await DisplayAlert(
+                        "Permissão Necessária",
+                        "Para tirar fotos, você precisa permitir o acesso à câmera nas configurações do dispositivo.",
+                        "OK"
+                    );
+                    return null;
+                }
+
+                // Mostra uma mensagem explicativa antes de pedir permissão
+                bool shouldRequest = await DisplayAlert(
+                    "Permissão de Câmera",
+                    "Este app precisa acessar sua câmera para tirar fotos de perfil. Permitir?",
+                    "Sim",
+                    "Não"
+                );
+
+                if (!shouldRequest)
+                {
+                    return null;
+                }
+
+                // Solicita a permissão
+                status = await Permissions.RequestAsync<Permissions.Camera>();
+                System.Diagnostics.Debug.WriteLine($"🔵 Status após solicitar: {status}");
+            }
+
+            // Verifica se a permissão foi concedida
+            if (status == PermissionStatus.Granted)
+            {
+                System.Diagnostics.Debug.WriteLine("🔵 Permissão concedida! Abrindo câmera...");
+
+                var photo = await MediaPicker.Default.CapturePhotoAsync(new MediaPickerOptions
+                {
+                    Title = "Tire uma foto para o perfil"
+                });
+
+                return photo;
+            }
+            else
+            {
+                System.Diagnostics.Debug.WriteLine($"🔴 Permissão negada: {status}");
+
+                await DisplayAlert(
+                    "Permissão Negada",
+                    "Não é possível tirar fotos sem permissão de acesso à câmera.",
+                    "OK"
+                );
+
+                return null;
+            }
+        }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine($"🔴 Erro ao tirar foto: {ex.Message}");
+            await DisplayAlert("Erro", $"Erro ao acessar câmera: {ex.Message}", "OK");
+            return null;
+        }
+    }
+
+    private async Task<FileResult> PickPhotoAsync()
+    {
+        try
+        {
+            System.Diagnostics.Debug.WriteLine("🔵 Verificando permissão de fotos...");
+
+            // Verifica o status atual da permissão
+            var status = await Permissions.CheckStatusAsync<Permissions.Photos>();
+            System.Diagnostics.Debug.WriteLine($"🔵 Status inicial de fotos: {status}");
+
+            // Se não tiver permissão, solicita
+            if (status != PermissionStatus.Granted)
+            {
+                // Verifica se deve mostrar explicação (iOS)
+                if (status == PermissionStatus.Denied && DeviceInfo.Platform == DevicePlatform.iOS)
+                {
+                    await DisplayAlert(
+                        "Permissão Necessária",
+                        "Para escolher fotos, você precisa permitir o acesso à galeria nas configurações do dispositivo.",
+                        "OK"
+                    );
+                    return null;
+                }
+
+                // Mostra uma mensagem explicativa antes de pedir permissão
+                bool shouldRequest = await DisplayAlert(
+                    "Permissão de Galeria",
+                    "Este app precisa acessar suas fotos para selecionar uma foto de perfil. Permitir?",
+                    "Sim",
+                    "Não"
+                );
+
+                if (!shouldRequest)
+                {
+                    return null;
+                }
+
+                // Solicita a permissão
+                status = await Permissions.RequestAsync<Permissions.Photos>();
+                System.Diagnostics.Debug.WriteLine($"🔵 Status após solicitar: {status}");
+            }
+
+            // Verifica se a permissão foi concedida
+            if (status == PermissionStatus.Granted)
+            {
+                System.Diagnostics.Debug.WriteLine("🔵 Permissão concedida! Abrindo galeria...");
+
+                var photo = await MediaPicker.Default.PickPhotoAsync(new MediaPickerOptions
+                {
+                    Title = "Selecione uma foto para o perfil"
+                });
+
+                return photo;
+            }
+            else
+            {
+                System.Diagnostics.Debug.WriteLine($"🔴 Permissão negada: {status}");
+
+                await DisplayAlert(
+                    "Permissão Negada",
+                    "Não é possível escolher fotos sem permissão de acesso à galeria.",
+                    "OK"
+                );
+
+                return null;
+            }
+        }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine($"🔴 Erro ao escolher foto: {ex.Message}");
+            await DisplayAlert("Erro", $"Erro ao acessar galeria: {ex.Message}", "OK");
+            return null;
+        }
+    }
+
+    private async Task LoadPhotoToProfile(FileResult photo)
+    {
+        try
+        {
+            System.Diagnostics.Debug.WriteLine($"🔵 Carregando foto: {photo.FileName}");
+
+            // Carrega a imagem selecionada
+            var stream = await photo.OpenReadAsync();
+
+            // Cria uma cópia do stream para evitar problemas de acesso
+            var memoryStream = new MemoryStream();
+            await stream.CopyToAsync(memoryStream);
+            memoryStream.Position = 0;
+
+            ProfileImage.Source = ImageSource.FromStream(() =>
+            {
+                memoryStream.Position = 0;
+                return memoryStream;
+            });
+
+            // Oculta o template padrão e mostra a imagem
+            DefaultProfileTemplate.IsVisible = false;
+            ProfileImage.IsVisible = true;
+
+            System.Diagnostics.Debug.WriteLine("🔵 Foto carregada com sucesso!");
+
+            // Salva a foto (opcional)
+            await SaveProfilePhoto(photo);
+        }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine($"🔴 Erro ao carregar foto: {ex.Message}");
+            await DisplayAlert("Erro", $"Erro ao carregar foto: {ex.Message}", "OK");
+        }
+    }
+
     private async void OnBackClicked(object sender, EventArgs e)
     {
         try
@@ -236,6 +481,88 @@ public partial class Index : ContentPage
         catch (Exception ex)
         {
             await DisplayAlert("Erro", $"Erro ao abrir página de edição: {ex.Message}", "OK");
+        }
+    }
+
+    // Método para carregar foto salva do usuário
+    private async Task LoadProfilePhoto()
+    {
+        try
+        {
+            // Carregar foto do banco de dados ou preferências
+            // string photoPath = Preferences.Get("profile_photo", string.Empty);
+
+            // if (!string.IsNullOrEmpty(photoPath) && File.Exists(photoPath))
+            // {
+            //     ProfileImage.Source = ImageSource.FromFile(photoPath);
+            //     DefaultProfileTemplate.IsVisible = false;
+            //     ProfileImage.IsVisible = true;
+            // }
+        }
+        catch (Exception ex)
+        {
+            // Log do erro
+        }
+    }
+
+    // Método para salvar foto no sistema
+    private async Task SaveProfilePhoto(FileResult photo)
+    {
+        try
+        {
+            if (photo == null) return;
+
+            System.Diagnostics.Debug.WriteLine("🔵 Salvando foto...");
+
+            // Copiar foto para o diretório da aplicação
+            var appDataPath = FileSystem.AppDataDirectory;
+            var fileName = "profile_photo.jpg";
+            var destPath = Path.Combine(appDataPath, fileName);
+
+            // Abrir stream da foto selecionada
+            using var sourceStream = await photo.OpenReadAsync();
+
+            // Salvar no diretório local
+            using var fileStream = File.Create(destPath);
+            await sourceStream.CopyToAsync(fileStream);
+
+            // Salvar caminho nas preferências
+            Preferences.Set("profile_photo_path", destPath);
+
+            System.Diagnostics.Debug.WriteLine($"🔵 Foto salva em: {destPath}");
+        }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine($"🔴 Erro ao salvar foto: {ex.Message}");
+            // Não mostra alerta para o usuário, apenas loga
+        }
+    }
+
+    private void LoadSavedProfilePhoto()
+    {
+        try
+        {
+            // Carregar foto do banco de dados ou preferências
+            string photoPath = Preferences.Get("profile_photo_path", string.Empty);
+
+            System.Diagnostics.Debug.WriteLine($"🔵 Tentando carregar foto de: {photoPath}");
+
+            if (!string.IsNullOrEmpty(photoPath) && File.Exists(photoPath))
+            {
+                ProfileImage.Source = ImageSource.FromFile(photoPath);
+                DefaultProfileTemplate.IsVisible = false;
+                ProfileImage.IsVisible = true;
+
+                System.Diagnostics.Debug.WriteLine("🔵 Foto de perfil carregada com sucesso!");
+            }
+            else
+            {
+                System.Diagnostics.Debug.WriteLine("🔵 Nenhuma foto salva encontrada");
+            }
+        }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine($"🔴 Erro ao carregar foto salva: {ex.Message}");
         }
     }
 }

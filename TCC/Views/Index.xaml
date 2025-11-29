@@ -39,26 +39,105 @@
                          Margin="0,0,0,-30" />
 
                 <!-- Nome do usuário -->
-                <VerticalStackLayout HorizontalOptions="Center" 
-                                     VerticalOptions="Center" 
-                                     Spacing="5">
+                <HorizontalStackLayout HorizontalOptions="Center" 
+                                       VerticalOptions="Center" 
+                                       Spacing="8">
                     <Label Text="Olá,"
-                           FontSize="14"
+                           FontSize="24"
+                           FontAttributes="Bold"
                            TextColor="White"
-                           Opacity="0.9"
-                           HorizontalOptions="Center"/>
+                           VerticalOptions="Center"/>
                     <Label x:Name="WelcomeLabel"
                            Text=""
                            FontSize="24"
                            FontAttributes="Bold"
                            TextColor="White"
-                           HorizontalOptions="Center"/>
-                </VerticalStackLayout>
+                           VerticalOptions="Center"/>
+                </HorizontalStackLayout>
+            </Grid>
+
+            <!-- Foto de perfil (sobreposta ao card) -->
+            <Grid Margin="0,-60,0,0" 
+                  HeightRequest="140" 
+                  WidthRequest="140"
+                  HorizontalOptions="Center">
+
+                <!-- Shadow/Border externo -->
+                <Frame CornerRadius="60"
+                       BackgroundColor="White"
+                       Padding="5"
+                       HasShadow="True"
+                       HeightRequest="120"
+                       WidthRequest="120"
+                       HorizontalOptions="Center"
+                       VerticalOptions="Start">
+                    <Frame.Shadow>
+                        <Shadow Brush="Black" 
+                                Opacity="0.2" 
+                                Radius="15" 
+                                Offset="0,5" />
+                    </Frame.Shadow>
+
+                    <!-- Imagem de perfil -->
+                    <Frame CornerRadius="55"
+                           Padding="0"
+                           HasShadow="False"
+                           BackgroundColor="#E2E8F0"
+                           IsClippedToBounds="True">
+
+                        <!-- Template padrão (mostrado quando não há foto) -->
+                        <Grid x:Name="DefaultProfileTemplate">
+                            <Frame BackgroundColor="#CBD5E0"
+                                   CornerRadius="55"
+                                   Padding="0"
+                                   HasShadow="False">
+                                <Label Text="👤"
+                                       FontSize="50"
+                                       HorizontalOptions="Center"
+                                       VerticalOptions="Center"
+                                       TextColor="#718096"/>
+                            </Frame>
+                        </Grid>
+
+                        <!-- Imagem do usuário (oculta inicialmente) -->
+                        <Image x:Name="ProfileImage"
+                               Aspect="AspectFill"
+                               IsVisible="False"/>
+                    </Frame>
+                </Frame>
+
+                <!-- Botão para adicionar/editar foto (fora do Frame da foto) -->
+                <Border StrokeThickness="0"
+                        BackgroundColor="#3182CE"
+                        HorizontalOptions="End"
+                        VerticalOptions="End"
+                        Margin="0,0,5,0"
+                        HeightRequest="44"
+                        WidthRequest="44">
+                    <Border.StrokeShape>
+                        <RoundRectangle CornerRadius="22"/>
+                    </Border.StrokeShape>
+                    <Border.Shadow>
+                        <Shadow Brush="Black" 
+                                Opacity="0.3" 
+                                Radius="10" 
+                                Offset="0,3" />
+                    </Border.Shadow>
+
+                    <Button Text="📷"
+                            FontSize="20"
+                            BackgroundColor="Transparent"
+                            TextColor="White"
+                            Padding="0"
+                            Clicked="OnSelectPhotoClicked"
+                            HorizontalOptions="Center"
+                            VerticalOptions="Center"/>
+                </Border>
             </Grid>
 
             <!-- Card principal redesenhado -->
             <Frame BackgroundColor="White"
-                   Margin="20,-20,20,20"
+                   Margin="20,10,20,20"
                    CornerRadius="20"
                    HasShadow="True"
                    Padding="0">
@@ -320,7 +399,7 @@
                                            FontSize="11" 
                                            TextColor="#C53030" 
                                            FontAttributes="Bold" />
-                                                        <Label x:Name="EmergencyContactCompactLabel" 
+                                    <Label x:Name="EmergencyContactCompactLabel" 
                                            Text="(98) 27389-7234" 
                                            FontSize="13" 
                                            TextColor="#2D3748"
