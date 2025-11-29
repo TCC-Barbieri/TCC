@@ -30,10 +30,6 @@ namespace TCC.Views
             PhoneLabel.Text = FormatPhone(_passengerToView.PhoneNumber);
             AddressLabel.Text = _passengerToView.Address ?? "Não informado";
 
-            // Documentos
-            RgLabel.Text = FormatRg(_passengerToView.RG);
-            CpfLabel.Text = FormatCpf(_passengerToView.CPF);
-
             // Dados acadêmicos
             SchoolLabel.Text = _passengerToView.School ?? "Não informado";
             ResponsableLabel.Text = _passengerToView.ResponsableName ?? "Não informado";
@@ -46,22 +42,6 @@ namespace TCC.Views
 
             // Botão deletar visível apenas para motoristas
             DeleteButton.IsVisible = _loggedDriver != null;
-        }
-
-        private string FormatCpf(string cpf)
-        {
-            if (string.IsNullOrEmpty(cpf) || cpf.Length != 11)
-                return cpf ?? "Não informado";
-
-            return $"{cpf[..3]}.{cpf[3..6]}.{cpf[6..9]}-{cpf[9..]}";
-        }
-
-        private string FormatRg(string rg)
-        {
-            if (string.IsNullOrEmpty(rg) || rg.Length != 9)
-                return rg ?? "Não informado";
-
-            return $"{rg[..2]}.{rg[2..5]}.{rg[5..8]}-{rg[8..]}";
         }
 
         private string FormatPhone(string phone)

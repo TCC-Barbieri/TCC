@@ -106,40 +106,7 @@
                                            TextColor="#2D3748"/>
                                 </VerticalStackLayout>
                             </Frame>
-
-                            <Frame Grid.Column="1"
-                                   BackgroundColor="#F7FAFC"
-                                   CornerRadius="12"
-                                   Padding="15"
-                                   HasShadow="False">
-                                <VerticalStackLayout Spacing="5">
-                                    <Label Text="📋 RG" 
-                                           FontSize="12" 
-                                           TextColor="#718096" 
-                                           FontAttributes="Bold"/>
-                                    <Label x:Name="RgLabel" 
-                                           FontSize="14" 
-                                           TextColor="#2D3748"/>
-                                </VerticalStackLayout>
-                            </Frame>
                         </Grid>
-
-                        <!-- CPF -->
-                        <Frame BackgroundColor="#F7FAFC"
-                               CornerRadius="12"
-                               Padding="15"
-                               HasShadow="False">
-                            <VerticalStackLayout Spacing="5">
-                                <Label Text="🆔 CPF" 
-                                       FontSize="12" 
-                                       TextColor="#718096" 
-                                       FontAttributes="Bold"/>
-                                <Label x:Name="CpfLabel" 
-                                       FontSize="16" 
-                                       TextColor="#2D3748"
-                                       FontAttributes="Bold"/>
-                            </VerticalStackLayout>
-                        </Frame>
 
                         <!-- Endereço -->
                         <Frame BackgroundColor="#F7FAFC"
