@@ -494,6 +494,8 @@ namespace TCC.Views
                     return new MapPoint(-49.05334, -22.3274, SpatialReferences.Wgs84);
                 case "UNOESTE":
                     return new MapPoint(-48.6050, -22.3045, SpatialReferences.Wgs84);
+                case "GARAGEM":
+                    return new MapPoint(-48.7408, -22.0845, SpatialReferences.Wgs84);
                 default:
                     return new MapPoint(-48.5548, -22.0050, SpatialReferences.Wgs84);
             }

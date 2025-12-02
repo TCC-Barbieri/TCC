@@ -122,6 +122,7 @@
                                     <x:String>UNESP</x:String>
                                     <x:String>Unisagrado</x:String>
                                     <x:String>UNOESTE</x:String>
+                                    <x:String>GARAGEM</x:String>
                                 </Picker.Items>
                             </Picker>
                         </Border>
